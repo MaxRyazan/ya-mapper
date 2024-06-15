@@ -1,5 +1,5 @@
 import { createApp } from 'vue'
-import './style.css'
+import './assets/css/style.css'
 import { createYmaps } from 'vue-yandex-maps';
 import App from './App.vue'
 import router from "./configs/router.ts";

@@ -3,14 +3,14 @@
 </script>
 
 <template>
-<div class="header">
+    <div class="header">
 
-</div>
+    </div>
 </template>
 
 <style scoped>
 .header {
-    height: 60px;
+    height: var(--header-height);
     width: 100%;
     background-color: rgb(245, 245, 245);
 }
