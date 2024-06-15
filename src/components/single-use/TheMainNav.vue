@@ -21,7 +21,7 @@ const navLinks = reactive([
 	flex-direction: column;
 	width: 300px;
 	min-height: calc(100vh - var(--header-height));
-	border: 2px solid #00e3ff;
+	border: 2px solid var(--primary-color);
 }
 
 .nav__link {
@@ -30,14 +30,14 @@ const navLinks = reactive([
 	padding: 10px 20px;
 	width: 100%;
 	text-align: start;
-    color: #00e3ff;
+    color: var(--primary-color);
 	&:hover {
-        background-color: #00e3ff;
+        background-color: var(--primary-color);
         color: white;
 	 }
 }
 .router-link-exact-active {
-	background-color: #00e3ff;
+	background-color: var(--primary-color);
     color: white;
 }
 </style>

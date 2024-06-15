@@ -18,4 +18,7 @@ import TheMainNav from "@/components/single-use/TheMainNav.vue";
     width: 100%;
     min-height: calc(100vh - var(--header-height));
 }
+.content {
+    flex: 1;
+}
 </style>
