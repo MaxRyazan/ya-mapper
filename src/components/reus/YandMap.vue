@@ -16,13 +16,14 @@
                 <yandex-map-default-features-layer/>
 
                 <yandex-map-feature
+                        v-for="line in lines" :key="line.id"
                         :settings="{
                             geometry: {
                             type: 'LineString',
-                            coordinates: props.busRoadMap,
+                            coordinates: line.roadMap.map(r => [r.coords[1], r.coords[0]]),
                         },
                         style: {
-                          stroke: [{ color: '#007afce6', width: 4 }],
+                          stroke: [{ color: line.lineColor, width: 4 }],
                         },
                 }"
                 />
@@ -41,7 +42,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import {ref, shallowRef} from "vue";
+import {ref, shallowRef, watch} from "vue";
 import {
     YandexMap,
     YandexMapDefaultFeaturesLayer,
@@ -54,15 +55,20 @@ const myMap = shallowRef<null | any>(null);
 let markers = ref<any>([])
 
 const props = defineProps<{
-	busRoadMap: any[],
+    lines: any[],
     center: any,
-    zoom: number
+    zoom: number,
+    lineColor: string
 }>()
 
 function produceAnAlert(p: any) {
     console.log(p)
 }
 
+
+watch(() => props.lines, () => {
+    console.log(props.lines)
+}, {immediate: true})
 </script>
 
 <style scoped>
