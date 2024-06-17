@@ -11,4 +11,5 @@ export interface Station {
     coords: number[]
     descRu: string
     descKz: string
+    direction: number
 }
