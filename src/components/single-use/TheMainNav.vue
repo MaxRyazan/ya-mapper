@@ -3,7 +3,17 @@ import {reactive} from "vue";
 
 const navLinks = reactive([
 	{title: 'Яндекс карты', to: '/map'},
-	{title: 'Яндекс карты old', to: '/old-map'},
+	{title: 'Маршруты', to: '/routes'},
+	{title: 'Транспорт', to: '/transport'},
+	{title: 'Контролёры', to: '/conductors'},
+	{title: 'Водители', to: '/drivers'},
+	{title: 'Транспорт/работа', to: '/transport-work'},
+	{title: 'Статистика/отчеты', to: '/statistics'},
+	{title: 'Диспетчирезация', to: '/dispatch'},
+	{title: 'Оценки', to: '/rating'},
+	{title: 'Журнал', to: '/journal'},
+	{title: 'Изменить пароль', to: '/change-password'},
+	{title: 'Выход', to: '/exit'},
 ])
 
 </script>
@@ -20,24 +30,29 @@ const navLinks = reactive([
 	display: flex;
 	flex-direction: column;
 	width: 300px;
-	min-height: calc(100vh - var(--header-height));
-	border: 2px solid var(--primary-color);
+	height: 100%;
+    border-radius: 8px;
+    border: 2px solid rgba(0,0,0, .2);
+    background-color: white;
 }
 
 .nav__link {
+    border-radius: 8px;
 	text-decoration: none;
 	font-size: 24px;
 	padding: 10px 20px;
 	width: 100%;
 	text-align: start;
-    color: var(--primary-color);
+    color: black;
+    border: 2px solid transparent;
 	&:hover {
-        background-color: var(--primary-color);
-        color: white;
+        border: 2px solid  var(--accent-color);
 	 }
 }
 .router-link-exact-active {
-	background-color: var(--primary-color);
+	background: var(--accent-gradient-color);
     color: white;
+    border: 2px solid var(--accent-color);
 }
+
 </style>

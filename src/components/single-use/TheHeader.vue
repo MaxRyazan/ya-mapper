@@ -12,6 +12,6 @@
 .header {
     height: var(--header-height);
     width: 100%;
-    background-color: rgb(245, 245, 245);
+    background: var(--accent-gradient-color);
 }
 </style>

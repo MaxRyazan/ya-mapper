@@ -16,7 +16,10 @@ import TheMainNav from "@/components/single-use/TheMainNav.vue";
 .def_layout {
     display: flex;
     width: 100%;
-    min-height: calc(100vh - var(--header-height));
+    gap: 10px;
+    padding: 6px;
+    background-color: rgba(0,0,0, .05);
+    height: calc(100vh - var(--header-height) - 6px);
 }
 .content {
     flex: 1;

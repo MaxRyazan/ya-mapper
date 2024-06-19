@@ -1,5 +1,7 @@
 html {
     --header-height: 60px;
-    --primary-color: #00e3ff;
+    --prime-text-color: white;
+    --accent-color: hsla(170, 62%, 16%, 1);
+    --accent-gradient-color: linear-gradient(180deg, hsla(170, 63%, 51%, 1) 0%, hsla(170, 62%, 16%, 1) 100%);
 }
 
