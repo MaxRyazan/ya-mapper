@@ -42,7 +42,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import {ref, shallowRef, watch} from "vue";
+import {ref, shallowRef} from "vue";
 import {
     YandexMap,
     YandexMapDefaultFeaturesLayer,
@@ -66,9 +66,9 @@ function produceAnAlert(p: any) {
 }
 
 
-watch(() => props.lines, () => {
-    console.log(props.lines)
-}, {immediate: true})
+// watch(() => props.lines, () => {
+//     console.log(props.lines)
+// }, {immediate: true})
 </script>
 
 <style scoped>

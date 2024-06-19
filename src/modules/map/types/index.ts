@@ -1,4 +1,4 @@
-export interface Bus {
+export interface BusRoutes {
     busNumber: string
     directions: {
         asc: Station [],

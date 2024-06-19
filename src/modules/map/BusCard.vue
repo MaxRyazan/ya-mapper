@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import {Bus} from "@/modules/map/types";
+import {BusRoutes} from "@/modules/map/types";
 import {ref} from "vue";
 import BusSubcard from "@/modules/map/BusSubcard.vue";
 
 const props = defineProps<{
-    bus: Bus
+    bus: BusRoutes
     isThisBusSelected: boolean
 }>()
 const emits = defineEmits<{
-    (e: 'selectBus', p: Bus, isAsc: boolean):void
+    (e: 'selectBus', p: BusRoutes, isAsc: boolean):void
 }>()
 
 const isCardOpen = ref(false)

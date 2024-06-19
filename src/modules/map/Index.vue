@@ -3,9 +3,9 @@
         <div class="all_buses">
             <bus-card @select-bus="selectBus"
                       :is-this-bus-selected="selectedBus?.busNumber === bus.busNumber"
-                      :bus="bus" v-for="bus in BUSES" :key="bus.busNumber"/>
+                      :bus="bus" v-for="bus in BUSES_ROUTES" :key="bus.busNumber"/>
         </div>
-        <yand-map style="width: 900px; height: 800px" :lines="test" :line-color="lineColor"
+        <yand-map style="width: 900px; height: 800px" :lines="busesRoadMaps" :line-color="lineColor"
                   :center="[63.615375, 53.181536]" :zoom="15"/>
     </div>
 </template>
@@ -13,16 +13,18 @@
 <script setup lang="ts">
 import YandMap from "@/components/reus/YandMap.vue";
 import {onMounted, reactive, ref} from "vue";
-import {Bus} from "@/modules/map/types";
+import {BusRoutes} from "@/modules/map/types";
 import BusCard from "@/modules/map/BusCard.vue";
-import {log} from "util";
+import {getAllBuses} from "@/modules/map/api";
+import {Bus} from "@/models/Bus.ts";
 
+const ALL_BUSES = ref<Bus[]>([])
 const lineColor = ref('red')
 let busRoadMap = ref<any>([])
-const selectedBus = ref<Bus | null>(null)
+const selectedBus = ref<BusRoutes | null>(null)
 
 
-const BUSES = reactive<Bus[]>([
+const BUSES_ROUTES = reactive<BusRoutes[]>([
     {
         busNumber: '24',
         directions: {
@@ -149,20 +151,20 @@ const BUSES = reactive<Bus[]>([
     }
 ])
 
-const test = ref([
+const busesRoadMaps = ref([
     {
         id: 1,
-        roadMap: BUSES[0].directions.asc,
+        roadMap: BUSES_ROUTES[0].directions.asc,
         lineColor: 'red'
     },
     {
         id: 2,
-        roadMap: BUSES[0].directions.desc,
+        roadMap: BUSES_ROUTES[0].directions.desc,
         lineColor: 'blue'
     }
 ])
 
-function selectBus(bus: Bus, isAsc: boolean) {
+function selectBus(bus: BusRoutes, isAsc: boolean) {
     selectedBus.value = bus
     let listOfStations: any[]
     busRoadMap.value = []
@@ -177,91 +179,12 @@ function selectBus(bus: Bus, isAsc: boolean) {
     Object.assign(busRoadMap.value, result)
 }
 
-function sendXHRRequest(method:string, url:string, body?: string|null) {
-    return new Promise((resolve, reject) => {
-        const xhr = new XMLHttpRequest()
-
-        xhr.open(method, url)
-        xhr.setRequestHeader('Content-Type', ' application/soap+xml')
-
-        xhr.onload = () => {
-            if(xhr.status >= 400) {
-                reject(xhr.response)
-            } else {
-                resolve(xhr.response)
-            }
-        }
-        xhr.send(body)
-    })
-}
 
 
 onMounted(async () => {
-    const body = `
-<?xml version="1.0" encoding="utf-8"?>
-<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-  <soap:Body>
-    <Get_BUSES_XML xmlns="http://microsoft.com/webservices/">
-      <BIN>10540003043</BIN>
-      <REGION>REG_18</REGION>
-    </Get_BUSES_XML>
-  </soap:Body>
-</soap:Envelope>`
-
-    // await sendXHRRequest('POST', 'http://www.asts.kz:94/Service1.asmx', body)
-
-
-    const res = await fetch('/api', {
-        method: 'POST',
-        headers: new Headers({'content-type': 'text/xml', 'host' : 'www.asts.kz:94'}),
-        mode: 'cors',
-        body:
-            `<?xml version="1.0" encoding="utf-8"?>
-            <soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-              <soap:Body>
-                <Get_BUSES_XML xmlns="http://microsoft.com/webservices/">
-                  <BIN>10540003043</BIN>
-                  <REGION>REG_18</REGION>
-                </Get_BUSES_XML>
-              </soap:Body>
-            </soap:Envelope>`
-    })
-    const xml = await res.text()
-    let parser = new DOMParser();
-    let xmlDoc = parser.parseFromString(xml,"text/xml");
-    const objects = xmlDoc.getElementsByTagName('BUS')
-
-
-
-    const tempArray = []
-
-    for(let i = 0; i < objects.length; i++) {
-        let temp = []
-        for(let j = 0; j < objects[i].childNodes.length; j++) {
-            temp.push([objects[i].childNodes[j].tagName, objects[i].childNodes[j].innerHTML])
-        }
-        tempArray.push(temp)
-    }
-
-
-    const ppp = tempArray.map(a => {
-       return a.map(b => {
-            return {
-                [b[0]]: b[1]
-            }
-        })
-    })
-
-
-    const sdfsdg = ppp.map(aasd => {
-        return Object.assign({}, ...aasd)
-    })
-
-    console.log(sdfsdg)
+    ALL_BUSES.value = await getAllBuses({bin: '10540003043', region: 'REG_18'})
+    console.log(ALL_BUSES.value)
 })
-
-
-
 
 
 </script>
