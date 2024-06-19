@@ -32,7 +32,7 @@ const navLinks = reactive([
 	width: 300px;
 	height: 100%;
     border-radius: 8px;
-    border: 2px solid rgba(0,0,0, .2);
+    border: 2px solid var(--borders-color);
     background-color: white;
 }
 
@@ -53,6 +53,7 @@ const navLinks = reactive([
 	background: var(--accent-gradient-color);
     color: white;
     border: 2px solid var(--accent-color);
+    transition: .4s;
 }
 
 </style>

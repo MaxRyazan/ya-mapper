@@ -2,6 +2,8 @@ html {
     --header-height: 60px;
     --prime-text-color: white;
     --accent-color: hsla(170, 62%, 16%, 1);
+    --accent-color-hover: hsla(170, 63%, 51%, 1);
     --accent-gradient-color: linear-gradient(180deg, hsla(170, 63%, 51%, 1) 0%, hsla(170, 62%, 16%, 1) 100%);
+    --borders-color: rgba(0,0,0, .2);
 }
 
