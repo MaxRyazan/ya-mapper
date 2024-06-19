@@ -15,8 +15,21 @@ const tableHeader = ['№', 'Код ТС', 'Гос номер', 'Тариф го
 
 
 onMounted(async () => {
-    ALL_BUSES.value = await getAllBuses({bin: '10540003043', region: 'REG_18'})
-    console.log(ALL_BUSES.value)
+    const result: Bus[] = await getAllBuses({bin: '10540003043', region: 'REG_18'})
+    ALL_BUSES.value = result.map(res => {
+        return {
+            ID: res.ID,
+            GOS_NUM: res.GOS_NUM,
+            TAR_CITY: res.TAR_CITY,
+            ZONES: res.ZONES,
+            TAR_BEZ: res.TAR_BEZ,
+            TAR_CASH: res.TAR_CASH,
+            ROUTE: res.ROUTE,
+            SMENA: res.SMENA,
+            STATUS: (res.STATUS === 'True' ? 'Рабочий' : 'Не рабочий'),
+            GPS_IMEI: res.GPS_IMEI,
+        }
+    })
 })
 </script>
 
