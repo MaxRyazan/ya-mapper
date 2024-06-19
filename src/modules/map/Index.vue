@@ -12,9 +12,10 @@
 
 <script setup lang="ts">
 import YandMap from "@/components/reus/YandMap.vue";
-import {reactive, ref} from "vue";
+import {onMounted, reactive, ref} from "vue";
 import {Bus} from "@/modules/map/types";
 import BusCard from "@/modules/map/BusCard.vue";
+import {log} from "util";
 
 const lineColor = ref('red')
 let busRoadMap = ref<any>([])
@@ -134,7 +135,6 @@ const BUSES = reactive<Bus[]>([
                 {code: 0, direction: 1, coords: [53.177882, 63.609301], descRu: '25-й магазин', descKz: ''},
                 {code: 0, direction: 1, coords: [53.175965, 63.607634], descRu: '', descKz: ''},
                 {code: 0, direction: 1, coords: [53.175591, 63.608810], descRu: 'Волынова', descKz: ''},
-
                 {code: 0, direction: 1, coords: [53.174277, 63.612883], descRu: '', descKz: ''},
                 {code: 0, direction: 1, coords: [53.174093, 63.613234], descRu: '', descKz: ''},
                 {code: 0, direction: 1, coords: [53.174333, 63.613782], descRu: '', descKz: ''},
@@ -176,6 +176,94 @@ function selectBus(bus: Bus, isAsc: boolean) {
     })
     Object.assign(busRoadMap.value, result)
 }
+
+function sendXHRRequest(method:string, url:string, body?: string|null) {
+    return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest()
+
+        xhr.open(method, url)
+        xhr.setRequestHeader('Content-Type', ' application/soap+xml')
+
+        xhr.onload = () => {
+            if(xhr.status >= 400) {
+                reject(xhr.response)
+            } else {
+                resolve(xhr.response)
+            }
+        }
+        xhr.send(body)
+    })
+}
+
+
+onMounted(async () => {
+    const body = `
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <Get_BUSES_XML xmlns="http://microsoft.com/webservices/">
+      <BIN>10540003043</BIN>
+      <REGION>REG_18</REGION>
+    </Get_BUSES_XML>
+  </soap:Body>
+</soap:Envelope>`
+
+    // await sendXHRRequest('POST', 'http://www.asts.kz:94/Service1.asmx', body)
+
+
+    const res = await fetch('/api', {
+        method: 'POST',
+        headers: new Headers({'content-type': 'text/xml', 'host' : 'www.asts.kz:94'}),
+        mode: 'cors',
+        body:
+            `<?xml version="1.0" encoding="utf-8"?>
+            <soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+              <soap:Body>
+                <Get_BUSES_XML xmlns="http://microsoft.com/webservices/">
+                  <BIN>10540003043</BIN>
+                  <REGION>REG_18</REGION>
+                </Get_BUSES_XML>
+              </soap:Body>
+            </soap:Envelope>`
+    })
+    const xml = await res.text()
+    let parser = new DOMParser();
+    let xmlDoc = parser.parseFromString(xml,"text/xml");
+    const objects = xmlDoc.getElementsByTagName('BUS')
+
+
+
+    const tempArray = []
+
+    for(let i = 0; i < objects.length; i++) {
+        let temp = []
+        for(let j = 0; j < objects[i].childNodes.length; j++) {
+            temp.push([objects[i].childNodes[j].tagName, objects[i].childNodes[j].innerHTML])
+        }
+        tempArray.push(temp)
+    }
+
+
+    const ppp = tempArray.map(a => {
+       return a.map(b => {
+            return {
+                [b[0]]: b[1]
+            }
+        })
+    })
+
+
+    const sdfsdg = ppp.map(aasd => {
+        return Object.assign({}, ...aasd)
+    })
+
+    console.log(sdfsdg)
+})
+
+
+
+
+
 </script>
 <style lang="scss" scoped>
 
