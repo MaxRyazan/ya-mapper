@@ -6,6 +6,7 @@
                       :bus="bus" v-for="bus in BUSES_ROUTES" :key="bus.busNumber"/>
         </div>
         <yand-map style="width: 900px; height: 800px" :lines="busesRoadMaps" :line-color="lineColor"
+                  :bus-last-coordinate="lastCoordinate"
                   :center="[63.615375, 53.181536]" :zoom="15"/>
     </div>
 </template>
@@ -15,10 +16,13 @@ import YandMap from "@/components/reus/YandMap.vue";
 import {onMounted, reactive, ref} from "vue";
 import {BusRoutes} from "@/modules/map/types";
 import BusCard from "@/modules/map/BusCard.vue";
-import {getAllBuses} from "@/modules/map/api";
-import {Bus} from "@/models/Bus.ts";
+import {getBusesByRoute, getBusGpsDataJson, getRouteXml, getSingleBusGPSData} from "@/modules/map/api";
+import {DateHelper} from "@/helpers/DateHelper.ts";
+import {CONSTANTS} from "@/constants.ts";
 
-const ALL_BUSES = ref<Bus[]>([])
+
+
+const lastCoordinate = ref<number[]>([])
 const lineColor = ref('red')
 let busRoadMap = ref<any>([])
 const selectedBus = ref<BusRoutes | null>(null)
@@ -180,10 +184,38 @@ function selectBus(bus: BusRoutes, isAsc: boolean) {
 }
 
 
+// async function getLastCoordinates() {
+//     setInterval(async () => {
+//         const TIME_STOP = dayjs().hour() + ':' + dayjs().minute() + ':' + dayjs().second()
+//         const resp = await getBusGpsDataJson({emei: '352592579463506', region: 'REG_18', date:'26.06.2024', time_start:'16:00:00', time_stop: TIME_STOP})
+//         const textCoordinate = resp[resp.length - 1].RES_GPS
+//         const array = textCoordinate.split(',')
+//         const res: number[] = array.map(a => +(a.trim()))
+//         lastCoordinate.value = [res[1], res[0]]
+//     }, 1000)
+// }
+
 
 onMounted(async () => {
-    ALL_BUSES.value = await getAllBuses({bin: '10540003043', region: 'REG_18'})
-    console.log(ALL_BUSES.value)
+    const route = await getRouteXml({route: '24', region: CONSTANTS.REG, direction: '0'})
+    const busesByRoute = await getBusesByRoute({route: '24', region: CONSTANTS.REG})
+    console.log(route)
+    console.log(busesByRoute)
+
+    for (const bus of busesByRoute) {
+        if(bus.GPS_IMEI) {
+            const result = await getBusGpsDataJson({
+                emei: bus.GPS_IMEI,
+                region: CONSTANTS.REG,
+                date: DateHelper.getDateNow(),
+                time_start:DateHelper.getTimeNowMinusHours(4),
+                time_stop: DateHelper.getTimeNow()
+            })
+            console.log(result)
+        }
+    }
+    const resp = await getSingleBusGPSData({route: '24', region: CONSTANTS.REG})
+    console.log(resp)
 })
 
 

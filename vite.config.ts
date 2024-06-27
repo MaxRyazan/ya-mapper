@@ -10,13 +10,4 @@ export default defineConfig({
       "@": fileURLToPath(new URL("./src", import.meta.url)),
     },
   },
-  server: {
-    proxy: {
-      '/api/all-buses': {
-        target: 'http://www.asts.kz:94/Service1.asmx?op=Get_BUSES_JSON',
-        changeOrigin: true,
-        secure: false,
-      },
-    },
-  },
 })

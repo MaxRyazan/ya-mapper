@@ -37,12 +37,22 @@
                             @click="produceAnAlert(marker)"
                     />
                 </yandex-map-marker>
+                <yandex-map-marker v-if="props.busLastCoordinate"
+                                   :settings="{ coordinates: busLastCoordinate }"
+                                   position="top-center left-center">
+                    <img
+                            class="pin"
+                            alt=""
+                            src="@/assets/img/where-icon.png"
+                            @click="produceAnAlert('marker')"
+                    />
+                </yandex-map-marker>
             </yandex-map>
         </div>
     </div>
 </template>
 <script setup lang="ts">
-import {ref, shallowRef} from "vue";
+import {onMounted, ref, shallowRef} from "vue";
 import {
     YandexMap,
     YandexMapDefaultFeaturesLayer,
@@ -59,6 +69,7 @@ const props = defineProps<{
     center: any,
     zoom: number,
     lineColor: string
+    busLastCoordinate: number[]
 }>()
 
 function produceAnAlert(p: any) {
@@ -66,9 +77,10 @@ function produceAnAlert(p: any) {
 }
 
 
-// watch(() => props.lines, () => {
-//     console.log(props.lines)
-// }, {immediate: true})
+onMounted(() => {
+    console.log(props.busLastCoordinate)
+
+})
 </script>
 
 <style scoped>
@@ -84,5 +96,9 @@ function produceAnAlert(p: any) {
     width: 100%;
     max-width: 800px;
     max-height: 800px;
+}
+.pin {
+    width: 40px;
+    padding-bottom: 20px;
 }
 </style>
