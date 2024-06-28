@@ -48,6 +48,7 @@ export async function getRouteXml(options?: {
 }){
     const res: Response = await fetch(`http://localhost:3001/get-route-xml?route=${options!.route}&region=${options!.region}&direction=${options?.direction}`)
     const raw: string = await res.text()
+    console.log(raw)
     const openArray: number = raw.indexOf('[')
     const closeArray: number = raw.indexOf(']')
 
@@ -65,5 +66,21 @@ export async function getBusesByRoute(options?: {
     const closeArray: number = raw.indexOf(']')
 
     const text: string = raw.slice(openArray, closeArray + 1)
+    if (text) return await JSON.parse(text)
+}
+
+
+/**
+ * Метод получает маршрут с отстановками с параметрами очередности остановок для отрисовки линий на карте
+ */
+export async function getLinesByRegion(){
+    const res: Response = await fetch(`http://localhost:3001/get-lines-by-region`)
+
+    const raw: string = await res.text()
+    const openArray: number = raw.indexOf('[{')
+    const closeArray: number = raw.indexOf('}]')
+
+    const text: string = raw.slice(openArray, closeArray + 2)
+    console.log(text)
     if (text) return await JSON.parse(text)
 }

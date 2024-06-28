@@ -16,7 +16,13 @@ import YandMap from "@/components/reus/YandMap.vue";
 import {onMounted, reactive, ref} from "vue";
 import {BusRoutes} from "@/modules/map/types";
 import BusCard from "@/modules/map/BusCard.vue";
-import {getBusesByRoute, getBusGpsDataJson, getRouteXml, getSingleBusGPSData} from "@/modules/map/api";
+import {
+    getBusesByRoute,
+    getBusGpsDataJson,
+    getLinesByRegion,
+    getRouteXml,
+    getSingleBusGPSData
+} from "@/modules/map/api";
 import {DateHelper} from "@/helpers/DateHelper.ts";
 import {CONSTANTS} from "@/constants.ts";
 
@@ -216,6 +222,8 @@ onMounted(async () => {
     }
     const resp = await getSingleBusGPSData({route: '24', region: CONSTANTS.REG})
     console.log(resp)
+    const rr = await getLinesByRegion()
+    console.log(rr)
 })
 
 
