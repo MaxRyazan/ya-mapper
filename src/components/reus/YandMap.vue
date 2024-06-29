@@ -72,6 +72,7 @@ const props = defineProps<{
     busLastCoordinate?: number[]
 }>()
 
+
 function produceAnAlert(p: any) {
     console.log(p)
 }
@@ -99,6 +100,7 @@ onMounted(() => {
     max-height: 800px;
 }
 .pin {
+    cursor: pointer;
     width: 14px;
     height: 14px;
 }
