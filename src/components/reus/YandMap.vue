@@ -20,20 +20,20 @@
                         :settings="{
                             geometry: {
                             type: 'LineString',
-                            coordinates: line.roadMap.map(a => a.coords),
+                            coordinates: line.roadMap.map((a:Station) => a.coords),
                         },
                         style: {
                           stroke: [{ color: line.lineColor, width: 4 }],
                         },
                 }"
                 />
-                <yandex-map-marker v-if="markers.length" v-for="marker in markers" :key="marker.busNumber"
-                                   :settings="{ coordinates: marker.coordinates }"
+                <yandex-map-marker v-for="marker in markers" :key="marker.code"
+                                   :settings="{ coordinates: marker.coords}"
                                    position="top-center left-center">
                     <img
                             class="pin"
                             alt=""
-                            :src="marker.iconSrc"
+                            src="@/assets/img/circle.png"
                             @click="produceAnAlert(marker)"
                     />
                 </yandex-map-marker>
@@ -66,7 +66,7 @@ const myMap = shallowRef<null | any>(null);
 let markers = ref<any>([])
 
 const props = defineProps<{
-    lines?: any[],
+    lines: any[],
     center: any,
     zoom?: number,
     busLastCoordinate?: number[]
@@ -75,6 +75,12 @@ const props = defineProps<{
 function produceAnAlert(p: any) {
     console.log(p)
 }
+onMounted(() => {
+    const ascStations = props.lines[0].roadMap.filter((a:any) => a.code)
+    const descStations = props.lines[1].roadMap.filter((a:any) => a.code)
+    markers.value = [...ascStations, ...descStations]
+
+})
 
 </script>
 
@@ -93,7 +99,7 @@ function produceAnAlert(p: any) {
     max-height: 800px;
 }
 .pin {
-    width: 40px;
-    padding-bottom: 20px;
+    width: 14px;
+    height: 14px;
 }
 </style>
