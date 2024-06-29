@@ -76,9 +76,6 @@ function produceAnAlert(p: any) {
     console.log(p)
 }
 
-onMounted(() => {
-    console.log(props.lines)
-})
 </script>
 
 <style scoped>

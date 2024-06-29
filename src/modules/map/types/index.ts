@@ -12,4 +12,5 @@ export interface Station {
     descRu: string
     descKz: string
     direction: number
+    segments?: [number, number][]
 }
