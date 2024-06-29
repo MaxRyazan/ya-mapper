@@ -41,10 +41,10 @@
                                    :settings="{ coordinates: (busLastCoordinate as any) }"
                                    position="top-center left-center">
                     <img
-                            class="pin"
+                            class="bus"
                             alt=""
                             src="@/assets/img/where-icon.png"
-                            @click="produceAnAlert('marker')"
+                            @click="produceAnAlert(busLastCoordinate)"
                     />
                 </yandex-map-marker>
             </yandex-map>
@@ -72,10 +72,14 @@ const props = defineProps<{
     busLastCoordinate?: number[]
 }>()
 
+const PATH = []
 
 function produceAnAlert(p: any) {
     console.log(p)
+    PATH.push(p)
 }
+
+
 onMounted(() => {
     const ascStations = props.lines[0].roadMap.filter((a:any) => a.code)
     const descStations = props.lines[1].roadMap.filter((a:any) => a.code)
@@ -103,5 +107,10 @@ onMounted(() => {
     cursor: pointer;
     width: 14px;
     height: 14px;
+}
+.bus {
+    cursor: pointer;
+    width: 40px;
+    margin-bottom: 20px;
 }
 </style>

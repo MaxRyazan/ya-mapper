@@ -5,7 +5,10 @@
                       :is-this-bus-selected="selectedBus?.busNumber === bus.busNumber"
                       :bus="bus" v-for="bus in BUSES_ROUTES" :key="bus.busNumber"/>
         </div>
-        <yand-map style="width: 900px; height: 800px" :lines="busesRoadMaps" :line-color="lineColor"
+        <button @click="console.log(lastCoordinate)" style="width: 100px;height: 30px; background-color: blue; color: white">Жмахни</button>
+        <yand-map style="width: 900px; height: 800px"
+                  :lines="busesRoadMaps"
+                  :line-color="lineColor"
                   :bus-last-coordinate="lastCoordinate"
                   :center="[63.615375, 53.181536]" :zoom="15"/>
     </div>
@@ -161,15 +164,30 @@ const BUSES_ROUTES = reactive<BusRoutes[]>([
     }
 ])
 
+const testASC = BUSES_ROUTES[0].directions.asc.map((a:any) => {
+    return {
+        ...a,
+        coords: [a.coords[1], a.coords[0]]
+    }
+})
+const testDESC = BUSES_ROUTES[0].directions.desc.map((a:any) => {
+    return {
+        ...a,
+        coords: [a.coords[1], a.coords[0]]
+    }
+})
+
+
+console.log(testASC)
 const busesRoadMaps = ref([
     {
         id: 1,
-        roadMap: BUSES_ROUTES[0].directions.asc,
+        roadMap: testASC,
         lineColor: 'red'
     },
     {
         id: 2,
-        roadMap: BUSES_ROUTES[0].directions.desc,
+        roadMap: testDESC,
         lineColor: 'blue'
     }
 ])
@@ -190,19 +208,26 @@ function selectBus(bus: BusRoutes, isAsc: boolean) {
 }
 
 
-// async function getLastCoordinates() {
-//     setInterval(async () => {
-//         const TIME_STOP = dayjs().hour() + ':' + dayjs().minute() + ':' + dayjs().second()
-//         const resp = await getBusGpsDataJson({emei: '352592579463506', region: 'REG_18', date:'26.06.2024', time_start:'16:00:00', time_stop: TIME_STOP})
-//         const textCoordinate = resp[resp.length - 1].RES_GPS
-//         const array = textCoordinate.split(',')
-//         const res: number[] = array.map(a => +(a.trim()))
-//         lastCoordinate.value = [res[1], res[0]]
-//     }, 1000)
-// }
+async function getLastCoordinates() {
+    setInterval(async () => {
+        const resp = await getBusGpsDataJson({
+            emei: '352592579460817',
+            region: 'REG_18',
+            date:'26.06.2024',
+            time_start:DateHelper.getTimeNowMinusHours(13),
+            time_stop: DateHelper.getTimeNowMinusHours(9)
+        })
+        const textCoordinate = resp[resp.length - 1].RES_GPS
+        const array = textCoordinate.split(',')
+        const res: number[] = array.map(a => +(a.trim()))
+        lastCoordinate.value = [res[1], res[0]]
+    }, 1000)
+}
 
 
 onMounted(async () => {
+    await getLastCoordinates()
+
     // const route = await getRouteXml({route: '24', region: CONSTANTS.REG, direction: '0'})
     // const busesByRoute = await getBusesByRoute({route: '24', region: CONSTANTS.REG})
     // console.log(route)
@@ -214,10 +239,9 @@ onMounted(async () => {
     //             emei: bus.GPS_IMEI,
     //             region: CONSTANTS.REG,
     //             date: DateHelper.getDateNow(),
-    //             time_start:DateHelper.getTimeNowMinusHours(4),
-    //             time_stop: DateHelper.getTimeNow()
+    //             time_start:DateHelper.getTimeNowMinusHours(10),
+    //             time_stop: DateHelper.getTimeNowMinusHours(9)
     //         })
-    //         console.log(result)
     //     }
     // }
     // const resp = await getSingleBusGPSData({route: '24', region: CONSTANTS.REG})

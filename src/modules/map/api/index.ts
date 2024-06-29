@@ -13,6 +13,8 @@ export async function getAllBuses(options?: { bin?: string, region?: string }): 
     else return [] as Bus[]
 }
 
+
+//todo
 export async function getSingleBusGPSData(options?: { region?: string, route?: string }): Promise<Bus[]> {
     const res: Response = await fetch(`http://localhost:3001/get-single-bus-gps-data?region=${options!.region}&route=${options!.route}`)
 
@@ -25,6 +27,10 @@ export async function getSingleBusGPSData(options?: { region?: string, route?: s
     else return [] as Bus[]
 }
 
+/**
+ * Получаем координаты автобуса в промежутокк времени
+ * @param options
+ */
 export async function getBusGpsDataJson(options?: {
     emei?: string,
     region?: string,
