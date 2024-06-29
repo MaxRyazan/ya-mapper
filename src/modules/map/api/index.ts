@@ -1,4 +1,5 @@
 import {Bus} from "@/models/Bus.ts";
+import {GetLinesResponse} from "@/modules/routes/types/apiModels.ts";
 
 export async function getAllBuses(options?: { bin?: string, region?: string }): Promise<Bus[]> {
     const res: Response = await fetch(`http://localhost:3001/get-buses-json?bin=${options!.bin}&region=${options!.region}`)
@@ -73,7 +74,7 @@ export async function getBusesByRoute(options?: {
 /**
  * Метод получает маршрут с отстановками с параметрами очередности остановок для отрисовки линий на карте
  */
-export async function getLinesByRegion(){
+export async function getLinesByRegion(): Promise<GetLinesResponse[] | undefined>{
     const res: Response = await fetch(`http://localhost:3001/get-lines-by-region`)
 
     const raw: string = await res.text()
@@ -81,6 +82,5 @@ export async function getLinesByRegion(){
     const closeArray: number = raw.indexOf('}]')
 
     const text: string = raw.slice(openArray, closeArray + 2)
-    console.log(text)
     if (text) return await JSON.parse(text)
 }

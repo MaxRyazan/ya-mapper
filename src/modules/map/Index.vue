@@ -203,27 +203,27 @@ function selectBus(bus: BusRoutes, isAsc: boolean) {
 
 
 onMounted(async () => {
-    const route = await getRouteXml({route: '24', region: CONSTANTS.REG, direction: '0'})
-    const busesByRoute = await getBusesByRoute({route: '24', region: CONSTANTS.REG})
-    console.log(route)
-    console.log(busesByRoute)
-
-    for (const bus of busesByRoute) {
-        if(bus.GPS_IMEI) {
-            const result = await getBusGpsDataJson({
-                emei: bus.GPS_IMEI,
-                region: CONSTANTS.REG,
-                date: DateHelper.getDateNow(),
-                time_start:DateHelper.getTimeNowMinusHours(4),
-                time_stop: DateHelper.getTimeNow()
-            })
-            console.log(result)
-        }
-    }
-    const resp = await getSingleBusGPSData({route: '24', region: CONSTANTS.REG})
-    console.log(resp)
-    const rr = await getLinesByRegion()
-    console.log(rr)
+    // const route = await getRouteXml({route: '24', region: CONSTANTS.REG, direction: '0'})
+    // const busesByRoute = await getBusesByRoute({route: '24', region: CONSTANTS.REG})
+    // console.log(route)
+    // console.log(busesByRoute)
+    //
+    // for (const bus of busesByRoute) {
+    //     if(bus.GPS_IMEI) {
+    //         const result = await getBusGpsDataJson({
+    //             emei: bus.GPS_IMEI,
+    //             region: CONSTANTS.REG,
+    //             date: DateHelper.getDateNow(),
+    //             time_start:DateHelper.getTimeNowMinusHours(4),
+    //             time_stop: DateHelper.getTimeNow()
+    //         })
+    //         console.log(result)
+    //     }
+    // }
+    // const resp = await getSingleBusGPSData({route: '24', region: CONSTANTS.REG})
+    // console.log(resp)
+    // const linesResponse = await getLinesByRegion()
+    // console.log(linesResponse)
 })
 
 

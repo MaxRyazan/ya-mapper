@@ -16,11 +16,11 @@
                 <yandex-map-default-features-layer/>
 
                 <yandex-map-feature
-                        v-for="line in lines" :key="line.id"
+                        v-for="line in props.lines" :key="line.id"
                         :settings="{
                             geometry: {
                             type: 'LineString',
-                            coordinates: line.roadMap.map(r => [r.coords[1], r.coords[0]]),
+                            coordinates: line.roadMap.map(a => a.coords),
                         },
                         style: {
                           stroke: [{ color: line.lineColor, width: 4 }],
@@ -38,7 +38,7 @@
                     />
                 </yandex-map-marker>
                 <yandex-map-marker v-if="props.busLastCoordinate"
-                                   :settings="{ coordinates: busLastCoordinate }"
+                                   :settings="{ coordinates: (busLastCoordinate as any) }"
                                    position="top-center left-center">
                     <img
                             class="pin"
@@ -60,26 +60,24 @@ import {
     YandexMapFeature,
     YandexMapMarker
 } from "vue-yandex-maps";
+import {Station} from "@/modules/map/types";
 
 const myMap = shallowRef<null | any>(null);
 let markers = ref<any>([])
 
 const props = defineProps<{
-    lines: any[],
+    lines?: any[],
     center: any,
-    zoom: number,
-    lineColor: string
-    busLastCoordinate: number[]
+    zoom?: number,
+    busLastCoordinate?: number[]
 }>()
 
 function produceAnAlert(p: any) {
     console.log(p)
 }
 
-
 onMounted(() => {
-    console.log(props.busLastCoordinate)
-
+    console.log(props.lines)
 })
 </script>
 
