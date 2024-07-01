@@ -10,6 +10,7 @@
                   :lines="busesRoadMaps"
                   :line-color="lineColor"
                   :bus-last-coordinate="lastCoordinate"
+                  :currentBusesCoordinates="currentBusesCoordinates"
                   :center="[63.615375, 53.181536]" :zoom="15"/>
     </div>
 </template>
@@ -21,10 +22,7 @@ import {BusRoutes} from "@/modules/map/types";
 import BusCard from "@/modules/map/BusCard.vue";
 import {
     getBusesByRoute,
-    getBusGpsDataJson,
-    getLinesByRegion,
-    getRouteXml,
-    getSingleBusGPSData
+    getBusGpsDataJson, getGroupBusGPSDataJson,
 } from "@/modules/map/api";
 import {DateHelper} from "@/helpers/DateHelper.ts";
 import {CONSTANTS} from "@/constants.ts";
@@ -178,7 +176,6 @@ const testDESC = BUSES_ROUTES[0].directions.desc.map((a:any) => {
 })
 
 
-console.log(testASC)
 const busesRoadMaps = ref([
     {
         id: 1,
@@ -211,22 +208,57 @@ function selectBus(bus: BusRoutes, isAsc: boolean) {
 async function getLastCoordinates() {
     setInterval(async () => {
         const resp = await getBusGpsDataJson({
-            emei: '352592579460817',
+            emei: '352592579463472',
             region: 'REG_18',
-            date:'26.06.2024',
-            time_start:DateHelper.getTimeNowMinusHours(13),
-            time_stop: DateHelper.getTimeNowMinusHours(9)
+            date:'30.06.2024',
+            time_start:DateHelper.getTimeNowMinusHours(1),
+            time_stop: DateHelper.getTimeNowMinusHours(0)
         })
         const textCoordinate = resp[resp.length - 1].RES_GPS
         const array = textCoordinate.split(',')
-        const res: number[] = array.map(a => +(a.trim()))
+        const res: number[] = array.map((a:any) => +(a.trim()))
         lastCoordinate.value = [res[1], res[0]]
     }, 1000)
 }
 
+function clearData(data: string[]){
+    const res = data.map(a => a.split('!'))
+    const obj = res.map(b => {
+        return {
+            emai: +b[1],
+            coords: b[2].split(',')
+        }
+    })
+    return obj.map(c => {
+        return {
+            ...c,
+            coords: c.coords.map(a => +(a.trim()))
+        }
+    })
+}
+
+let currentBusesCoordinates = ref<any>([])
+function trasformCoords(coord: [number, number]){
+    return [coord[1], coord[0]]
+}
+
 
 onMounted(async () => {
-    await getLastCoordinates()
+    // await getLastCoordinates()
+
+    setInterval(async () => {
+        currentBusesCoordinates.value = []
+        const response = await getGroupBusGPSDataJson({region: CONSTANTS.REG, route: '24'})
+        const re:any = clearData(response)
+        console.log(response)
+        for(let i = 0; i < re.length; i++){
+            currentBusesCoordinates.value.push(trasformCoords(re[i].coords))
+        }
+        console.log(currentBusesCoordinates.value)
+    }, 2000)
+
+
+    // lastCoordinate.value = [re[2].coords[1], re[0].coords[0]]
 
     // const route = await getRouteXml({route: '24', region: CONSTANTS.REG, direction: '0'})
     // const busesByRoute = await getBusesByRoute({route: '24', region: CONSTANTS.REG})

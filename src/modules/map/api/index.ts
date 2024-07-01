@@ -90,3 +90,18 @@ export async function getLinesByRegion(): Promise<GetLinesResponse[] | undefined
     const text: string = raw.slice(openArray, closeArray + 2)
     if (text) return await JSON.parse(text)
 }
+
+
+export async function getGroupBusGPSDataJson(options?: {
+    route?: string,
+    region?: string,
+}){
+    const res: Response = await fetch(`http://localhost:3001/get-group-bus-gps-data-json?route=${options!.route}&region=${options!.region}`)
+
+    const raw: string = await res.text()
+    const openArray: number = raw.indexOf('[')
+    const closeArray: number = raw.indexOf(']')
+
+    const text: string = raw.slice(openArray, closeArray + 1)
+    if (text) return await JSON.parse(text)
+}

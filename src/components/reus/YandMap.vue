@@ -37,6 +37,18 @@
                             @click="produceAnAlert(marker)"
                     />
                 </yandex-map-marker>
+
+                <yandex-map-marker v-for="(coord, idx) in currentBusesCoordinates" :key="idx"
+                                   :settings="{ coordinates: coord}"
+                                   position="top-center left-center">
+                    <img
+                            class="bus"
+                            alt=""
+                            src="@/assets/img/where-icon.png"
+                            @click="produceAnAlert(coord)"
+                    />
+                </yandex-map-marker>
+
                 <yandex-map-marker v-if="props.busLastCoordinate"
                                    :settings="{ coordinates: (busLastCoordinate as any) }"
                                    position="top-center left-center">
@@ -70,6 +82,7 @@ const props = defineProps<{
     center: any,
     zoom?: number,
     busLastCoordinate?: number[]
+    currentBusesCoordinates?: [number, number][]
 }>()
 
 const PATH = []
