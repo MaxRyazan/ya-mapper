@@ -1,12 +1,12 @@
 <template>
-	<div style="display: flex">
+	<d-flex gap="0">
 		<router-link to="/routes">маршруты</router-link>
 		<p>/{{ route.params.id }}</p>
-	</div>
-	<div style="display: flex; gap: 10px; padding-left: 20px; margin-top: 20px;">
-		<span @click="direction = 0" :class="{current: direction === 0}" style="cursor:pointer;">Прямой</span>
-		<span @click="direction = 1" :class="{current: direction === 1}" style="cursor:pointer;">Обратный</span>
-	</div>
+    </d-flex>
+	<d-flex style="margin-top: 20px;">
+        <d-text @click="direction = 0" :class="{current: direction === 0}" cursor="pointer">Прямой</d-text>
+        <d-text @click="direction = 1" :class="{current: direction === 1}" cursor="pointer">Обратный</d-text>
+    </d-flex>
 	<yand-map style="width: 900px; height: 800px"
 						v-if="isLoaded"
 						:lines="busesRoadMaps"
@@ -21,6 +21,8 @@ import YandMap from "@/components/reus/YandMap.vue";
 import {BusRoadMap} from "@/modules/routes/types/Index.ts";
 import {GetLinesByRouteResponse} from "@/modules/map/types/api-models";
 import {transformData} from "@/modules/routes/helpers";
+import DFlex from "@/components/reus/html-containers/DFlex.vue";
+import DText from "@/components/reus/texts/DText.vue";
 
 const isLoaded = ref(false)
 const route = useRoute()
