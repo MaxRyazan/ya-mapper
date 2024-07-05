@@ -19,8 +19,8 @@ import {onMounted, ref, watch} from "vue";
 import {getLinesByRegion} from "@/modules/map/api";
 import YandMap from "@/components/reus/YandMap.vue";
 import {BusRoadMap} from "@/modules/routes/types/Index.ts";
-import {GetLinesResponse} from "@/modules/routes/types/apiModels.ts";
 import {GetLinesByRouteResponse} from "@/modules/map/types/api-models";
+import {transformData} from "@/modules/routes/helpers";
 
 const isLoaded = ref(false)
 const route = useRoute()
@@ -41,43 +41,9 @@ const busesRoadMaps = ref<BusRoadMap[]>([
 	}
 ])
 
-function deleteRN(p: string) {
-	return p.replace('\r', '').replace('\n', '')
-}
-
-function clearLatLon(p: string) {
-	const res = deleteRN(p).split(',')
-	if (res.length !== 2) return []
-	const arr = res.map(r => +(r.trim()))
-	return [arr[1], arr[0]]
-}
-
-function clearSegments(p: string) {
-	if (!p.length) return
-	const segments = p.split('!')
-	const coordinates = segments[1].split(':')
-	const res = coordinates.map(a => a.replace('[', '').replace(']', ''))
-	return res.map(r => clearLatLon(r))
-}
-
-function transformData(p: GetLinesByRouteResponse[]) {
-	return p.map((a: GetLinesByRouteResponse) => {
-		return {
-			DIRECTION: +a.DIRECTION,
-			LON_LAT: clearLatLon(a.LON_LAT),
-			NAME_KZ: deleteRN(a.NAME_KZ),
-			NAME_RU: deleteRN(a.NAME_RU),
-			NUM_IN_ROUTE: +a.NUM_IN_ROUTE,
-			ROUTE_NUM: +a.ROUTE_NUM,
-			ST_ID: +a.ST_ID,
-			SEGMENTS: clearSegments(a.SEGMENTS) ?? []
-		}
-	})
-}
-
 watch(direction, () => getLinesByRoute())
 
-async function getLinesByRoute(){
+async function getLinesByRoute() {
 	const linesResponse: GetLinesByRouteResponse[] | undefined = await getLinesByRegion(+route.params.id, direction.value)
 	if (!linesResponse) return
 	const currentRouteLines = linesResponse.filter((r: GetLinesByRouteResponse) => +r.ROUTE_NUM === currentBusRoute)
