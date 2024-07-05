@@ -1,8 +1,12 @@
 import {Bus} from "@/models/Bus.ts";
 import {GetLinesResponse} from "@/modules/routes/types/apiModels.ts";
+import {GetLinesByRouteResponse} from "@/modules/map/types/api-models";
+
+const PORT = 5553
+const URL = 'https://www.asts.kz:5554/api/test/'
 
 export async function getAllBuses(options?: { bin?: string, region?: string }): Promise<Bus[]> {
-    const res: Response = await fetch(`http://localhost:3001/get-buses-json?bin=${options!.bin}&region=${options!.region}`)
+    const res: Response = await fetch(`${URL}?op=Get_BUSES&bin=${options!.bin}&region=${options!.region}`)
 
     const raw: string = await res.text()
     const openArray: number = raw.indexOf('[')
@@ -14,9 +18,8 @@ export async function getAllBuses(options?: { bin?: string, region?: string }): 
 }
 
 
-//todo
 export async function getSingleBusGPSData(options?: { region?: string, route?: string }): Promise<Bus[]> {
-    const res: Response = await fetch(`http://localhost:3001/get-single-bus-gps-data?region=${options!.region}&route=${options!.route}`)
+    const res: Response = await fetch(`http://localhost:${PORT}/get-single-bus-gps-data?region=${options!.region}&route=${options!.route}`)
 
     const raw: string = await res.text()
     const openArray: number = raw.indexOf('[')
@@ -38,7 +41,7 @@ export async function getBusGpsDataJson(options?: {
     time_start: string,
     time_stop: string
 }) {
-    const res: Response = await fetch(`http://localhost:3001/get-bus-gps-data-json?emei=${options!.emei}&region=${options!.region}&time_start=${options?.time_start}&time_stop=${options?.time_stop}&date=${options?.date}`)
+    const res: Response = await fetch(`http://localhost:${PORT}/get-bus-gps-data-json?emei=${options!.emei}&region=${options!.region}&time_start=${options?.time_start}&time_stop=${options?.time_stop}&date=${options?.date}`)
 
     const raw: string = await res.text()
     const openArray: number = raw.indexOf('[')
@@ -53,7 +56,7 @@ export async function getRouteXml(options?: {
     region?: string,
     direction: string,
 }){
-    const res: Response = await fetch(`http://localhost:3001/get-route-xml?route=${options!.route}&region=${options!.region}&direction=${options?.direction}`)
+    const res: Response = await fetch(`http://localhost:${PORT}/get-route-xml?route=${options!.route}&region=${options!.region}&direction=${options?.direction}`)
     const raw: string = await res.text()
     console.log(raw)
     const openArray: number = raw.indexOf('[')
@@ -67,7 +70,7 @@ export async function getBusesByRoute(options?: {
     route?: string,
     region?: string,
 }){
-    const res: Response = await fetch(`http://localhost:3001/get-buses-by-route?route=${options!.route}&region=${options!.region}`)
+    const res: Response = await fetch(`http://localhost:${PORT}/get-buses-by-route?route=${options!.route}&region=${options!.region}`)
     const raw: string = await res.text()
     const openArray: number = raw.indexOf('[')
     const closeArray: number = raw.indexOf(']')
@@ -80,8 +83,8 @@ export async function getBusesByRoute(options?: {
 /**
  * Метод получает маршрут с отстановками с параметрами очередности остановок для отрисовки линий на карте
  */
-export async function getLinesByRegion(): Promise<GetLinesResponse[] | undefined>{
-    const res: Response = await fetch(`http://localhost:3001/get-lines-by-region`)
+export async function getLinesByRegion(num: number, direction: 0 | 1): Promise<GetLinesByRouteResponse[] | undefined>{
+    const res: Response = await fetch(`${URL}?op=Get_ROUTE&REGION=REG_18&NUM=${num}&DIRECTION=${direction}`)
 
     const raw: string = await res.text()
     const openArray: number = raw.indexOf('[{')
@@ -96,7 +99,7 @@ export async function getGroupBusGPSDataJson(options?: {
     route?: string,
     region?: string,
 }){
-    const res: Response = await fetch(`http://localhost:3001/get-group-bus-gps-data-json?route=${options!.route}&region=${options!.region}`)
+    const res: Response = await fetch(`http://localhost:${PORT}/get-group-bus-gps-data-json?route=${options!.route}&region=${options!.region}`)
 
     const raw: string = await res.text()
     const openArray: number = raw.indexOf('[')

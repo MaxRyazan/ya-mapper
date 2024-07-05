@@ -14,3 +14,4 @@ export interface Station {
     direction: number
     segments?: [number, number][]
 }
+

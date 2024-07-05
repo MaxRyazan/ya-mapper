@@ -21,10 +21,8 @@ import {onMounted, reactive, ref} from "vue";
 import {BusRoutes} from "@/modules/map/types";
 import BusCard from "@/modules/map/BusCard.vue";
 import {
-    getBusesByRoute,
-    getBusGpsDataJson, getGroupBusGPSDataJson,
+    getGroupBusGPSDataJson,
 } from "@/modules/map/api";
-import {DateHelper} from "@/helpers/DateHelper.ts";
 import {CONSTANTS} from "@/constants.ts";
 
 
@@ -205,21 +203,21 @@ function selectBus(bus: BusRoutes, isAsc: boolean) {
 }
 
 
-async function getLastCoordinates() {
-    setInterval(async () => {
-        const resp = await getBusGpsDataJson({
-            emei: '352592579463472',
-            region: 'REG_18',
-            date:'30.06.2024',
-            time_start:DateHelper.getTimeNowMinusHours(1),
-            time_stop: DateHelper.getTimeNowMinusHours(0)
-        })
-        const textCoordinate = resp[resp.length - 1].RES_GPS
-        const array = textCoordinate.split(',')
-        const res: number[] = array.map((a:any) => +(a.trim()))
-        lastCoordinate.value = [res[1], res[0]]
-    }, 1000)
-}
+// async function getLastCoordinates() {
+//     setInterval(async () => {
+//         const resp = await getBusGpsDataJson({
+//             emei: '352592579463472',
+//             region: 'REG_18',
+//             date:'30.06.2024',
+//             time_start:DateHelper.getTimeNowMinusHours(1),
+//             time_stop: DateHelper.getTimeNowMinusHours(0)
+//         })
+//         const textCoordinate = resp[resp.length - 1].RES_GPS
+//         const array = textCoordinate.split(',')
+//         const res: number[] = array.map((a:any) => +(a.trim()))
+//         lastCoordinate.value = [res[1], res[0]]
+//     }, 1000)
+// }
 
 function clearData(data: string[]){
     const res = data.map(a => a.split('!'))
