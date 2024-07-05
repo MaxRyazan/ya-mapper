@@ -7,10 +7,13 @@
         <d-text @click="direction = 0" :class="{current: direction === 0}" cursor="pointer">Прямой</d-text>
         <d-text @click="direction = 1" :class="{current: direction === 1}" cursor="pointer">Обратный</d-text>
     </d-flex>
-	<yand-map style="width: 900px; height: 800px"
-						v-if="isLoaded"
-						:lines="busesRoadMaps"
-						:center="center" :zoom="15"/>
+    <d-flex gap="40px">
+        <bus-stations-card @show-station="changeCenter" :stations="busStations" :direction="direction"/>
+        <yand-map style="width: 900px; height: 800px"
+                            v-if="isLoaded"
+                            :lines="busesRoadMaps"
+                            :center="center" :zoom="zoom"/>
+    </d-flex>
 </template>
 
 <script setup lang="ts">
@@ -23,12 +26,15 @@ import {GetLinesByRouteResponse} from "@/modules/map/types/api-models";
 import {transformData} from "@/modules/routes/helpers";
 import DFlex from "@/components/reus/html-containers/DFlex.vue";
 import DText from "@/components/reus/texts/DText.vue";
+import BusStationsCard from "@/modules/routes/views/cards/BusStationsCard.vue";
 
 const isLoaded = ref(false)
 const route = useRoute()
 const center = ref([63.615375, 53.181536])
+const zoom = ref(15)
 const direction = ref<0|1>(0)
 const currentBusRoute = +route.params.id
+const busStations = ref<string[]>([])
 
 const busesRoadMaps = ref<BusRoadMap[]>([
 	{
@@ -43,11 +49,21 @@ const busesRoadMaps = ref<BusRoadMap[]>([
 	}
 ])
 
+function changeCenter(param: {name: string, direction: 1|0}){
+    const busRoute = busesRoadMaps.value[direction.value]
+    const station = busRoute.roadMap.find(r => r.descRu === param.name)
+    if(!station) return
+    center.value = [station.coords[0], station.coords[1]]
+    zoom.value = 18
+
+}
+
 watch(direction, () => getLinesByRoute())
 
 async function getLinesByRoute() {
 	const linesResponse: GetLinesByRouteResponse[] | undefined = await getLinesByRegion(+route.params.id, direction.value)
 	if (!linesResponse) return
+    busStations.value = linesResponse.map((r:GetLinesByRouteResponse) => r.NAME_RU)
 	const currentRouteLines = linesResponse.filter((r: GetLinesByRouteResponse) => +r.ROUTE_NUM === currentBusRoute)
 	let ASC = currentRouteLines?.filter((r: GetLinesByRouteResponse) => +r.DIRECTION === 0)
 	let DESC = currentRouteLines?.filter((r: GetLinesByRouteResponse) => +r.DIRECTION === 1)

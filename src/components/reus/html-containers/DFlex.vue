@@ -12,10 +12,10 @@
 
 <script setup lang="ts">
 export interface IProps {
-    align: 'center' | 'start' | 'end',
-    justify: 'center' | 'start' | 'end' | 'space-between',
-    type: "row" | 'column' | 'column-reverse',
-    gap: string
+    align?: 'center' | 'start' | 'end',
+    justify?: 'center' | 'start' | 'end' | 'space-between',
+    type?: "row" | 'column' | 'column-reverse',
+    gap?: string
 }
 
 const props = withDefaults(defineProps<IProps>(), {

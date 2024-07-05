@@ -1,8 +1,8 @@
 <script setup lang="ts">
 
 interface DTextProps {
-    tag: 'span' | 'p' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'strong',
-    cursor: 'default' | 'pointer' | 'text' | 'not-allowed'
+    tag?: 'span' | 'p' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'strong',
+    cursor?: 'default' | 'pointer' | 'text' | 'not-allowed'
 }
 
 const props = withDefaults(defineProps<DTextProps>(), {
