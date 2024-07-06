@@ -30,6 +30,7 @@
             </d-flex>
             <d-flex type="column">
                 <button v-if="interval" class="map__button2" @click="addCoordinate">Запомнить координату</button>
+                <button style="background-color:red; padding: 5px 10px" @click="paintLine">прорисовать</button>
                 <button @click="getDataFromBackend" class="map__button">Получить данные с бэкэнда</button>
                 <button @click="startProgram"
                         v-if="isDataLoading"
@@ -46,10 +47,10 @@
             </d-flex>
         </div>
         <yand-map style="width: 900px; height: 800px"
-                  :lines="busesRoadMaps"
+                  :lines="paintedLine"
                   :line-color="lineColor"
                   :bus-last-coordinate="lastCoordinate"
-                  :currentBusesCoordinates="currentBusesCoordinates"
+                  :currentBusesCoordinates="undefined"
                   :center="[63.615375, 53.181536]" :zoom="15"/>
     </div>
 </template>
@@ -67,7 +68,7 @@ import DFlex from "@/components/reus/html-containers/DFlex.vue";
 import {GetSingleBusCoordinates} from "@/modules/map/types/api-models.ts";
 import DText from "@/components/reus/texts/DText.vue";
 
-const lastCoordinate = ref<number[]>([])
+const lastCoordinate = ref<[number, number]>([0,0])
 const lineColor = ref('red')
 let busRoadMap = ref<any>([])
 const selectedBus = ref<BusRoutes | null>(null)
@@ -200,32 +201,32 @@ const BUSES_ROUTES = reactive<BusRoutes[]>([
     }
 ])
 
-const testASC = BUSES_ROUTES[0].directions.asc.map((a: any) => {
-    return {
-        ...a,
-        coords: [a.coords[1], a.coords[0]]
-    }
-})
-const testDESC = BUSES_ROUTES[0].directions.desc.map((a: any) => {
-    return {
-        ...a,
-        coords: [a.coords[1], a.coords[0]]
-    }
-})
+// const testASC = BUSES_ROUTES[0].directions.asc.map((a: any) => {
+//     return {
+//         ...a,
+//         coords: [a.coords[1], a.coords[0]]
+//     }
+// })
+// const testDESC = BUSES_ROUTES[0].directions.desc.map((a: any) => {
+//     return {
+//         ...a,
+//         coords: [a.coords[1], a.coords[0]]
+//     }
+// })
 
 
-const busesRoadMaps = ref([
-    {
-        id: 1,
-        roadMap: testASC,
-        lineColor: 'red'
-    },
-    {
-        id: 2,
-        roadMap: testDESC,
-        lineColor: 'blue'
-    }
-])
+// const busesRoadMaps = ref([
+//     {
+//         id: 1,
+//         roadMap: testASC,
+//         lineColor: 'red'
+//     },
+//     {
+//         id: 2,
+//         roadMap: testDESC,
+//         lineColor: 'blue'
+//     }
+// ])
 
 function selectBus(bus: BusRoutes, isAsc: boolean) {
     selectedBus.value = bus
@@ -242,32 +243,30 @@ function selectBus(bus: BusRoutes, isAsc: boolean) {
     Object.assign(busRoadMap.value, result)
 }
 
-function clearData(data: string[]) {
-    const res = data.map(a => a.split('!'))
-    const obj = res.map(b => {
-        return {
-            emai: +b[1],
-            coords: b[2].split(',')
-        }
-    })
-    return obj.map(c => {
-        return {
-            ...c,
-            coords: c.coords.map(a => +(a.trim()))
-        }
-    })
-}
+// function clearData(data: string[]) {
+//     const res = data.map(a => a.split('!'))
+//     const obj = res.map(b => {
+//         return {
+//             emai: +b[1],
+//             coords: b[2].split(',')
+//         }
+//     })
+//     return obj.map(c => {
+//         return {
+//             ...c,
+//             coords: c.coords.map(a => +(a.trim()))
+//         }
+//     })
+// }
+//
+// let currentBusesCoordinates = ref<any>([])
+//
+// function trasformCoords(coord: [number, number]) {
+//     return [coord[1], coord[0]]
+// }
 
-let currentBusesCoordinates = ref<any>([])
-
-function trasformCoords(coord: [number, number]) {
-    return [coord[1], coord[0]]
-}
-
-function getCoordinatesFromString(stringCoords: string) {
+function getCoordinatesFromString(stringCoords: string): [number, number] {
     const coords = stringCoords.split(',')
-    console.log([+coords[1], +coords[0]])
-
     return [+coords[1], +coords[0]]
 }
 
@@ -299,6 +298,7 @@ async function getDataFromBackend() {
     apiData.value = response
 }
 
+const paintedLine = ref<{roadMap: [number, number][] | []}[]>([{roadMap: []}, {roadMap: []}])
 const interval = ref()
 
 function startProgram(){
@@ -314,6 +314,11 @@ function startProgram(){
     }
 }
 
+function paintLine() {
+    paintedLine.value[0].roadMap = addedCoordinates.value
+
+    console.log(paintedLine.value[0].roadMap)
+}
 
 onMounted(async () => {
     // await getLastCoordinates()
