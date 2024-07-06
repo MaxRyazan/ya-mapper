@@ -10,3 +10,10 @@ export interface GetLinesByRouteResponse {
     ROUTES: string
     SEGMENTS: string
 }
+
+export interface GetSingleBusCoordinates {
+    GPS_IMEI: string
+    RES_GPS:string
+    SPEED: string
+    TimeStamp: string
+}

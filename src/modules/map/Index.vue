@@ -5,7 +5,46 @@
                       :is-this-bus-selected="selectedBus?.busNumber === bus.busNumber"
                       :bus="bus" v-for="bus in BUSES_ROUTES" :key="bus.busNumber"/>
         </div>
-        <button @click="console.log(lastCoordinate)" style="width: 100px;height: 30px; background-color: blue; color: white">Жмахни</button>
+        <div>
+            <d-flex type="column" align="start">
+                <d-flex style="width: 100%;" justify="space-between">
+                    <label for="emei">emei</label>
+                    <input id="emei" placeholder="emei автобуса" v-model="watchData.emei"/>
+                </d-flex>
+                <d-flex style="width: 100%;" justify="space-between">
+                    <label for="date">date</label>
+                    <input id="date" placeholder="за какую дату показать" v-model="watchData.date"/>
+                </d-flex>
+                <d-flex style="width: 100%;" justify="space-between">
+                    <label for="TIME_START">TIME_START</label>
+                    <input id="TIME_START" placeholder="TIME_Start" v-model="watchData.TIME_Start"/>
+                </d-flex>
+                <d-flex style="width: 100%;" justify="space-between">
+                    <label for="TIME_STOP">TIME_STOP</label>
+                    <input id="TIME_STOP" placeholder="TIME_Stop" v-model="watchData.TIME_Stop"/>
+                </d-flex>
+                <d-flex style="width: 100%;" justify="space-between">
+                    <label for="interval">время между отрисовкой новой координаты</label>
+                    <input id="TIME_STOP" placeholder="TIME_Stop" v-model="watchData.interval"/>
+                </d-flex>
+            </d-flex>
+            <d-flex type="column">
+                <button v-if="interval" class="map__button2" @click="addCoordinate">Запомнить координату</button>
+                <button @click="getDataFromBackend" class="map__button">Получить данные с бэкэнда</button>
+                <button @click="startProgram"
+                        v-if="isDataLoading"
+                        class="map__button">{{interval ? 'Остановить цикл' : 'Запустить цикл выполнения'}}</button>
+                <span v-else>данных для отображения пока нет</span>
+            </d-flex>
+            <d-flex v-if="apiData.length" type="column" style="max-height: 300px; overflow-y: auto; border: 1px solid blue; padding: 10px; margin-top: 20px;">
+                <div v-for="data in apiData" :key=data.TimeStamp>{{data}}</div>
+            </d-flex>
+            <d-flex align="start" type="column" v-if="addedCoordinates.length" style="margin-top: 20px; border: 1px solid orange; overflow-y: auto; height: 200px; padding: 10px">
+                <d-flex v-for="(aa, idx) in addedCoordinates" :key="idx">
+                    <d-text>{{aa}}</d-text>
+                </d-flex>
+            </d-flex>
+        </div>
         <yand-map style="width: 900px; height: 800px"
                   :lines="busesRoadMaps"
                   :line-color="lineColor"
@@ -21,18 +60,19 @@ import {onMounted, reactive, ref} from "vue";
 import {BusRoutes} from "@/modules/map/types";
 import BusCard from "@/modules/map/BusCard.vue";
 import {
-    getGroupBusGPSDataJson,
+    getSingleBusGPSData,
 } from "@/modules/map/api";
-import {CONSTANTS} from "@/constants.ts";
-
-
+import {DateHelper} from "@/helpers/DateHelper.ts";
+import DFlex from "@/components/reus/html-containers/DFlex.vue";
+import {GetSingleBusCoordinates} from "@/modules/map/types/api-models.ts";
+import DText from "@/components/reus/texts/DText.vue";
 
 const lastCoordinate = ref<number[]>([])
 const lineColor = ref('red')
 let busRoadMap = ref<any>([])
 const selectedBus = ref<BusRoutes | null>(null)
 
-
+const addedCoordinates = ref<[number, number][]>([])
 const BUSES_ROUTES = reactive<BusRoutes[]>([
     {
         busNumber: '24',
@@ -160,13 +200,13 @@ const BUSES_ROUTES = reactive<BusRoutes[]>([
     }
 ])
 
-const testASC = BUSES_ROUTES[0].directions.asc.map((a:any) => {
+const testASC = BUSES_ROUTES[0].directions.asc.map((a: any) => {
     return {
         ...a,
         coords: [a.coords[1], a.coords[0]]
     }
 })
-const testDESC = BUSES_ROUTES[0].directions.desc.map((a:any) => {
+const testDESC = BUSES_ROUTES[0].directions.desc.map((a: any) => {
     return {
         ...a,
         coords: [a.coords[1], a.coords[0]]
@@ -202,24 +242,7 @@ function selectBus(bus: BusRoutes, isAsc: boolean) {
     Object.assign(busRoadMap.value, result)
 }
 
-
-// async function getLastCoordinates() {
-//     setInterval(async () => {
-//         const resp = await getBusGpsDataJson({
-//             emei: '352592579463472',
-//             region: 'REG_18',
-//             date:'30.06.2024',
-//             time_start:DateHelper.getTimeNowMinusHours(1),
-//             time_stop: DateHelper.getTimeNowMinusHours(0)
-//         })
-//         const textCoordinate = resp[resp.length - 1].RES_GPS
-//         const array = textCoordinate.split(',')
-//         const res: number[] = array.map((a:any) => +(a.trim()))
-//         lastCoordinate.value = [res[1], res[0]]
-//     }, 1000)
-// }
-
-function clearData(data: string[]){
+function clearData(data: string[]) {
     const res = data.map(a => a.split('!'))
     const obj = res.map(b => {
         return {
@@ -236,24 +259,88 @@ function clearData(data: string[]){
 }
 
 let currentBusesCoordinates = ref<any>([])
-function trasformCoords(coord: [number, number]){
+
+function trasformCoords(coord: [number, number]) {
     return [coord[1], coord[0]]
+}
+
+function getCoordinatesFromString(stringCoords: string) {
+    const coords = stringCoords.split(',')
+    console.log([+coords[1], +coords[0]])
+
+    return [+coords[1], +coords[0]]
+}
+
+function addCoordinate() {
+    addedCoordinates.value.push(lastCoordinate.value)
+}
+
+const watchData = reactive({
+    emei: '352592579460684',
+    date: DateHelper.getDateNow(),
+    TIME_Start: DateHelper.getTimeNowMinusHours(2),
+    TIME_Stop: DateHelper.getTimeNow(),
+    interval: 5
+})
+const isDataLoading = ref(false)
+const apiData = ref<GetSingleBusCoordinates[]>([])
+
+async function getDataFromBackend() {
+    apiData.value = []
+    isDataLoading.value = false
+    const response = await getSingleBusGPSData({
+        region: 'REG_18',
+        emei: watchData.emei,
+        date: watchData.date,
+        TIME_Start: watchData.TIME_Start,
+        TIME_Stop: watchData.TIME_Stop
+    })
+    isDataLoading.value = true
+    apiData.value = response
+}
+
+const interval = ref()
+
+function startProgram(){
+    if(interval.value) {
+        clearInterval(interval.value)
+        interval.value = null
+    } else {
+        let i = 0
+        interval.value = setInterval(() => {
+            lastCoordinate.value = getCoordinatesFromString(apiData.value[i].RES_GPS)
+            i += 1
+        }, watchData.interval * 1000)
+    }
 }
 
 
 onMounted(async () => {
     // await getLastCoordinates()
+    // const response = await getSingleBusGPSData({
+    //     region: 'REG_18',
+    //     emei: watchData.emei,
+    //     date: DateHelper.getDateNow(),
+    //     TIME_Start: DateHelper.getTimeNowMinusHours(2),
+    //     TIME_Stop: DateHelper.getTimeNow()
+    // })
+    // let i = 0
+    // setInterval(() => {
+    //     lastCoordinate.value = getCoordinatesFromString(response[i].RES_GPS)
+    //     i += 1
+    // }, intervalTime.value)
 
-    setInterval(async () => {
-        currentBusesCoordinates.value = []
-        const response = await getGroupBusGPSDataJson({region: CONSTANTS.REG, route: '24'})
-        const re:any = clearData(response)
-        console.log(response)
-        for(let i = 0; i < re.length; i++){
-            currentBusesCoordinates.value.push(trasformCoords(re[i].coords))
-        }
-        console.log(currentBusesCoordinates.value)
-    }, 2000)
+
+    // setInterval(async () => {
+    //     currentBusesCoordinates.value = []
+    //     const response = await getGroupBusGPSDataJson({region: CONSTANTS.REG, route: '24'})
+    //     const re:any = clearData(response)
+    //     console.log(response)
+    //     for(let i = 0; i < re.length; i++){
+    //         currentBusesCoordinates.value.push(trasformCoords(re[i].coords))
+    //     }
+    //     console.log(currentBusesCoordinates.value)
+    // }, 2000)
 
 
     // lastCoordinate.value = [re[2].coords[1], re[0].coords[0]]
@@ -283,5 +370,34 @@ onMounted(async () => {
 
 </script>
 <style scoped>
-
+.map__button {
+    width: 300px;
+    height: 30px;
+    margin-top: 20px;
+    cursor: pointer;
+    background-color: blue;
+    color: white;
+    transition: .4s;
+    &:hover{
+        transition: .4s;
+        background-color: darkblue;
+    }
+}
+.map__button2 {
+    width: 300px;
+    height: 30px;
+    margin-top: 20px;
+    cursor: pointer;
+    background-color: orangered;
+    color: white;
+    border: none;
+    outline: none;
+    &:hover{
+        transition: .4s;
+        background-color: orange;
+    }
+    &:active {
+        color:red;
+    }
+}
 </style>

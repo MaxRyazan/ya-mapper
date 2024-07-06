@@ -1,5 +1,5 @@
 import {Bus} from "@/models/Bus.ts";
-import {GetLinesByRouteResponse} from "@/modules/map/types/api-models.ts";
+import {GetLinesByRouteResponse, GetSingleBusCoordinates} from "@/modules/map/types/api-models.ts";
 
 const PORT = 5553
 const URL = 'https://www.asts.kz:5554/api/test/'
@@ -17,8 +17,8 @@ export async function getAllBuses(options?: { bin?: string, region?: string }): 
 }
 
 
-export async function getSingleBusGPSData(options?: { region?: string, route?: string }): Promise<Bus[]> {
-    const res: Response = await fetch(`http://localhost:${PORT}/get-single-bus-gps-data?region=${options!.region}&route=${options!.route}`)
+export async function getSingleBusGPSData(options: { region: string, emei: string, date: string, TIME_Start: string, TIME_Stop: string }): Promise<GetSingleBusCoordinates[]> {
+    const res: Response = await fetch(`${URL}?op=Get_SINGLE_BUS_GPS_DATA&REGION=${options.region}&IMEI=${options.emei}&DATE=${options.date}&TIME_Start=${options.TIME_Start}&TIME_Stop=${options.TIME_Stop}`)
 
     const raw: string = await res.text()
     const openArray: number = raw.indexOf('[')
@@ -54,7 +54,7 @@ export async function getRouteXml(options?: {
     route?: string,
     region?: string,
     direction: string,
-}){
+}) {
     const res: Response = await fetch(`http://localhost:${PORT}/get-route-xml?route=${options!.route}&region=${options!.region}&direction=${options?.direction}`)
     const raw: string = await res.text()
     console.log(raw)
@@ -68,7 +68,7 @@ export async function getRouteXml(options?: {
 export async function getBusesByRoute(options?: {
     route?: string,
     region?: string,
-}){
+}) {
     const res: Response = await fetch(`http://localhost:${PORT}/get-buses-by-route?route=${options!.route}&region=${options!.region}`)
     const raw: string = await res.text()
     const openArray: number = raw.indexOf('[')
@@ -82,7 +82,7 @@ export async function getBusesByRoute(options?: {
 /**
  * Метод получает маршрут с отстановками с параметрами очередности остановок для отрисовки линий на карте
  */
-export async function getLinesByRegion(num: number, direction: 0 | 1): Promise<GetLinesByRouteResponse[] | undefined>{
+export async function getLinesByRegion(num: number, direction: 0 | 1): Promise<GetLinesByRouteResponse[] | undefined> {
     const res: Response = await fetch(`${URL}?op=Get_ROUTE&REGION=REG_18&NUM=${num}&DIRECTION=${direction}`)
 
     const raw: string = await res.text()
@@ -97,7 +97,7 @@ export async function getLinesByRegion(num: number, direction: 0 | 1): Promise<G
 export async function getGroupBusGPSDataJson(options?: {
     route?: string,
     region?: string,
-}){
+}) {
     const res: Response = await fetch(`http://localhost:${PORT}/get-group-bus-gps-data-json?route=${options!.route}&region=${options!.region}`)
 
     const raw: string = await res.text()
