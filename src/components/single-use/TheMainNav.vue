@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {reactive} from "vue";
-
+import {useRoute} from "vue-router";
+const route = useRoute()
 const navLinks = reactive([
 	{title: 'Яндекс карты', to: '/map'},
 	{title: 'Маршруты', to: '/routes'},
@@ -20,7 +21,11 @@ const navLinks = reactive([
 
 <template>
 	<div class="nav">
-		<router-link v-for="link in navLinks" :key="link.title" class="nav__link" :to="link.to">{{ link.title }}</router-link>
+		<router-link v-for="link in navLinks"
+                     :class="{'current-route': route.path.includes(link.to)}"
+                     :key="link.title"
+                     class="nav__link"
+                     :to="link.to">{{ link.title }}</router-link>
 	</div>
 </template>
 
@@ -49,7 +54,8 @@ const navLinks = reactive([
         border: 2px solid  var(--accent-color);
 	 }
 }
-.router-link-exact-active {
+
+.current-route {
 	background: var(--accent-gradient-color);
     color: white;
     border: 2px solid var(--accent-color);

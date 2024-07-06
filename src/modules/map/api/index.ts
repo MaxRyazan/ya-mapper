@@ -1,6 +1,5 @@
 import {Bus} from "@/models/Bus.ts";
-import {GetLinesResponse} from "@/modules/routes/types/apiModels.ts";
-import {GetLinesByRouteResponse} from "@/modules/map/types/api-models";
+import {GetLinesByRouteResponse} from "@/modules/map/types/api-models.ts";
 
 const PORT = 5553
 const URL = 'https://www.asts.kz:5554/api/test/'
