@@ -94,14 +94,10 @@ function produceAnAlert(p: any) {
 
 
 onMounted(() => {
-    console.log('1')
-    const ascStations = props.lines[0].roadMap.filter((a:any) => a.code)
-    console.log('2')
-    const descStations = props.lines[1].roadMap.filter((a:any) => a.code)
-    console.log('asdasd')
-    markers.value = [...ascStations, ...descStations]
-    console.log('assgdfg')
-    console.log(markers.value)
+    // const ascStations = props.lines[0].roadMap.filter((a:any) => a.code)
+    // const descStations = props.lines[1].roadMap.filter((a:any) => a.code)
+    // markers.value = [...ascStations, ...descStations]
+
 })
 
 </script>
