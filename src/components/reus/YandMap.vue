@@ -94,10 +94,16 @@ function produceAnAlert(p: any) {
 
 
 onMounted(() => {
-    // const ascStations = props.lines[0].roadMap.filter((a:any) => a.code)
-    // const descStations = props.lines[1].roadMap.filter((a:any) => a.code)
-    // markers.value = [...ascStations, ...descStations]
-
+    let ascStations;
+    let descStations;
+    if(props.lines[0]) {
+        ascStations = props.lines[0]?.roadMap.filter((a:any) => a.code)
+        markers.value = [... markers.value, ...ascStations]
+    }
+    if(props.lines[1]) {
+        descStations = props.lines[1]?.roadMap.filter((a:any) => a.code)
+        markers.value = [... markers.value, ...descStations]
+    }
 })
 
 </script>
@@ -118,8 +124,8 @@ onMounted(() => {
 }
 .pin {
     cursor: pointer;
-    width: 14px;
-    height: 14px;
+    width: 10px;
+    height: 10px;
 }
 .bus {
     cursor: pointer;
