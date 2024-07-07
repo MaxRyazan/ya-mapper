@@ -26,7 +26,7 @@ export async function getSingleBusGPSData(options: { region: string, emei: strin
 
     const text: string = raw.slice(openArray, closeArray + 1)
     if (text) return await JSON.parse(text)
-    else return [] as Bus[]
+    else return [] as GetSingleBusCoordinates[]
 }
 
 /**
