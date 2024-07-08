@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import {onMounted} from "vue";
 
 const props = defineProps<{
     data: {
@@ -8,9 +7,6 @@ const props = defineProps<{
     }
 }>()
 
-onMounted(() => {
-    console.log(props.data)
-})
 </script>
 
 <template>
@@ -23,7 +19,10 @@ onMounted(() => {
         <tbody>
             <tr :class="{odd: idx % 2 === 0}" v-for="(obj, idx) in data.body" :key="idx">
                 <td>{{idx + 1}}</td>
-                <td v-for="[key, value] in Object.entries(obj)" :key="key">{{value}}</td>
+                <td v-for="[key, value] in Object.entries(obj)" :key="key">
+                    {{value}}
+                    <slot :record="obj" :name="key"/>
+                </td>
             </tr>
         </tbody>
     </table>

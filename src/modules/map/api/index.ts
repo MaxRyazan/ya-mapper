@@ -2,7 +2,8 @@ import {Bus} from "@/models/Bus.ts";
 import {GetLinesByRouteResponse, GetSingleBusCoordinates} from "@/modules/map/types/api-models.ts";
 
 const PORT = 5553
-const URL = 'https://www.asts.kz:5554/api/test/'
+export const URL = 'https://www.asts.kz:5554/api/test/'
+export const URL2 = 'https://www.asts.kz:5554/api/Routes/'
 
 export async function getAllBuses(options?: { bin?: string, region?: string }): Promise<Bus[]> {
     const res: Response = await fetch(`${URL}?op=Get_BUSES&bin=${options!.bin}&region=${options!.region}`)
