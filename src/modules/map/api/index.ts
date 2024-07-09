@@ -31,7 +31,7 @@ export async function getSingleBusGPSData(options: { region: string, emei: strin
 }
 
 /**
- * Получаем координаты автобуса в промежутокк времени
+ * Получаем координаты автобуса в промежуток времени
  * @param options
  */
 export async function getBusGpsDataJson(options?: {
