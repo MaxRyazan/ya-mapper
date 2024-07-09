@@ -4,7 +4,7 @@ import DText from "@/components/reus/texts/DText.vue";
 
 const props = defineProps<{
     stations: string[],
-    direction: 1|0
+    direction: 1|0|2
 }>()
 defineEmits<{
     (e: 'showStation', p: {name: string, direction: 1|0}):void

@@ -6,6 +6,7 @@
 	<d-flex style="margin-top: 20px;">
         <d-text @click="direction = 0" :class="{current: direction === 0}" cursor="pointer">Прямой</d-text>
         <d-text @click="direction = 1" :class="{current: direction === 1}" cursor="pointer">Обратный</d-text>
+        <d-text @click="direction = 2" :class="{current: direction === 2}" cursor="pointer">Оба</d-text>
     </d-flex>
     <d-flex gap="40px">
         <bus-stations-card @show-station="changeCenter" :stations="busStations" :direction="direction"/>
@@ -32,7 +33,7 @@ const isLoaded = ref(false)
 const route = useRoute()
 const center = ref([63.615375, 53.181536])
 const zoom = ref(15)
-const direction = ref<0|1>(0)
+const direction = ref<0|1|2>(0)
 const currentBusRoute = +route.params.id
 const busStations = ref<string[]>([])
 
@@ -58,7 +59,69 @@ function changeCenter(param: {name: string, direction: 1|0}){
 
 }
 
-watch(direction, () => getLinesByRoute())
+watch(direction, () => {
+    if(direction.value !== 2) {
+        getLinesByRoute()
+    } else getBothLinesByRoute()
+})
+
+async function getBothLinesByRoute() {
+    const ascResponse: GetLinesByRouteResponse[] | undefined = await getLinesByRegion(+route.params.id, 0)
+    const descResponse: GetLinesByRouteResponse[] | undefined = await getLinesByRegion(+route.params.id, 1)
+
+    if(!ascResponse || !descResponse) return
+    const both = [...ascResponse, ...descResponse]
+    busStations.value = both.map((r:GetLinesByRouteResponse) => r.NAME_RU)
+
+    let ASC = both?.filter((r: GetLinesByRouteResponse) => +r.DIRECTION === 0)
+    let DESC = both?.filter((r: GetLinesByRouteResponse) => +r.DIRECTION === 1)
+    if (ASC) {
+        const res0: any[] = transformData(ASC)
+        busesRoadMaps.value[0].roadMap = res0.map(r => {
+            return {
+                code: r.ST_ID,
+                coords: r.LON_LAT,
+                descRu: r.NAME_RU,
+                descKz: r.NAME_KZ,
+                direction: r.DIRECTION,
+                segments: r.SEGMENTS
+            }
+        })
+        const variable = busesRoadMaps.value[0].roadMap
+        const resArr = []
+
+        for (let i = 0; i < variable.length; i++) {
+            resArr.push(variable[i])
+            if (variable[i].segments) {
+                variable[i].segments?.forEach(vS => resArr.push({coords: vS}))
+            }
+        }
+        busesRoadMaps.value[0].roadMap = resArr
+    }
+    if (DESC) {
+        const res1: any[] = transformData(DESC)
+        busesRoadMaps.value[1].roadMap = res1.map(r => {
+            return {
+                code: r.ST_ID,
+                coords: r.LON_LAT,
+                descRu: r.NAME_RU,
+                descKz: r.NAME_KZ,
+                direction: r.DIRECTION,
+                segments: r.SEGMENTS
+            }
+        })
+        const variable = busesRoadMaps.value[1].roadMap
+        const resArr = []
+
+        for (let i = 0; i < variable.length; i++) {
+            resArr.push(variable[i])
+            if (variable[i].segments) {
+                variable[i].segments?.forEach(vS => resArr.push({coords: vS}))
+            }
+        }
+        busesRoadMaps.value[1].roadMap = resArr
+    }
+}
 
 async function getLinesByRoute() {
 	const linesResponse: GetLinesByRouteResponse[] | undefined = await getLinesByRegion(+route.params.id, direction.value)
