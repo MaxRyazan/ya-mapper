@@ -26,6 +26,7 @@
             <d-flex type="column">
                 <button v-if="interval" class="map__button2" @click="addCoordinate">Запомнить координату</button>
                 <button style="background-color:red; width: 300px; padding: 5px 10px" @click="paintLine">прорисовать</button>
+                <div style="font-size: 22px;" v-if="marketCoordinate">[{{marketCoordinate}}]: {{ apiData.find(a => a.RES_GPS === marketCoordinate?.toString())!.TimeStamp }}</div>
                 <button @click="getDataFromBackend" class="map__button">Получить данные с бэкэнда</button>
                 <button @click="startProgram"
                         v-if="isDataLoading"
@@ -104,8 +105,13 @@ const paintedLine = ref<any>([{roadMap: [], lineColor: 'red'}])
 const interval = ref()
 const savedIntervalCoordinate = ref<any>(null)
 
+
+const marketCoordinate = ref<any>(null)
+
 function startProgram(){
     if(interval.value) {
+        marketCoordinate.value = apiData.value[savedIntervalCoordinate.value].RES_GPS
+        console.log( marketCoordinate.value.toString())
         clearInterval(interval.value)
         interval.value = null
     } else {
@@ -215,5 +221,8 @@ onMounted(async () => {
     &:active {
         color:red;
     }
+}
+.active {
+    color: blue !important;
 }
 </style>
