@@ -7,7 +7,7 @@ const props = defineProps<{
     direction: 1|0|2
 }>()
 defineEmits<{
-    (e: 'showStation', p: {name: string, direction: 1|0}):void
+    (e: 'showStation', p: {name: string, direction: 1|0|2}):void
 }>()
 
 

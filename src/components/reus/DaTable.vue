@@ -1,9 +1,9 @@
 <script setup lang="ts">
 
-const props = defineProps<{
+defineProps<{
     data: {
         header: string[],
-        body: Object[]
+        body: any[]
     }
 }>()
 

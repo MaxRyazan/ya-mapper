@@ -50,7 +50,7 @@ const busesRoadMaps = ref<BusRoadMap[]>([
 	}
 ])
 
-function changeCenter(param: {name: string, direction: 1|0}){
+function changeCenter(param: {name: string, direction: 1|0|2}){
     const busRoute = busesRoadMaps.value[direction.value]
     const station = busRoute.roadMap.find(r => r.descRu === param.name)
     if(!station) return
