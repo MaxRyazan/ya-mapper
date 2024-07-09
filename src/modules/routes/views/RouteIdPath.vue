@@ -122,6 +122,6 @@ onMounted(async () => {
 </script>
 <style scoped>
 .current {
-	color: blue
+	color: blue !important;
 }
 </style>

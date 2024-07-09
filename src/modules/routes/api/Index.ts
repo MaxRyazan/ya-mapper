@@ -6,4 +6,5 @@ export async function getAllRoutes(options?:{region: string, bin: string}): Prom
     if(res) {
         return await res.json()
     }
+    else return []
 }

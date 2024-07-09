@@ -3,7 +3,7 @@
         <d-text color="accent" size="22px" weight="600">Список маршрутов</d-text>
         <da-table style="margin-top: 28px;" :data="{header: table.header, body: table.body}">
             <template #operations="{record}">
-                <router-link :to="`/routes/${record.routeNum}`">схема</router-link>
+                <router-link :to="`/routes/${record.routeNumber}`">схема</router-link>
                 <button>остановки</button>
             </template>
         </da-table>
@@ -15,14 +15,14 @@ import DText from "@/components/reus/texts/DText.vue";
 import {onMounted, reactive} from "vue";
 import {getAllRoutes} from "@/modules/routes/api/Index.ts";
 
-const table = reactive({
+const table = reactive<any>({
     header: ['№', 'Тип', '№ маршрута', "Описание(рус)", "Описание(каз)", "Тариф город", "Кол-во зон", "Тариф безнал", "Тариф нал",  "Операции"],
     body: []
 })
 
 onMounted(async () => {
     const response = await getAllRoutes({bin: '10540003043', region: 'REG_18'})
-    table.body = response.map((a, idx) => {
+    table.body = response.map(a => {
         return {
             type: 'Автобус',
             routeNumber: a.ROUTE,
