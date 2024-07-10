@@ -20,8 +20,13 @@ import TheMainNav from "@/components/single-use/TheMainNav.vue";
     padding: 6px;
     background-color: rgba(0,0,0, .05);
     height: calc(100vh - var(--header-height) - 6px);
+    overflow: hidden;
+    position: relative;
+    border: 1px solid red
 }
 .content {
     flex: 1;
+    max-height: calc(100vh - var(--header-height) - 20px);
+    overflow: auto;
 }
 </style>

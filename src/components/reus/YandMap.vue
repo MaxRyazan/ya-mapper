@@ -79,7 +79,7 @@ let markers = ref<any>([])
 
 const props = defineProps<{
     lines: any[],
-    busStationsMarkers: any[],
+    busStationsMarkers?: any[],
     center: any,
     zoom?: number,
     busLastCoordinate?: number[]

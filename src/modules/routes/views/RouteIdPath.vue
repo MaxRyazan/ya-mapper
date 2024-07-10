@@ -1,21 +1,23 @@
 <template>
-	<d-flex gap="0">
-		<router-link to="/routes">маршруты</router-link>
-		<p>/{{ route.params.id }}</p>
-    </d-flex>
-	<d-flex style="margin-top: 20px;">
-        <d-text @click="direction = 0" :class="{current: direction === 0}" cursor="pointer">Прямой</d-text>
-        <d-text @click="direction = 1" :class="{current: direction === 1}" cursor="pointer">Обратный</d-text>
-        <d-text @click="direction = 2" :class="{current: direction === 2}" cursor="pointer">Оба</d-text>
-    </d-flex>
-    <d-flex gap="40px">
-        <bus-stations-card @show-station="changeCenter" :stations="busStations" :direction="direction"/>
-        <yand-map style="width: 900px; height: 800px"
-                            v-if="isLoaded"
-                            :lines="busesRoadMaps"
-                            :busStationsMarkers="busStations"
-                            :center="center" :zoom="zoom"/>
-    </d-flex>
+    <div>
+        <d-flex gap="0">
+            <router-link to="/routes">маршруты</router-link>
+            <p>/{{ route.params.id }}</p>
+        </d-flex>
+        <d-flex style="margin-top: 20px;">
+            <d-text @click="direction = 0" :class="{current: direction === 0}" cursor="pointer">Прямой</d-text>
+            <d-text @click="direction = 1" :class="{current: direction === 1}" cursor="pointer">Обратный</d-text>
+            <d-text @click="direction = 2" :class="{current: direction === 2}" cursor="pointer">Оба</d-text>
+        </d-flex>
+        <d-flex align="start" style="max-height: calc(100vh - 134px); overflow-y: auto" justify="space-between" gap="40px">
+            <bus-stations-card style="max-height: calc(100vh - 154px); overflow-y: auto; margin-top: 20px;" @show-station="changeCenter" :stations="busStations" :direction="direction"/>
+            <yand-map style="width: 900px; height: 750px"
+                                v-if="isLoaded"
+                                :lines="busesRoadMaps"
+                                :busStationsMarkers="busStations"
+                                :center="center" :zoom="zoom"/>
+        </d-flex>
+    </div>
 </template>
 
 <script setup lang="ts">

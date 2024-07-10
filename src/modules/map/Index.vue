@@ -111,7 +111,6 @@ const marketCoordinate = ref<any>(null)
 function startProgram(){
     if(interval.value) {
         marketCoordinate.value = apiData.value[savedIntervalCoordinate.value].RES_GPS
-        console.log( marketCoordinate.value.toString())
         clearInterval(interval.value)
         interval.value = null
     } else {
