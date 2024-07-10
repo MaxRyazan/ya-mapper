@@ -22,7 +22,6 @@ import TheMainNav from "@/components/single-use/TheMainNav.vue";
     height: calc(100vh - var(--header-height) - 6px);
     overflow: hidden;
     position: relative;
-    border: 1px solid red
 }
 .content {
     flex: 1;
