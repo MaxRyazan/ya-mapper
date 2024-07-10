@@ -13,6 +13,7 @@
         <yand-map style="width: 900px; height: 800px"
                             v-if="isLoaded"
                             :lines="busesRoadMaps"
+                            :busStationsMarkers="busStations"
                             :center="center" :zoom="zoom"/>
     </d-flex>
 </template>
@@ -60,6 +61,7 @@ function changeCenter(param: {name: string, direction: 1|0|2}){
 }
 
 watch(direction, () => {
+    busStations.value = []
     if(direction.value !== 2) {
         getLinesByRoute()
     } else getBothLinesByRoute()

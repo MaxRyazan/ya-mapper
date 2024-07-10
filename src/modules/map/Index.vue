@@ -38,7 +38,7 @@
             </d-flex>
             <d-flex align="start" type="column" v-if="addedCoordinates.length" style="margin-top: 20px; border: 1px solid orange; overflow-y: auto; height: 200px; padding: 10px">
                 <d-flex v-for="(aa, idx) in addedCoordinates" :key="idx">
-                    <d-text>{{aa}}</d-text>
+                    <d-text>{{[aa[1], aa[0]]}}</d-text>
                 </d-flex>
             </d-flex>
         </div>

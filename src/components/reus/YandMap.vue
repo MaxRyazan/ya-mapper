@@ -64,7 +64,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import {onMounted, ref, shallowRef} from "vue";
+import {onMounted, ref, shallowRef, watch} from "vue";
 import {
     YandexMap,
     YandexMapDefaultFeaturesLayer,
@@ -79,6 +79,7 @@ let markers = ref<any>([])
 
 const props = defineProps<{
     lines: any[],
+    busStationsMarkers: any[],
     center: any,
     zoom?: number,
     busLastCoordinate?: number[]
@@ -92,10 +93,26 @@ function produceAnAlert(p: any) {
     PATH.push(p)
 }
 
+watch(() => props.busStationsMarkers, () => {
+    markers.value = []
+    let ascStations;
+    let descStations;
+
+    if(props.lines[0]) {
+        ascStations = props.lines[0]?.roadMap.filter((a:any) => a.code)
+        markers.value = [... markers.value, ...ascStations]
+    }
+    if(props.lines[1]) {
+        descStations = props.lines[1]?.roadMap.filter((a:any) => a.code)
+        markers.value = [... markers.value, ...descStations]
+    }
+}, {deep: true})
+
 
 onMounted(() => {
     let ascStations;
     let descStations;
+
     if(props.lines[0]) {
         ascStations = props.lines[0]?.roadMap.filter((a:any) => a.code)
         markers.value = [... markers.value, ...ascStations]
