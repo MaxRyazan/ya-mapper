@@ -39,7 +39,7 @@
                 </yandex-map-marker>
 
                 <yandex-map-marker v-for="(bus, idx) in props.currentBusesCoordinates" :key="idx"
-                                   :settings="{ coordinates: bus.coord}"
+                                   :settings="{ coordinates: bus.coord as any}"
                                    position="top-center left-center">
                     <div style="display: flex; flex-direction: column; align-items: center">
                         <d-text style="background-color:white; border-radius: 6px; padding: 2px 6px; color: black; border: 1px solid black">{{bus?.emei}}</d-text>
@@ -77,6 +77,7 @@ import {
 } from "vue-yandex-maps";
 import {Station} from "@/modules/map/types";
 import DText from "@/components/reus/texts/DText.vue";
+import {BusOnMap} from "@/modules/routes/types/Index.ts";
 
 const myMap = shallowRef<null | any>(null);
 let markers = ref<any>([])
@@ -87,7 +88,7 @@ const props = defineProps<{
     center: any,
     zoom?: number,
     busLastCoordinate?: number[]
-    currentBusesCoordinates?: Object[]
+    currentBusesCoordinates?: BusOnMap[]
 }>()
 
 const PATH = []

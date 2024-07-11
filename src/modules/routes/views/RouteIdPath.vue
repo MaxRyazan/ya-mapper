@@ -26,7 +26,7 @@ import {useRoute} from "vue-router";
 import {onMounted, ref, watch} from "vue";
 import {getLinesByRegion} from "@/modules/map/api";
 import YandMap from "@/components/reus/YandMap.vue";
-import {BusRoadMap} from "@/modules/routes/types/Index.ts";
+import {BusOnMap, BusRoadMap} from "@/modules/routes/types/Index.ts";
 import {GetLinesByRouteResponse} from "@/modules/map/types/api-models";
 import {transformData} from "@/modules/routes/helpers";
 import DFlex from "@/components/reus/html-containers/DFlex.vue";
@@ -35,6 +35,7 @@ import BusStationsCard from "@/modules/routes/views/cards/BusStationsCard.vue";
 import {getAllBusesLastCoordinateByRouteNum} from "@/modules/routes/api/Index.ts";
 import {ParseHelper} from "@/helpers/ParseHelper.ts";
 
+
 const isLoaded = ref(false)
 const route = useRoute()
 const center = ref([63.615375, 53.181536])
@@ -42,7 +43,7 @@ const zoom = ref(15)
 const direction = ref<0|1|2>(0)
 const currentBusRoute = +route.params.id
 const busStations = ref<string[]>([])
-let busesOnRoute = ref([])
+const busesOnRoute = ref<BusOnMap[]>([])
 
 
 const busesRoadMaps = ref<BusRoadMap[]>([
@@ -74,7 +75,7 @@ watch(direction, async () => {
     } else {
         await getBothLinesByRoute()
         const response = await getAllBusesLastCoordinateByRouteNum({region: 'REG_18', route: 24})
-        busesOnRoute.value = response.map((r:any) => {
+        busesOnRoute.value = response.map((r:string) => {
             const parsed = JSON.parse(r)
             return {
                 coord: ParseHelper.parseCoords(parsed.RES_GPS),
