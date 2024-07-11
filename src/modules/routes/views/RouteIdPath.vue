@@ -15,6 +15,7 @@
                                 v-if="isLoaded"
                                 :lines="busesRoadMaps"
                                 :busStationsMarkers="busStations"
+                                :currentBusesCoordinates="busesOnRoute"
                                 :center="center" :zoom="zoom"/>
         </d-flex>
     </div>
@@ -31,6 +32,8 @@ import {transformData} from "@/modules/routes/helpers";
 import DFlex from "@/components/reus/html-containers/DFlex.vue";
 import DText from "@/components/reus/texts/DText.vue";
 import BusStationsCard from "@/modules/routes/views/cards/BusStationsCard.vue";
+import {getAllBusesLastCoordinateByRouteNum} from "@/modules/routes/api/Index.ts";
+import {ParseHelper} from "@/helpers/ParseHelper.ts";
 
 const isLoaded = ref(false)
 const route = useRoute()
@@ -39,6 +42,8 @@ const zoom = ref(15)
 const direction = ref<0|1|2>(0)
 const currentBusRoute = +route.params.id
 const busStations = ref<string[]>([])
+let busesOnRoute = ref([])
+
 
 const busesRoadMaps = ref<BusRoadMap[]>([
 	{
@@ -62,11 +67,24 @@ function changeCenter(param: {name: string, direction: 1|0|2}){
 
 }
 
-watch(direction, () => {
+watch(direction, async () => {
     busStations.value = []
     if(direction.value !== 2) {
-        getLinesByRoute()
-    } else getBothLinesByRoute()
+        await getLinesByRoute()
+    } else {
+        await getBothLinesByRoute()
+        const response = await getAllBusesLastCoordinateByRouteNum({region: 'REG_18', route: 24})
+        busesOnRoute.value = response.map((r:any) => {
+            const parsed = JSON.parse(r)
+            return {
+                coord: ParseHelper.parseCoords(parsed.RES_GPS),
+                emei: parsed.GPS_IMEI,
+                speed: +parsed.SPEED,
+                timestamp: parsed.TimeStamp
+
+            }
+        })
+    }
 })
 
 async function getBothLinesByRoute() {

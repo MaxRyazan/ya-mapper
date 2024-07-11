@@ -38,15 +38,18 @@
                     />
                 </yandex-map-marker>
 
-                <yandex-map-marker v-for="(coord, idx) in currentBusesCoordinates" :key="idx"
-                                   :settings="{ coordinates: coord}"
+                <yandex-map-marker v-for="(bus, idx) in props.currentBusesCoordinates" :key="idx"
+                                   :settings="{ coordinates: bus.coord}"
                                    position="top-center left-center">
-                    <img
-                            class="bus"
-                            alt=""
-                            src="@/assets/img/where-icon.png"
-                            @click="produceAnAlert(coord)"
-                    />
+                    <div style="display: flex; flex-direction: column; align-items: center">
+                        <d-text style="background-color:white; border-radius: 6px; padding: 2px 6px; color: black; border: 1px solid black">{{bus?.emei}}</d-text>
+                        <img
+                                class="bus"
+                                alt=""
+                                src="@/assets/img/where-icon.png"
+                                @click="produceAnAlert(bus.coord)"
+                        />
+                    </div>
                 </yandex-map-marker>
 
                 <yandex-map-marker v-if="props.busLastCoordinate"
@@ -73,6 +76,7 @@ import {
     YandexMapMarker
 } from "vue-yandex-maps";
 import {Station} from "@/modules/map/types";
+import DText from "@/components/reus/texts/DText.vue";
 
 const myMap = shallowRef<null | any>(null);
 let markers = ref<any>([])
@@ -83,7 +87,7 @@ const props = defineProps<{
     center: any,
     zoom?: number,
     busLastCoordinate?: number[]
-    currentBusesCoordinates?: [number, number][]
+    currentBusesCoordinates?: Object[]
 }>()
 
 const PATH = []
@@ -108,6 +112,9 @@ watch(() => props.busStationsMarkers, () => {
     }
 }, {deep: true})
 
+watch(() => props.currentBusesCoordinates, () => {
+    console.log( props.currentBusesCoordinates)
+})
 
 onMounted(() => {
     let ascStations;
