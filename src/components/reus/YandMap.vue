@@ -41,15 +41,13 @@
                 <yandex-map-marker v-for="(bus, idx) in props.currentBusesCoordinates" :key="idx"
                                    :settings="{ coordinates: bus.coord as any}"
                                    position="top-center left-center">
-                    <div style="display: flex; flex-direction: column; align-items: center">
-                        <d-text style="background-color:white; border-radius: 6px; padding: 2px 6px; color: black; border: 1px solid black">{{bus?.emei}}</d-text>
-                        <img
-                                class="bus"
-                                alt=""
-                                src="@/assets/img/where-icon.png"
-                                @click="produceAnAlert(bus.coord)"
-                        />
-                    </div>
+                            <d-text class="bus__number-container">{{ bus?.emei }}</d-text>
+                            <img style="position: relative"
+                                 class="bus"
+                                 alt=""
+                                 src="@/assets/img/svg/where-icon.svg"
+                                 @click="produceAnAlert(bus.coord)"
+                            />
                 </yandex-map-marker>
 
                 <yandex-map-marker v-if="props.busLastCoordinate"
@@ -61,6 +59,7 @@
                             src="@/assets/img/where-icon.png"
                             @click="produceAnAlert(busLastCoordinate)"
                     />
+
                 </yandex-map-marker>
             </yandex-map>
         </div>
@@ -103,31 +102,31 @@ watch(() => props.busStationsMarkers, () => {
     let ascStations;
     let descStations;
 
-    if(props.lines[0]) {
-        ascStations = props.lines[0]?.roadMap.filter((a:any) => a.code)
-        markers.value = [... markers.value, ...ascStations]
+    if (props.lines[0]) {
+        ascStations = props.lines[0]?.roadMap.filter((a: any) => a.code)
+        markers.value = [...markers.value, ...ascStations]
     }
-    if(props.lines[1]) {
-        descStations = props.lines[1]?.roadMap.filter((a:any) => a.code)
-        markers.value = [... markers.value, ...descStations]
+    if (props.lines[1]) {
+        descStations = props.lines[1]?.roadMap.filter((a: any) => a.code)
+        markers.value = [...markers.value, ...descStations]
     }
 }, {deep: true})
 
 watch(() => props.currentBusesCoordinates, () => {
-    console.log( props.currentBusesCoordinates)
+    console.log(props.currentBusesCoordinates)
 })
 
 onMounted(() => {
     let ascStations;
     let descStations;
 
-    if(props.lines[0]) {
-        ascStations = props.lines[0]?.roadMap.filter((a:any) => a.code)
-        markers.value = [... markers.value, ...ascStations]
+    if (props.lines[0]) {
+        ascStations = props.lines[0]?.roadMap.filter((a: any) => a.code)
+        markers.value = [...markers.value, ...ascStations]
     }
-    if(props.lines[1]) {
-        descStations = props.lines[1]?.roadMap.filter((a:any) => a.code)
-        markers.value = [... markers.value, ...descStations]
+    if (props.lines[1]) {
+        descStations = props.lines[1]?.roadMap.filter((a: any) => a.code)
+        markers.value = [...markers.value, ...descStations]
     }
 })
 
@@ -142,19 +141,36 @@ onMounted(() => {
     width: 100%;
     height: 100%;
 }
+
 .map {
     width: 100%;
     max-width: 800px;
     max-height: 800px;
 }
+
 .pin {
     cursor: pointer;
     width: 10px;
     height: 10px;
 }
+
 .bus {
     cursor: pointer;
-    width: 40px;
-    margin-bottom: 20px;
+    width: 80px;
+    transform: translateX(35px);
+    margin-bottom: 35px;
+}
+
+.bus__number-container {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    position: absolute;
+    height: 30px;
+    right: -35px;
+    border-radius: 6px;
+    padding: 2px 6px;
+    color: black;
+    border: 1px solid black;
 }
 </style>

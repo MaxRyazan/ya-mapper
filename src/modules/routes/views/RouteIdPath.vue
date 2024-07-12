@@ -16,7 +16,8 @@
                                 :lines="busesRoadMaps"
                                 :busStationsMarkers="busStations"
                                 :currentBusesCoordinates="busesOnRoute"
-                                :center="center" :zoom="zoom"/>
+                                :center="center"
+                                :zoom="zoom"/>
         </d-flex>
     </div>
 </template>
@@ -44,7 +45,7 @@ const direction = ref<0|1|2>(0)
 const currentBusRoute = +route.params.id
 const busStations = ref<string[]>([])
 const busesOnRoute = ref<BusOnMap[]>([])
-
+const interval = ref()
 
 const busesRoadMaps = ref<BusRoadMap[]>([
 	{
@@ -74,17 +75,19 @@ watch(direction, async () => {
         await getLinesByRoute()
     } else {
         await getBothLinesByRoute()
-        const response = await getAllBusesLastCoordinateByRouteNum({region: 'REG_18', route: 24})
-        busesOnRoute.value = response.map((r:string) => {
-            const parsed = JSON.parse(r)
-            return {
-                coord: ParseHelper.parseCoords(parsed.RES_GPS),
-                emei: parsed.GPS_IMEI,
-                speed: +parsed.SPEED,
-                timestamp: parsed.TimeStamp
+        interval.value = setInterval(async () => {
+            const response = await getAllBusesLastCoordinateByRouteNum({region: 'REG_18', route: 24})
+            busesOnRoute.value = response.map((r:string) => {
+                const parsed = JSON.parse(r)
+                return {
+                    coord: ParseHelper.parseCoords(parsed.RES_GPS),
+                    emei: parsed.GPS_IMEI,
+                    speed: +parsed.SPEED,
+                    timestamp: parsed.TimeStamp
 
-            }
-        })
+                }
+            })
+        }, 1000)
     }
 })
 
