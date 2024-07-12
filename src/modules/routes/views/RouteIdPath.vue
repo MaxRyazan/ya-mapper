@@ -5,9 +5,14 @@
             <p>/{{ route.params.id }}</p>
         </d-flex>
         <d-flex style="margin-top: 20px;">
-            <d-text @click="direction = 0" :class="{current: direction === 0}" cursor="pointer">Прямой</d-text>
-            <d-text @click="direction = 1" :class="{current: direction === 1}" cursor="pointer">Обратный</d-text>
-            <d-text @click="direction = 2" :class="{current: direction === 2}" cursor="pointer">Оба</d-text>
+<!--            <d-text class="breadcrumbs"-->
+<!--                    @click="direction = 0" :class="{current: direction === 0}" cursor="pointer">Прямой</d-text>-->
+<!--            <d-text class="breadcrumbs"-->
+<!--                    @click="direction = 1" :class="{current: direction === 1}" cursor="pointer">Обратный</d-text>-->
+            <d-text class="breadcrumbs"
+                    @click="direction = 2" :class="{current: direction === 2}" cursor="pointer">Оба</d-text>
+            <d-text class="breadcrumbs"
+                    @click="isSchema = !isSchema" cursor="pointer">Показать схему</d-text>
         </d-flex>
         <d-flex align="start" style="max-height: calc(100vh - 134px); overflow-y: auto" justify="space-between"
                 gap="40px">
@@ -16,12 +21,15 @@
                                :stations="busStations"
                                :direction="direction"/>
             <yand-map style="width: 900px; height: 750px"
-                      v-if="isLoaded"
+                      v-if="isLoaded && !isSchema"
                       :lines="busesRoadMaps"
                       :busStationsMarkers="busStations"
                       :currentBusesCoordinates="busesOnRoute"
                       :center="center"
                       :zoom="zoom"/>
+            <div v-if="isSchema" style="display: flex; gap: 10px;  right: 40%">
+                <div v-for="item in busStations" :key="item" style="border-radius: 50%; width: 20px;height: 20px;border: 2px solid red;"></div>
+            </div>
         </d-flex>
     </div>
 </template>
@@ -40,12 +48,12 @@ import BusStationsCard from "@/modules/routes/views/cards/BusStationsCard.vue";
 import {getAllBusesLastCoordinateByRouteNum} from "@/modules/routes/api/Index.ts";
 import {ParseHelper} from "@/helpers/ParseHelper.ts";
 
-
+const isSchema = ref(false)
 const isLoaded = ref(false)
 const route = useRoute()
 const center = ref([63.615375, 53.181536])
 const zoom = ref(15)
-const direction = ref<0 | 1 | 2>(0)
+const direction = ref<0 | 1 | 2>(2)
 const currentBusRoute = +route.params.id
 const busStations = ref<string[]>([])
 const busesOnRoute = ref<BusOnMap[]>([])
@@ -93,7 +101,7 @@ watch(direction, async () => {
             })
         }, 1000)
     }
-})
+},{immediate:true})
 onUnmounted(() => {
     clearInterval(interval.value)
 })
@@ -212,7 +220,7 @@ async function getLinesByRoute() {
 }
 
 onMounted(async () => {
-    await getLinesByRoute()
+    await getBothLinesByRoute()
     isLoaded.value = true
 })
 </script>
@@ -238,5 +246,13 @@ onMounted(async () => {
 ::-webkit-scrollbar-thumb {
     background: var(--accent-color);
     border-radius: 6px;
+}
+.breadcrumbs {
+    border-radius: 6px;
+    background-color: white;
+    padding: 4px;
+    border: 1px solid black;
+    width: 120px;
+    text-align: center;
 }
 </style>

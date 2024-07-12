@@ -30,24 +30,30 @@
                 <yandex-map-marker v-for="marker in markers" :key="marker.code"
                                    :settings="{ coordinates: marker.coords}"
                                    position="top-center left-center">
-                    <img
-                            class="pin"
-                            alt=""
-                            src="@/assets/img/circle.png"
-                            @click="produceAnAlert(marker)"
-                    />
+                    <div class="station__info"
+                         v-if="isDialogVisible && selectedStation && marker.coords === selectedStation.coords">
+                        {{ selectedStation.code }} - {{ selectedStation.descRu }}
+                    </div>
+                    <div @click="produceAnAlert(marker)"
+                         style="border: 2px solid black; background-color:white; position: relative; border-radius: 50%; height: 12px; width: 12px; cursor:pointer;"
+                         :style="{
+                             border:  marker.coords === selectedStation?.coords ? '2px solid blue' : '2px solid black',
+                             backgroundColor: marker.coords === selectedStation?.coords ? 'blue' : 'white',
+                         }"
+                    >
+                    </div>
                 </yandex-map-marker>
 
                 <yandex-map-marker v-for="(bus, idx) in props.currentBusesCoordinates" :key="idx"
                                    :settings="{ coordinates: bus.coord as any}"
                                    position="top-center left-center">
-                            <d-text class="bus__number-container">{{ bus?.emei }}</d-text>
-                            <img style="position: relative"
-                                 class="bus"
-                                 alt=""
-                                 src="@/assets/img/svg/where-icon.svg"
-                                 @click="produceAnAlert(bus.coord)"
-                            />
+                    <d-text class="bus__number-container">{{ bus?.emei }}</d-text>
+                    <img style="position: relative"
+                         class="bus"
+                         alt=""
+                         src="@/assets/img/svg/where-icon.svg"
+                         @click="produceAnAlert(bus.coord)"
+                    />
                 </yandex-map-marker>
 
                 <yandex-map-marker v-if="props.busLastCoordinate"
@@ -90,11 +96,12 @@ const props = defineProps<{
     currentBusesCoordinates?: BusOnMap[]
 }>()
 
-const PATH = []
+const selectedStation = ref<Station | null>(null)
+const isDialogVisible = ref(false)
 
 function produceAnAlert(p: any) {
-    console.log(p)
-    PATH.push(p)
+    isDialogVisible.value = true
+    selectedStation.value = p
 }
 
 watch(() => props.busStationsMarkers, () => {
@@ -150,8 +157,11 @@ onMounted(() => {
 
 .pin {
     cursor: pointer;
-    width: 10px;
-    height: 10px;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    position: absolute;
+    inset: 0 0 0 0;
 }
 
 .bus {
@@ -173,5 +183,16 @@ onMounted(() => {
     color: black;
     border: 2px solid black;
     z-index: 9900;
+}
+
+.station__info {
+    position: absolute;
+    background-color: white;
+    white-space: nowrap;
+    border-radius: 6px;
+    padding: 4px;
+    border: 2px solid black;
+    left: 15px;
+    top: -8px;
 }
 </style>
