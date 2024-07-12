@@ -24,8 +24,17 @@ defineEmits<{
 
 <style scoped>
 .card__text {
+    height: 20px;
+    border-radius: 6px;
+    border: 1px solid var(--accent-color);
+    width: 200px;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
     &:hover {
-        color: blue;
+        color: blue !important;
     }
 }
 </style>

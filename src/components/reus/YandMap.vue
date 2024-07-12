@@ -167,10 +167,11 @@ onMounted(() => {
     background-color: white;
     position: absolute;
     height: 30px;
-    right: -35px;
+    right: -38px;
     border-radius: 6px;
     padding: 2px 6px;
     color: black;
-    border: 1px solid black;
+    border: 2px solid black;
+    z-index: 9900;
 }
 </style>
