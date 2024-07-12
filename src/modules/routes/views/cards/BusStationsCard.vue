@@ -15,7 +15,7 @@ defineEmits<{
 
 <template>
 <d-flex type="column" align="start">
-    <d-text @click="$emit('showStation', {name: name, direction: props.direction})"
+    <d-text weight="500" @click="$emit('showStation', {name: name, direction: props.direction})"
             cursor="pointer"
             class="card__text"
             v-for="name in stations" :key="name">{{name}}</d-text>
@@ -24,15 +24,13 @@ defineEmits<{
 
 <style scoped>
 .card__text {
-    height: 20px;
     border-radius: 6px;
     border: 1px solid var(--accent-color);
     width: 200px;
-    padding: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    padding: 6px;
     background-color: white;
+    text-align: center;
+    letter-spacing: 1px;
     &:hover {
         color: blue !important;
     }

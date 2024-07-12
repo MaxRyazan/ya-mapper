@@ -222,6 +222,7 @@ onMounted(async () => {
     padding: 0 10px;
     max-height: calc(100vh - 154px);
     overflow-y: auto;
+    overflow-x: hidden;
     margin-top: 20px;
     direction: rtl;
 }
