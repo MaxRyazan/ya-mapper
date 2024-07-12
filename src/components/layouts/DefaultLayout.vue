@@ -5,7 +5,9 @@ import TheMainNav from "@/components/single-use/TheMainNav.vue";
 
 <template>
 <div class="def_layout">
-    <the-main-nav />
+    <div>
+        <the-main-nav />
+    </div>
     <div class="content">
         <router-view />
     </div>
@@ -26,6 +28,6 @@ import TheMainNav from "@/components/single-use/TheMainNav.vue";
 .content {
     flex: 1;
     max-height: calc(100vh - var(--header-height) - 20px);
-    overflow: auto;
+    overflow: hidden;
 }
 </style>

@@ -28,7 +28,7 @@
 
 <script setup lang="ts">
 import {useRoute} from "vue-router";
-import {onMounted, ref, watch} from "vue";
+import {onMounted, onUnmounted, ref, watch} from "vue";
 import {getLinesByRegion} from "@/modules/map/api";
 import YandMap from "@/components/reus/YandMap.vue";
 import {BusOnMap, BusRoadMap} from "@/modules/routes/types/Index.ts";
@@ -93,6 +93,9 @@ watch(direction, async () => {
             })
         }, 1000)
     }
+})
+onUnmounted(() => {
+    clearInterval(interval.value)
 })
 
 async function getBothLinesByRoute() {
