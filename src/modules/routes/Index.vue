@@ -1,33 +1,119 @@
 <template>
-    <div>
-        <d-text color="accent" size="22px" weight="600">Список маршрутов</d-text>
-        <da-spinner style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%)" v-if="isLoading" />
-        <da-table v-else style="margin-top: 28px;" :data="{header: table.header, body: table.body}">
-            <template #operations="{record}">
-                <router-link :to="`/routes/${record?.routeNumber!}`">схема</router-link>
-                <button>остановки</button>
+    <d-flex class="route__wrapper" gap="40px" type="column">
+        <d-text size="26px">Маршруты</d-text>
+        <a-spin size="large" class="route__spinner" v-if="isLoading"/>
+        <a-table size="middle"
+                 :columns="columns"
+                 :pagination="false"
+                 :data-source="dataSource">
+            <template #emptyText></template>
+            <template #bodyCell="{column, record}">
+                <template v-if="column.key === 'operations'">
+                    <div style="display: flex; gap: 10px">
+                        <router-link :to="`/routes/${record?.routeNumber!}`">схема</router-link>
+                        <router-link :to="`/routes/stations/${record?.routeNumber!}`">остановки</router-link>
+                    </div>
+                </template>
             </template>
-        </da-table>
-    </div>
+        </a-table>
+    </d-flex>
 </template>
 <script setup lang="ts">
-import DaTable from "@/components/reus/DaTable.vue";
-import DText from "@/components/reus/texts/DText.vue";
-import {onMounted, reactive, ref} from "vue";
+import {onMounted, ref} from "vue";
 import {getAllRoutes} from "@/modules/routes/api/Index.ts";
-import DaSpinner from "@/components/reus/DaSpinner.vue";
+import DText from "@/components/reus/texts/DText.vue";
 
 const isLoading = ref(false)
-const table = reactive<any>({
-    header: ['№', 'Тип', '№ маршрута', "Описание(рус)", "Описание(каз)", "Тариф город", "Кол-во зон", "Тариф безнал", "Тариф нал",  "Операции"],
-    body: []
-})
+
+
+const columns = [
+    {
+        title: '№',
+        dataIndex: 'key',
+        key: 'key',
+        align: 'center',
+        ellipsis: true,
+        width: 50
+    },
+    {
+        title: 'Тип',
+        dataIndex: 'type',
+        key: 'type',
+        align: 'center',
+        ellipsis: true,
+        width: 120
+    },
+    {
+        title: '№ маршрута',
+        dataIndex: 'routeNumber',
+        key: 'routeNumber',
+        align: 'center',
+        ellipsis: true,
+        width: 120
+    },
+    {
+        title: 'Описание(рус)',
+        dataIndex: 'descRu',
+        key: 'descRu',
+        align: 'center',
+        ellipsis: true,
+    },
+    {
+        title: 'Описание(каз)',
+        dataIndex: 'descKZ',
+        key: 'descKZ',
+        align: 'center',
+        ellipsis: true,
+    },
+    {
+        title: 'Тариф город',
+        dataIndex: 'tarifCity',
+        key: 'tarifCity',
+        align: 'center',
+        ellipsis: true,
+        width: 120
+    },
+    {
+        title: 'Кол-во зон',
+        dataIndex: 'zones',
+        key: 'zones',
+        align: 'center',
+        ellipsis: true,
+        width: 120
+    },
+    {
+        title: 'Тариф безнал',
+        dataIndex: 'tarifBeznal',
+        key: 'tarifBeznal',
+        align: 'center',
+        ellipsis: true,
+        width: 120
+    },
+    {
+        title: 'Тариф нал',
+        dataIndex: 'tarifCahs',
+        key: 'tarifCahs',
+        align: 'center',
+        ellipsis: true,
+        width: 120
+    },
+    {
+        title: 'Операции',
+        dataIndex: '',
+        key: 'operations',
+        align: 'center',
+        ellipsis: true,
+        width: 150
+    },
+]
+let dataSource = ref<any>()
 
 onMounted(async () => {
     isLoading.value = true
     const response = await getAllRoutes({bin: '10540003043', region: 'REG_18'})
-    table.body = response.map(a => {
+    dataSource.value = response.map((a, idx) => {
         return {
+            key: idx + 1,
             type: 'Автобус',
             routeNumber: a.ROUTE,
             descRu: a.NAME_RU,
@@ -45,5 +131,15 @@ onMounted(async () => {
 
 
 <style scoped>
-
+.route__wrapper {
+    min-height: 100vh;
+    padding: 20px;
+    position: relative;
+}
+.route__spinner {
+    position: absolute;
+    top: 50%;
+    right: 50%;
+    transform: translate(-50%, -50%);
+}
 </style>

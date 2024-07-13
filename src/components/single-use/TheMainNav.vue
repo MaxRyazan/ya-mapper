@@ -53,7 +53,7 @@ const isMenuExpanded = ref(true)
                 </d-flex>
             </router-link>
         </d-flex>
-        <d-flex class="nav__link" style="width: 80%; cursor:pointer;" gap="15px" @click="isMenuExpanded = !isMenuExpanded">
+        <d-flex class="nav__link" style="width: 84%; cursor:pointer;" gap="15px" @click="isMenuExpanded = !isMenuExpanded">
             <right-square-filled v-if="!isMenuExpanded" class="da-icon"/>
             <left-square-filled v-else class="da-icon"/>
             <span v-if="isMenuExpanded" style="width: 80%;">Свернуть</span>
@@ -65,10 +65,10 @@ const isMenuExpanded = ref(true)
 .nav-wrapper {
     padding-top: 40px;
     width: 320px;
-    transition: 0.3s;
+    min-width: 320px;
     background-color: hsla(0, 0%, 22%, 1);
     min-height: 100vh;
-
+    transition: .3s !important;
     & > * {
         user-select: none;
     }
@@ -106,6 +106,7 @@ const isMenuExpanded = ref(true)
 
 .mini {
     width: 70px;
+    min-width: 70px;
     transition: .3s;
 }
 </style>

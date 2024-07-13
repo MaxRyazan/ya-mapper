@@ -2,23 +2,17 @@
 </script>
 
 <template>
-    <router-view />
+    <d-flex align="start" class="def_layout-wrapper">
+        <router-view/>
+    </d-flex>
 </template>
 
 <style scoped>
-.def_layout {
-    display: flex;
-    width: 100%;
-    gap: 10px;
-    padding: 6px;
-    background-color: rgba(0,0,0, .05);
-    height: calc(100vh - var(--header-height) - 6px);
-    overflow: hidden;
-    position: relative;
-}
-.content {
-    flex: 1;
-    max-height: calc(100vh - var(--header-height) - 20px);
-    overflow: hidden;
+.def_layout-wrapper {
+    flex-grow: 1;
+    height: 100vh;
+    & > * {
+        flex-grow: 1;
+    }
 }
 </style>
