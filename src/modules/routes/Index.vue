@@ -5,7 +5,7 @@
         <a-table size="middle"
                  :columns="columns"
                  :pagination="false"
-                 :data-source="dataSource">
+                 :data-source="allRoutes">
             <template #emptyText></template>
             <template #bodyCell="{column, record}">
                 <template v-if="column.key === 'operations'">
@@ -19,9 +19,10 @@
     </d-flex>
 </template>
 <script setup lang="ts">
-import {onMounted, ref} from "vue";
+import {ref, watch} from "vue";
 import {getAllRoutes} from "@/modules/routes/api/Index.ts";
 import DText from "@/components/reus/texts/DText.vue";
+import {allRoutes, isAllRoutesLoading} from "@/modules/routes/stores/allRoutes.ts";
 
 const isLoading = ref(false)
 
@@ -106,27 +107,31 @@ const columns = [
         width: 150
     },
 ]
-let dataSource = ref<any>()
 
-onMounted(async () => {
-    isLoading.value = true
-    const response = await getAllRoutes({bin: '10540003043', region: 'REG_18'})
-    dataSource.value = response.map((a, idx) => {
-        return {
-            key: idx + 1,
-            type: 'Автобус',
-            routeNumber: a.ROUTE,
-            descRu: a.NAME_RU,
-            descKZ: a.NAME_KZ,
-            tarifCity: a.TAR_CITY,
-            zones: a.ZONES,
-            tarifBeznal: a.TAR_BEZ,
-            tarifCahs: a.TAR_CASH,
-            operations: ''
+watch(allRoutes, async () => {
+    if(!allRoutes.value) {
+        if(!isAllRoutesLoading.value) {
+            isLoading.value = true
+            const response = await getAllRoutes({bin: '10540003043', region: 'REG_18'})
+            allRoutes.value = response.map((a, idx) => {
+                return {
+                    key: idx + 1,
+                    type: 'Автобус',
+                    routeNumber: a.ROUTE,
+                    descRu: a.NAME_RU,
+                    descKZ: a.NAME_KZ,
+                    tarifCity: a.TAR_CITY,
+                    zones: a.ZONES,
+                    tarifBeznal: a.TAR_BEZ,
+                    tarifCahs: a.TAR_CASH,
+                    operations: ''
+                }
+            })
+            isLoading.value = false
         }
-    })
-    isLoading.value = false
-})
+    }
+}, {immediate: true})
+
 </script>
 
 
