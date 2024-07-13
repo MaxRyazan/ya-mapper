@@ -47,7 +47,7 @@
                 <yandex-map-marker v-for="(bus, idx) in props.currentBusesCoordinates" :key="idx"
                                    :settings="{ coordinates: bus.coord as any}"
                                    position="top-center left-center">
-                    <d-text class="bus__number-container">{{ bus?.emei }}</d-text>
+                    <d-text class="bus__number-container">{{ getBusGRN(bus?.emei) }}</d-text>
                     <img style="position: relative"
                          class="bus"
                          alt=""
@@ -83,6 +83,7 @@ import {
 import {Station} from "@/modules/map/types";
 import DText from "@/components/reus/texts/DText.vue";
 import {BusOnMap} from "@/modules/routes/types/Index.ts";
+import {getBusGRN} from "@/stores/buses.ts";
 
 const myMap = shallowRef<null | any>(null);
 let markers = ref<any>([])
@@ -177,6 +178,7 @@ onMounted(() => {
     background-color: white;
     position: absolute;
     height: 30px;
+    width: 100%;
     right: -38px;
     border-radius: 6px;
     padding: 2px 6px;
