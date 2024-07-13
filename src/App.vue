@@ -1,15 +1,19 @@
 <template>
-    <the-header />
-    <div style="display: flex">
-        <router-view />
-    </div>
+    <d-flex justify="start" align="start" style="height: 100vh; position: relative">
+        <the-main-nav />
+        <d-flex>
+            <default-layout />
+        </d-flex>
+    </d-flex>
 </template>
 <script setup lang="ts">
-import TheHeader from "@/components/single-use/TheHeader.vue";
 import {Bus} from "@/models/Bus.ts";
 import {getAllBuses} from "@/modules/map/api";
 import {allBuses, isAllBusesInLoading} from "@/stores/buses.ts";
 import {onMounted} from "vue";
+import DFlex from "@/components/reus/html-containers/DFlex.vue";
+import TheMainNav from "@/components/single-use/TheMainNav.vue";
+import DefaultLayout from "@/components/layouts/DefaultLayout.vue";
 
 onMounted(async () => {
     isAllBusesInLoading.value = true

@@ -1,4 +1,5 @@
 @import "variables.css";
+@import 'ant-design-vue/dist/reset.css';
 
 * {
     padding: 0;

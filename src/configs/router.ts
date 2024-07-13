@@ -9,8 +9,7 @@ const routes = [
             children: [
                 {
                     path: '/',
-                    name: 'main',
-                    component: () => import('@/modules/main/Index.vue'),
+                    redirect: '/routes'
                 },
                 {
                     path: '/map',
