@@ -20,12 +20,12 @@ import {useRoute} from "vue-router";
 
 const route = useRoute()
 const navLinks = reactive([
-    // {title: 'Яндекс карты', to: '/map', icon: RightSquareFilled},
+    {title: 'Яндекс карты', to: '/map', icon: RightSquareFilled},
     {title: 'Маршруты', to: '/routes', icon: FundOutlined},
     {title: 'Транспорт', to: '/transport', icon: CarOutlined},
     {title: 'Контролёры', to: '/conductors', icon: TeamOutlined},
     {title: 'Водители', to: '/drivers', icon: MehOutlined},
-    {title: 'Транспорт/работа', to: '/transport-work', icon: BugOutlined},
+    {title: 'Транспорт/работа', to: '/auto-work', icon: BugOutlined},
     {title: 'Статистика/отчеты', to: '/statistics', icon: ProfileOutlined},
     {title: 'Диспетчирезация', to: '/dispatch', icon: PushpinOutlined},
     {title: 'Оценки', to: '/rating', icon: StarOutlined},
@@ -40,7 +40,7 @@ const isMenuExpanded = ref(true)
     <d-flex type="column" gap="0" class="nav-wrapper" justify="space-between" :class="{mini: !isMenuExpanded}">
         <d-flex type="column" justify="start" gap="0">
             <router-link v-for="link in navLinks"
-                         :class="{'current-route': route.path === link.to}"
+                         :class="{'current-route': route.path.includes(link.to)}"
                          :key="link.title"
                          class="nav__link"
                          :to="link.to">

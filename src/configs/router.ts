@@ -72,8 +72,8 @@ const routes = [
                     component: () => import('@/modules/transport/Index.vue'),
                 },
                 {
-                    path: '/transport-work',
-                    name: 'transport-work',
+                    path: '/auto-work',
+                    name: 'auto-work',
                     component: () => import('@/modules/transport-work/Index.vue'),
                 },
             ]

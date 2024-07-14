@@ -88,7 +88,7 @@ watch(direction, async () => {
     } else {
         await getBothLinesByRoute()
         interval.value = setInterval(async () => {
-            const response = await getAllBusesLastCoordinateByRouteNum({region: 'REG_18', route: 24})
+            const response = await getAllBusesLastCoordinateByRouteNum({region: 'REG_18', route: +(route.params.id)})
             busesOnRoute.value = response.map((r: string) => {
                 const parsed = JSON.parse(r)
                 return {
