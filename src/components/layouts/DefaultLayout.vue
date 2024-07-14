@@ -11,6 +11,7 @@
 .def_layout-wrapper {
     flex-grow: 1;
     height: 100vh;
+    overflow-y: auto;
     & > * {
         flex-grow: 1;
     }

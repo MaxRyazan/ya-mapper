@@ -40,7 +40,7 @@ const isMenuExpanded = ref(true)
     <d-flex type="column" gap="0" class="nav-wrapper" justify="space-between" :class="{mini: !isMenuExpanded}">
         <d-flex type="column" justify="start" gap="0">
             <router-link v-for="link in navLinks"
-                         :class="{'current-route': route.path.includes(link.to)}"
+                         :class="{'current-route': route.path === link.to}"
                          :key="link.title"
                          class="nav__link"
                          :to="link.to">

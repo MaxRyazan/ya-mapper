@@ -18,8 +18,9 @@ import DefaultLayout from "@/components/layouts/DefaultLayout.vue";
 onMounted(async () => {
     isAllBusesInLoading.value = true
     const result: Bus[] = await getAllBuses({bin: '10540003043', region: 'REG_18'})
-    const res = result.map(res => {
+    const res = result.map((res, idx) => {
         return {
+            KEY: idx + 1,
             ID: res.ID,
             GOS_NUM: res.GOS_NUM,
             TAR_CITY: res.TAR_CITY,
