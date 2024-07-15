@@ -27,7 +27,7 @@ const navLinks = reactive([
     {title: 'Водители', to: '/drivers', icon: MehOutlined},
     {title: 'Транспорт/работа', to: '/auto-work', icon: BugOutlined},
     {title: 'Статистика/отчеты', to: '/statistics', icon: ProfileOutlined},
-    {title: 'Диспетчирезация', to: '/dispatch', icon: PushpinOutlined},
+    {title: 'Диспетчеризация', to: '/dispatch', icon: PushpinOutlined},
     {title: 'Оценки', to: '/rating', icon: StarOutlined},
     {title: 'Журнал', to: '/journal', icon: FileTextOutlined},
     {title: 'Изменить пароль', to: '/change-password', icon: UserOutlined},
@@ -40,12 +40,12 @@ const isMenuExpanded = ref(true)
     <d-flex type="column" gap="0" class="nav-wrapper" justify="space-between" :class="{mini: !isMenuExpanded}">
         <d-flex type="column" justify="start" gap="0">
             <router-link v-for="link in navLinks"
-                         :class="{'current-route': route.path === link.to}"
+                         :class="{'current-route': route.path.includes(link.to)}"
                          :key="link.title"
                          class="nav__link"
                          :to="link.to">
                 <d-flex gap="15px">
-                    <component :class="{'current-route': route.path === link.to}"
+                    <component :class="{'current-route': route.path.includes(link.to)}"
                                :title="link.title"
                                :is="link.icon"
                                class="da-icon"/>

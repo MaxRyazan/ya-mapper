@@ -60,7 +60,7 @@
                                    :settings="{ coordinates: (busLastCoordinate as any) }"
                                    position="top-center left-center">
                     <img
-                            class="bus"
+                            class="bus2"
                             alt=""
                             src="@/assets/img/where-icon.png"
                             @click="produceAnAlert(busLastCoordinate)"
@@ -168,8 +168,12 @@ onMounted(() => {
 .bus {
     cursor: pointer;
     width: 80px;
-    transform: translateX(35px);
-    margin-bottom: 35px;
+    transform: translate(40px, -25px);
+}
+.bus2 {
+    cursor: pointer;
+    width: 50px;
+    transform: translateY(-25px);
 }
 
 .bus__number-container {
@@ -179,7 +183,8 @@ onMounted(() => {
     position: absolute;
     height: 30px;
     width: 100%;
-    right: -38px;
+    right: -42px;
+    top: -25px;
     border-radius: 6px;
     padding: 2px 6px;
     color: black;

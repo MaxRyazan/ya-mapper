@@ -9,7 +9,6 @@ declare module 'vue' {
   export interface GlobalComponents {
     ASpin: typeof import('ant-design-vue/es')['Spin']
     ATable: typeof import('ant-design-vue/es')['Table']
-    ContainerMax: typeof import('./src/components/reus/containers/ContainerMax.vue')['default']
     DaSpinner: typeof import('./src/components/reus/DaSpinner.vue')['default']
     DaTable: typeof import('./src/components/reus/DaTable.vue')['default']
     DefaultLayout: typeof import('./src/components/layouts/DefaultLayout.vue')['default']
