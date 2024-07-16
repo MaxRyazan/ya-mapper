@@ -57,17 +57,16 @@ const isMenuExpanded = ref(true)
 <template>
     <d-flex type="column" gap="0" class="nav-wrapper" justify="space-between" :class="{mini: !isMenuExpanded}">
         <d-flex type="column" justify="start" gap="0">
-            <router-link v-for="link in navLinks"
+            <span v-for="link in navLinks"
                          :class="{'current-route': route.path.includes(link.to)}"
                          :key="link.title"
-                         class="nav__link"
-                         :to="link.to">
+                         class="nav__link">
                 <d-flex align="start" gap="15px">
                     <d-flex align="start" type="column" style="position: relative">
                         <main-sub-links :is-menu-expanded="isMenuExpanded" :link="link"/>
                     </d-flex>
                 </d-flex>
-            </router-link>
+            </span>
         </d-flex>
         <d-flex class="nav__link" style="width: 84%; cursor:pointer;" gap="15px"
                 @click="isMenuExpanded = !isMenuExpanded">
@@ -80,6 +79,9 @@ const isMenuExpanded = ref(true)
 
 <style scoped>
 .nav-wrapper {
+    scrollbar-gutter: stable;
+    scrollbar-width: thin;
+    max-height: 100vh;
     padding-top: 40px;
     width: 320px;
     min-width: 320px;
@@ -104,6 +106,7 @@ const isMenuExpanded = ref(true)
 }
 
 .nav__link {
+    cursor: pointer;
     border-radius: 8px;
     text-decoration: none;
     font-size: 18px;

@@ -1,14 +1,35 @@
 <script setup lang="ts">
 import DFlex from "@/components/reus/html-containers/DFlex.vue";
-import {useRoute} from "vue-router";
-import {ref} from "vue";
+import {useRoute, useRouter} from "vue-router";
+import {ref, watch} from "vue";
 
 const props = defineProps<{
     link: any,
     isMenuExpanded: boolean
 }>()
 const route = useRoute()
+const router = useRouter()
 const isSubExpanded = ref(false)
+
+function openSubLinks() {
+    if(props.link.subNavs) {
+        router.push({ path: props.link.to, hash: props.link.subNavs[0].href })
+    } else {
+        router.push({ path: props.link.to })
+    }
+    isSubExpanded.value = !isSubExpanded.value
+}
+
+watch(() => route.path, () => {
+    if(route.path !== props.link.to) {
+        isSubExpanded.value = false
+    }
+})
+
+watch(() => props.isMenuExpanded, () => {
+    isSubExpanded.value = props.isMenuExpanded;
+})
+
 </script>
 
 <template>
@@ -17,7 +38,7 @@ const isSubExpanded = ref(false)
                    :title="link.title"
                    :is="link.icon"
                    class="da-icon"/>
-        <span class="link-title" v-if="props.isMenuExpanded" @click="isSubExpanded = !isSubExpanded">{{link.title }}</span>
+        <span class="link-title" v-if="props.isMenuExpanded" @click="openSubLinks">{{link.title }}</span>
     </d-flex>
     <d-flex class="sub-links-dropdown" align="start" type="column" v-if="props.link.subNavs && isSubExpanded">
         <router-link class="sub-link"
