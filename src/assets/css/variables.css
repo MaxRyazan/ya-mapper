@@ -5,5 +5,7 @@ html {
     --accent-color-hover: hsla(170, 63%, 51%, 1);
     --accent-gradient-color: linear-gradient(180deg, hsla(170, 63%, 51%, 1) 0%, hsla(170, 62%, 16%, 1) 100%);
     --borders-color: rgba(0,0,0, .2);
+
+    --primary-color: rgb(0, 209, 255);
 }
 

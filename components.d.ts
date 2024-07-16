@@ -7,6 +7,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AAnchor: typeof import('ant-design-vue/es')['Anchor']
     ASpin: typeof import('ant-design-vue/es')['Spin']
     ATable: typeof import('ant-design-vue/es')['Table']
     DaSpinner: typeof import('./src/components/reus/DaSpinner.vue')['default']
@@ -14,6 +15,8 @@ declare module 'vue' {
     DefaultLayout: typeof import('./src/components/layouts/DefaultLayout.vue')['default']
     DFlex: typeof import('./src/components/reus/html-containers/DFlex.vue')['default']
     DText: typeof import('./src/components/reus/texts/DText.vue')['default']
+    MainSubLinks: typeof import('./src/components/single-use/MainSubLinks.vue')['default']
+    PageWithTabs: typeof import('./src/components/reus/samples/PageWithTabs.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     TheHeader: typeof import('./src/components/single-use/TheHeader.vue')['default']

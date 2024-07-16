@@ -17,8 +17,24 @@ import {
 } from "@ant-design/icons-vue";
 import DFlex from "@/components/reus/html-containers/DFlex.vue";
 import {useRoute} from "vue-router";
+import MainSubLinks from "@/components/single-use/MainSubLinks.vue";
 
 const route = useRoute()
+const dispatchSubNavs = reactive([
+    {title: 'Мониторинг', key: 1, href: '#monitor'},
+    {title: 'Путь', key: 2, href: '#path'},
+    {title: 'Отклонения', key: 3, href: '#vectors'},
+    {title: 'Обороты', key: 4, href: '#screw'},
+    {title: 'Расписание', key: 5, href: '#list'},
+    {title: 'Выходные дни', key: 6, href: '#weekend'},
+    {title: 'Прохождение узлов', key: 7, href: '#nodes'},
+    {title: 'График движения', key: 8, href: '#graph-map'},
+    {title: 'График, остановка', key: 9, href: '#grap-stations'},
+    {title: 'График, рейс', key: 10, href: '#graph-reis'},
+    {title: 'Прогноз по остановке', key: 11, href: '#future'},
+    {title: 'Сообщение на табло', key: 12, href: '#message'},
+])
+
 const navLinks = reactive([
     {title: 'Яндекс карты', to: '/map', icon: RightSquareFilled},
     {title: 'Маршруты', to: '/routes', icon: FundOutlined},
@@ -27,12 +43,14 @@ const navLinks = reactive([
     {title: 'Водители', to: '/drivers', icon: MehOutlined},
     {title: 'Транспорт/работа', to: '/auto-work', icon: BugOutlined},
     {title: 'Статистика/отчеты', to: '/statistics', icon: ProfileOutlined},
-    {title: 'Диспетчеризация', to: '/dispatch', icon: PushpinOutlined},
+    {title: 'Диспетчеризация', to: '/dispatch', icon: PushpinOutlined, subNavs: dispatchSubNavs},
     {title: 'Оценки', to: '/rating', icon: StarOutlined},
     {title: 'Журнал', to: '/journal', icon: FileTextOutlined},
     {title: 'Изменить пароль', to: '/change-password', icon: UserOutlined},
     {title: 'Выход', to: '/exit', icon: StopOutlined},
 ])
+
+
 const isMenuExpanded = ref(true)
 </script>
 
@@ -44,16 +62,15 @@ const isMenuExpanded = ref(true)
                          :key="link.title"
                          class="nav__link"
                          :to="link.to">
-                <d-flex gap="15px">
-                    <component :class="{'current-route': route.path.includes(link.to)}"
-                               :title="link.title"
-                               :is="link.icon"
-                               class="da-icon"/>
-                    <span style="white-space: nowrap" v-if="isMenuExpanded">{{ link.title }}</span>
+                <d-flex align="start" gap="15px">
+                    <d-flex align="start" type="column" style="position: relative">
+                        <main-sub-links :is-menu-expanded="isMenuExpanded" :link="link"/>
+                    </d-flex>
                 </d-flex>
             </router-link>
         </d-flex>
-        <d-flex class="nav__link" style="width: 84%; cursor:pointer;" gap="15px" @click="isMenuExpanded = !isMenuExpanded">
+        <d-flex class="nav__link" style="width: 84%; cursor:pointer;" gap="15px"
+                @click="isMenuExpanded = !isMenuExpanded">
             <right-square-filled v-if="!isMenuExpanded" class="da-icon"/>
             <left-square-filled v-else class="da-icon"/>
             <span v-if="isMenuExpanded" style="width: 80%;">Свернуть</span>
@@ -69,6 +86,7 @@ const isMenuExpanded = ref(true)
     background-color: hsla(0, 0%, 22%, 1);
     min-height: 100vh;
     transition: .3s !important;
+    overflow-y: auto;
     & > * {
         user-select: none;
     }
@@ -78,6 +96,7 @@ const isMenuExpanded = ref(true)
     min-width: 26px;
     min-height: 26px;
     color: rgba(255, 255, 255, .5);
+
     & > * {
         width: 100%;
         height: 100%;
@@ -95,12 +114,12 @@ const isMenuExpanded = ref(true)
     border: 2px solid transparent;
 
     &:hover {
-        color: white;
+        color: var(--primary-color) !important;
     }
 }
 
 .current-route {
-    color: white !important;
+    color: var(--primary-color) !important;
     transition: .4s;
 }
 

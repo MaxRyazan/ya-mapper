@@ -1,7 +1,7 @@
 <template>
-    <d-flex justify="start" align="start" style="height: 100vh; position: relative">
+    <d-flex justify="start" align="start" style="height: 100vh; max-height: 100vh; position: relative;">
         <the-main-nav />
-        <d-flex>
+        <d-flex class="content-wrapper">
             <default-layout />
         </d-flex>
     </d-flex>
@@ -37,3 +37,10 @@ onMounted(async () => {
     isAllBusesInLoading.value = false
 })
 </script>
+<style scoped>
+.content-wrapper {
+    max-width: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+</style>
