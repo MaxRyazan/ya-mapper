@@ -15,9 +15,7 @@ import DText from "@/components/reus/texts/DText.vue";
 import {reactive, shallowRef} from "vue";
 import DispatchMap from "@/modules/dispatch/views/tabs/DispatchMap.vue";
 import DispatchLinear from "@/modules/dispatch/views/tabs/DispatchLinear.vue";
-import {useRouter} from "vue-router";
 
-const router = useRouter()
 const currentComponent = shallowRef(DispatchMap)
 
 const tabs = reactive([
@@ -27,7 +25,6 @@ const tabs = reactive([
 
 function changeComponent(tab: any) {
     currentComponent.value = tab.component
-    router.push({})
 }
 
 </script>
