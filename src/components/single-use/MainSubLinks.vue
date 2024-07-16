@@ -12,7 +12,7 @@ const router = useRouter()
 const isSubExpanded = ref(false)
 
 function openSubLinks() {
-    if(props.link.subNavs) {
+    if(props.link.subNavs && !route.hash) {
         router.push({ path: props.link.to, hash: props.link.subNavs[0].href })
     } else {
         router.push({ path: props.link.to })
@@ -30,6 +30,12 @@ watch(() => props.isMenuExpanded, () => {
     isSubExpanded.value = props.isMenuExpanded;
 })
 
+watch(() => route.hash, () => {
+    if(props.link.subNavs) {
+        const exist = props.link.subNavs.find((a:any) => a.href === route.hash)
+        if(exist) isSubExpanded.value = true
+    }
+})
 </script>
 
 <template>
