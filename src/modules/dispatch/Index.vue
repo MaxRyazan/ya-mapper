@@ -16,11 +16,11 @@ const SUB_COMPONENTS_MAP = new Map([
 ])
 
 watch(() => route.hash, () => {
-    currentComponent.value = SUB_COMPONENTS_MAP.get(route.hash)
+    currentComponent.value = SUB_COMPONENTS_MAP.get(route.hash) as any
 })
 
 onMounted(() => {
-    currentComponent.value = SUB_COMPONENTS_MAP.get(route.hash)
+    currentComponent.value = SUB_COMPONENTS_MAP.get(route.hash) as any
 })
 </script>
 
