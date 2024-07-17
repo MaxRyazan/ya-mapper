@@ -5,14 +5,12 @@
             <p>/{{ route.params.id }}</p>
         </d-flex>
         <d-flex style="margin-top: 20px;">
-<!--            <d-text class="breadcrumbs"-->
-<!--                    @click="direction = 0" :class="{current: direction === 0}" cursor="pointer">Прямой</d-text>-->
-<!--            <d-text class="breadcrumbs"-->
-<!--                    @click="direction = 1" :class="{current: direction === 1}" cursor="pointer">Обратный</d-text>-->
             <d-text class="breadcrumbs"
-                    @click="direction = 2" :class="{current: direction === 2}" cursor="pointer">Оба</d-text>
+                    @click="direction = 2" :class="{current: direction === 2}" cursor="pointer">Оба
+            </d-text>
             <d-text class="breadcrumbs"
-                    @click="isSchema = !isSchema" cursor="pointer">Показать схему</d-text>
+                    @click="isSchema = !isSchema" cursor="pointer">Показать схему
+            </d-text>
         </d-flex>
         <d-flex align="start" style="max-height: calc(100vh - 134px); overflow-y: auto" justify="space-between"
                 gap="40px">
@@ -28,7 +26,8 @@
                       :center="center"
                       :zoom="zoom"/>
             <div v-if="isSchema" style="display: flex; gap: 10px;  right: 40%">
-                <div v-for="item in busStations" :key="item" style="border-radius: 50%; width: 20px;height: 20px;border: 2px solid red;"></div>
+                <div v-for="item in busStations" :key="item"
+                     style="border-radius: 50%; width: 20px;height: 20px;border: 2px solid red;"></div>
             </div>
         </d-flex>
     </div>
@@ -45,8 +44,9 @@ import {transformData} from "@/modules/routes/helpers";
 import DFlex from "@/components/reus/html-containers/DFlex.vue";
 import DText from "@/components/reus/texts/DText.vue";
 import BusStationsCard from "@/modules/routes/views/cards/BusStationsCard.vue";
-import {getAllBusesLastCoordinateByRouteNum} from "@/modules/routes/api/Index.ts";
+import {getAllBusesLastCoordinateByRouteNum, getLastPackageWithCoordinates} from "@/modules/routes/api/Index.ts";
 import {ParseHelper} from "@/helpers/ParseHelper.ts";
+import dayjs from "dayjs";
 
 const isSchema = ref(false)
 const isLoaded = ref(false)
@@ -57,7 +57,8 @@ const direction = ref<0 | 1 | 2>(2)
 const currentBusRoute = +route.params.id
 const busStations = ref<string[]>([])
 const busesOnRoute = ref<BusOnMap[]>([])
-const interval = ref()
+const outerInterval = ref()
+const innerInterval = ref()
 
 const busesRoadMaps = ref<BusRoadMap[]>([
     {
@@ -82,28 +83,68 @@ function changeCenter(param: { name: string, direction: 1 | 0 | 2 }) {
 }
 
 watch(direction, async () => {
-    busStations.value = []
-    if (direction.value !== 2) {
-        await getLinesByRoute()
-    } else {
-        await getBothLinesByRoute()
-        interval.value = setInterval(async () => {
-            const response = await getAllBusesLastCoordinateByRouteNum({region: 'REG_18', route: +(route.params.id)})
-            busesOnRoute.value = response.map((r: string) => {
-                const parsed = JSON.parse(r)
-                return {
-                    coord: ParseHelper.parseCoords(parsed.RES_GPS),
-                    emei: parsed.GPS_IMEI,
-                    speed: +parsed.SPEED,
-                    timestamp: parsed.TimeStamp
+    await buildInnerInterval()
+    outerInterval.value = setInterval(async () => {
+        await buildInnerInterval()
+    }, 20000)
+}, {immediate: true})
 
-                }
-            })
-        }, 1000)
+
+async function buildInnerInterval() {
+    console.log('outer interval start')
+    // clearInterval(innerInterval.value)
+    let counter = 0
+    const response = await getLastPackageWithCoordinates()
+    if(response){
+        const arrOfUniqueEmeis = getUniqueEmeis(response)
+        console.log(arrOfUniqueEmeis)
     }
-},{immediate:true})
+    // let resultArray = []
+    // for(let i = 0; i < arrOfUniqueEmeis.length; i++) {
+    //     const temp = response.filter(r => r.GPS_IMEI === arrOfUniqueEmeis[i])
+    //     resultArray.push(temp)
+    // }
+    // innerInterval.value = setInterval(() => {
+    //     busesOnRoute.value = resultArray.map((r: string) => {
+    //             return {
+    //                 coord: ParseHelper.parseCoords(r[counter].RES_GPS),
+    //                 emei: r.GPS_IMEI,
+    //                 speed: +r.SPEED,
+    //                 timestamp: r[counter].TimeStamp
+    //             }
+    //         })
+    //     counter++
+    // }, 1000)
+}
+
+function getUniqueEmeis(data: any) {
+    const emeis = data.map(a => a.GPS_IMEI)
+    const uniqueEmeis = new Set(emeis)
+    return Array.from(uniqueEmeis)
+}
+
+// watch(direction, async () => {
+//     busStations.value = []
+//     if (direction.value !== 2) {
+//         await getLinesByRoute()
+//     } else {
+//         await getBothLinesByRoute()
+//         interval.value = setInterval(async () => {
+//             const response = await getAllBusesLastCoordinateByRouteNum({region: 'REG_18', route: +(route.params.id)})
+//             busesOnRoute.value = response.map((r: string) => {
+//                 const parsed = JSON.parse(r)
+//                 return {
+//                     coord: ParseHelper.parseCoords(parsed.RES_GPS),
+//                     emei: parsed.GPS_IMEI,
+//                     speed: +parsed.SPEED,
+//                     timestamp: parsed.TimeStamp
+//                 }
+//             })
+//         }, 1000)
+//     }
+// },{immediate:true})
 onUnmounted(() => {
-    clearInterval(interval.value)
+    clearInterval(outerInterval.value)
 })
 
 async function getBothLinesByRoute() {
@@ -164,60 +205,60 @@ async function getBothLinesByRoute() {
     }
 }
 
-async function getLinesByRoute() {
-    const linesResponse: GetLinesByRouteResponse[] | undefined = await getLinesByRegion(+route.params.id, direction.value)
-    if (!linesResponse) return
-    busStations.value = linesResponse.map((r: GetLinesByRouteResponse) => r.NAME_RU)
-    const currentRouteLines = linesResponse.filter((r: GetLinesByRouteResponse) => +r.ROUTE_NUM === currentBusRoute)
-    let ASC = currentRouteLines?.filter((r: GetLinesByRouteResponse) => +r.DIRECTION === 0)
-    let DESC = currentRouteLines?.filter((r: GetLinesByRouteResponse) => +r.DIRECTION === 1)
-    if (ASC) {
-        const res0: any[] = transformData(ASC)
-        busesRoadMaps.value[0].roadMap = res0.map(r => {
-            return {
-                code: r.ST_ID,
-                coords: r.LON_LAT,
-                descRu: r.NAME_RU,
-                descKz: r.NAME_KZ,
-                direction: r.DIRECTION,
-                segments: r.SEGMENTS
-            }
-        })
-        const variable = busesRoadMaps.value[0].roadMap
-        const resArr = []
-
-        for (let i = 0; i < variable.length; i++) {
-            resArr.push(variable[i])
-            if (variable[i].segments) {
-                variable[i].segments?.forEach(vS => resArr.push({coords: vS}))
-            }
-        }
-        busesRoadMaps.value[0].roadMap = resArr
-    }
-    if (DESC) {
-        const res1: any[] = transformData(DESC)
-        busesRoadMaps.value[1].roadMap = res1.map(r => {
-            return {
-                code: r.ST_ID,
-                coords: r.LON_LAT,
-                descRu: r.NAME_RU,
-                descKz: r.NAME_KZ,
-                direction: r.DIRECTION,
-                segments: r.SEGMENTS
-            }
-        })
-        const variable = busesRoadMaps.value[1].roadMap
-        const resArr = []
-
-        for (let i = 0; i < variable.length; i++) {
-            resArr.push(variable[i])
-            if (variable[i].segments) {
-                variable[i].segments?.forEach(vS => resArr.push({coords: vS}))
-            }
-        }
-        busesRoadMaps.value[1].roadMap = resArr
-    }
-}
+// async function getLinesByRoute() {
+//     const linesResponse: GetLinesByRouteResponse[] | undefined = await getLinesByRegion(+route.params.id, direction.value)
+//     if (!linesResponse) return
+//     busStations.value = linesResponse.map((r: GetLinesByRouteResponse) => r.NAME_RU)
+//     const currentRouteLines = linesResponse.filter((r: GetLinesByRouteResponse) => +r.ROUTE_NUM === currentBusRoute)
+//     let ASC = currentRouteLines?.filter((r: GetLinesByRouteResponse) => +r.DIRECTION === 0)
+//     let DESC = currentRouteLines?.filter((r: GetLinesByRouteResponse) => +r.DIRECTION === 1)
+//     if (ASC) {
+//         const res0: any[] = transformData(ASC)
+//         busesRoadMaps.value[0].roadMap = res0.map(r => {
+//             return {
+//                 code: r.ST_ID,
+//                 coords: r.LON_LAT,
+//                 descRu: r.NAME_RU,
+//                 descKz: r.NAME_KZ,
+//                 direction: r.DIRECTION,
+//                 segments: r.SEGMENTS
+//             }
+//         })
+//         const variable = busesRoadMaps.value[0].roadMap
+//         const resArr = []
+//
+//         for (let i = 0; i < variable.length; i++) {
+//             resArr.push(variable[i])
+//             if (variable[i].segments) {
+//                 variable[i].segments?.forEach(vS => resArr.push({coords: vS}))
+//             }
+//         }
+//         busesRoadMaps.value[0].roadMap = resArr
+//     }
+//     if (DESC) {
+//         const res1: any[] = transformData(DESC)
+//         busesRoadMaps.value[1].roadMap = res1.map(r => {
+//             return {
+//                 code: r.ST_ID,
+//                 coords: r.LON_LAT,
+//                 descRu: r.NAME_RU,
+//                 descKz: r.NAME_KZ,
+//                 direction: r.DIRECTION,
+//                 segments: r.SEGMENTS
+//             }
+//         })
+//         const variable = busesRoadMaps.value[1].roadMap
+//         const resArr = []
+//
+//         for (let i = 0; i < variable.length; i++) {
+//             resArr.push(variable[i])
+//             if (variable[i].segments) {
+//                 variable[i].segments?.forEach(vS => resArr.push({coords: vS}))
+//             }
+//         }
+//         busesRoadMaps.value[1].roadMap = resArr
+//     }
+// }
 
 onMounted(async () => {
     await getBothLinesByRoute()
@@ -237,16 +278,20 @@ onMounted(async () => {
     margin-top: 20px;
     direction: rtl;
 }
+
 ::-webkit-scrollbar {
     width: 4px;
 }
+
 ::-webkit-scrollbar-track {
     background: #f1f1f1;
 }
+
 ::-webkit-scrollbar-thumb {
     background: var(--accent-color);
     border-radius: 6px;
 }
+
 .breadcrumbs {
     border-radius: 6px;
     background-color: white;

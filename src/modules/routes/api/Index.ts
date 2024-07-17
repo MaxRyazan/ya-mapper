@@ -17,3 +17,17 @@ export async function getAllBusesLastCoordinateByRouteNum(options:{region: strin
     }
     else return []
 }
+
+export async function getLastPackageWithCoordinates() {
+    try {
+        const res = await fetch('https://www.asts.kz:5554/api/Values/Get_GROUP_BUS_GPS_DATA_OBJ?REGION=REG_18&ROUTE=27')
+        if(res) {
+            console.log(await res.json())
+            const arOfJsons = await res.json()
+            console.log(arOfJsons)
+            return arOfJsons.map((a:any) => JSON.parse(a))
+        }
+    } catch (e) {
+        return []
+    }
+}
