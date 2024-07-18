@@ -44,9 +44,10 @@ import {transformData} from "@/modules/routes/helpers";
 import DFlex from "@/components/reus/html-containers/DFlex.vue";
 import DText from "@/components/reus/texts/DText.vue";
 import BusStationsCard from "@/modules/routes/views/cards/BusStationsCard.vue";
-import {getAllBusesLastCoordinateByRouteNum, getLastPackageWithCoordinates} from "@/modules/routes/api/Index.ts";
+import {getLastPackageWithCoordinates} from "@/modules/routes/api/Index.ts";
+import {Dayjs} from "dayjs";
+import {DateHelper} from "@/helpers/DateHelper.ts";
 import {ParseHelper} from "@/helpers/ParseHelper.ts";
-import dayjs from "dayjs";
 
 const isSchema = ref(false)
 const isLoaded = ref(false)
@@ -90,37 +91,48 @@ watch(direction, async () => {
 }, {immediate: true})
 
 
+const currentResponseObject = ref<{emei: string, packageLastTimeStamp: Dayjs|null, coords: []}[]>([])
+let lastResponseObject = <any>[]
+
+
 async function buildInnerInterval() {
     console.log('outer interval start')
-    // clearInterval(innerInterval.value)
-    let counter = 0
+    clearInterval(innerInterval.value)
     const response = await getLastPackageWithCoordinates()
     if(response){
-        const arrOfUniqueEmeis = getUniqueEmeis(response)
-        console.log(arrOfUniqueEmeis)
+        currentResponseObject.value = getUniqueEmeis(response)
+        for(let i = 0; i < currentResponseObject.value.length; i++) {
+            const temp = response.filter((r:any) => r.GPS_IMEI === currentResponseObject.value[i].emei)
+            currentResponseObject.value[i].packageLastTimeStamp = DateHelper.stringDateToDayjs(temp[temp.length - 1].TimeStamp)
+            currentResponseObject.value[i].coords = temp.map((a:any) => ParseHelper.parseCoords(a.RES_GPS))
+        }
+        let counter = 0
+        if(currentResponseObject.value[0].packageLastTimeStamp!.isAfter(lastResponseObject[0]?.packageLastTimeStamp)) {
+            innerInterval.value = setInterval(() => {
+                    busesOnRoute.value = [{
+                            coord: currentResponseObject.value[0].coords[counter],
+                            emei: currentResponseObject.value[0].emei,
+                            speed: '',
+                            timestamp: ''
+                        }]
+                    counter++
+            }, 1000)
+        }
+        lastResponseObject = currentResponseObject.value
     }
-    // let resultArray = []
-    // for(let i = 0; i < arrOfUniqueEmeis.length; i++) {
-    //     const temp = response.filter(r => r.GPS_IMEI === arrOfUniqueEmeis[i])
-    //     resultArray.push(temp)
-    // }
-    // innerInterval.value = setInterval(() => {
-    //     busesOnRoute.value = resultArray.map((r: string) => {
-    //             return {
-    //                 coord: ParseHelper.parseCoords(r[counter].RES_GPS),
-    //                 emei: r.GPS_IMEI,
-    //                 speed: +r.SPEED,
-    //                 timestamp: r[counter].TimeStamp
-    //             }
-    //         })
-    //     counter++
-    // }, 1000)
 }
 
-function getUniqueEmeis(data: any) {
-    const emeis = data.map(a => a.GPS_IMEI)
+function getUniqueEmeis(data: any): {emei: string, packageLastTimeStamp: Dayjs|null, coords: []}[] {
+    const emeis = data.map((a:any) => a.GPS_IMEI)
     const uniqueEmeis = new Set(emeis)
-    return Array.from(uniqueEmeis)
+    const arr = Array.from(uniqueEmeis) as string[]
+    return arr.map(a => {
+        return {
+            emei: a,
+            packageLastTimeStamp: null,
+            coords: []
+        }
+    })
 }
 
 // watch(direction, async () => {
