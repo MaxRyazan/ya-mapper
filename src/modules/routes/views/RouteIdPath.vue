@@ -80,7 +80,6 @@ function changeCenter(param: { name: string, direction: 1 | 0 | 2 }) {
     if (!station) return
     center.value = [station.coords[0], station.coords[1]]
     zoom.value = 18
-
 }
 
 watch(direction, async () => {
@@ -105,7 +104,7 @@ async function buildInnerInterval() {
             const temp = response.filter((r:any) => r.GPS_IMEI === currentResponseObject.value[i].emei)
             currentResponseObject.value[i].packageLastTimeStamp = DateHelper.stringDateToDayjs(temp[temp.length - 1].TimeStamp)
             currentResponseObject.value[i].coords = temp.map((a:any) => ParseHelper.parseCoords(a.RES_GPS))
-            currentResponseObject.value[i].direction = temp.map((a:any) => +a.DIRECTION)
+            currentResponseObject.value[i].direction = +temp[0].DIRECTION
         }
         let counter = 0
         if(currentResponseObject.value[0].packageLastTimeStamp!.isAfter(lastResponseObject[0]?.packageLastTimeStamp)) {
@@ -283,7 +282,8 @@ onMounted(async () => {
 </script>
 <style scoped>
 .current {
-    color: blue !important;
+    background-color: var(--primary-color) !important;
+    color: hsla(0, 0%, 22%, .75) !important;
 }
 
 .bus__stations {
@@ -304,7 +304,7 @@ onMounted(async () => {
 }
 
 ::-webkit-scrollbar-thumb {
-    background: var(--accent-color);
+    background: var(--primary-color);
     border-radius: 6px;
 }
 
@@ -312,7 +312,7 @@ onMounted(async () => {
     border-radius: 6px;
     background-color: white;
     padding: 4px;
-    border: 1px solid black;
+    border: 2px solid hsla(0, 0%, 22%, .75);
     width: 120px;
     text-align: center;
 }
