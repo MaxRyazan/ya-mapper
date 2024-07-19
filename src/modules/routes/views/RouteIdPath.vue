@@ -55,7 +55,7 @@ const route = useRoute()
 const center = ref([63.615375, 53.181536])
 const zoom = ref(15)
 const direction = ref<0 | 1 | 2>(2)
-// const currentBusRoute = +route.params.id
+const currentBusRoute = +route.params.id
 const busStations = ref<string[]>([])
 const busesOnRoute = ref<BusOnMap[]>([])
 const outerInterval = ref()
@@ -97,7 +97,7 @@ let lastResponseObject = <any>[]
 async function buildInnerInterval() {
     console.log('outer interval start')
     clearInterval(innerInterval.value)
-    const response = await getLastPackageWithCoordinates()
+    const response = await getLastPackageWithCoordinates({route: currentBusRoute})
     if(response){
         currentResponseObject.value = getUniqueEmeis(response)
         for(let i = 0; i < currentResponseObject.value.length; i++) {
