@@ -55,7 +55,7 @@ const route = useRoute()
 const center = ref([63.615375, 53.181536])
 const zoom = ref(15)
 const direction = ref<0 | 1 | 2>(2)
-const currentBusRoute = +route.params.id
+// const currentBusRoute = +route.params.id
 const busStations = ref<string[]>([])
 const busesOnRoute = ref<BusOnMap[]>([])
 const outerInterval = ref()
@@ -91,7 +91,7 @@ watch(direction, async () => {
 }, {immediate: true})
 
 
-const currentResponseObject = ref<{emei: string, packageLastTimeStamp: Dayjs|null, coords: []}[]>([])
+const currentResponseObject = ref<{emei: string, packageLastTimeStamp: Dayjs|null, coords: [], direction: number|null}[]>([])
 let lastResponseObject = <any>[]
 
 
@@ -105,6 +105,7 @@ async function buildInnerInterval() {
             const temp = response.filter((r:any) => r.GPS_IMEI === currentResponseObject.value[i].emei)
             currentResponseObject.value[i].packageLastTimeStamp = DateHelper.stringDateToDayjs(temp[temp.length - 1].TimeStamp)
             currentResponseObject.value[i].coords = temp.map((a:any) => ParseHelper.parseCoords(a.RES_GPS))
+            currentResponseObject.value[i].direction = temp.map((a:any) => +a.DIRECTION)
         }
         let counter = 0
         if(currentResponseObject.value[0].packageLastTimeStamp!.isAfter(lastResponseObject[0]?.packageLastTimeStamp)) {
@@ -113,7 +114,8 @@ async function buildInnerInterval() {
                             coord: currentResponseObject.value[0].coords[counter],
                             emei: currentResponseObject.value[0].emei,
                             speed: '',
-                            timestamp: ''
+                            timestamp: '',
+                            direction: currentResponseObject.value[0].direction,
                         }]
                     counter++
             }, 1000)
@@ -122,13 +124,14 @@ async function buildInnerInterval() {
     }
 }
 
-function getUniqueEmeis(data: any): {emei: string, packageLastTimeStamp: Dayjs|null, coords: []}[] {
+function getUniqueEmeis(data: any): {emei: string, packageLastTimeStamp: Dayjs|null, coords: [], direction: number|null}[] {
     const emeis = data.map((a:any) => a.GPS_IMEI)
     const uniqueEmeis = new Set(emeis)
     const arr = Array.from(uniqueEmeis) as string[]
     return arr.map(a => {
         return {
             emei: a,
+            direction: null,
             packageLastTimeStamp: null,
             coords: []
         }
@@ -157,6 +160,7 @@ function getUniqueEmeis(data: any): {emei: string, packageLastTimeStamp: Dayjs|n
 // },{immediate:true})
 onUnmounted(() => {
     clearInterval(outerInterval.value)
+    clearInterval(innerInterval.value)
 })
 
 async function getBothLinesByRoute() {

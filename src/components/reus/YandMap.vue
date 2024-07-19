@@ -48,12 +48,13 @@
                                    :settings="{ coordinates: bus.coord as any}"
                                    position="top-center left-center">
                     <d-text class="bus__number-container">{{ getBusGRN(bus?.emei) }}</d-text>
-                    <img style="position: relative"
-                         class="bus"
-                         alt=""
-                         src="@/assets/img/svg/where-icon.svg"
+                    <svg fill="white" :stroke="bus.direction === 0 ? 'blue' : 'red'"
+                         class="bus" viewBox="0 0 500 500"
                          @click="produceAnAlert(bus.coord)"
-                    />
+                         xmlns="http://www.w3.org/2000/svg">
+                        <defs/>
+                        <path style="stroke-width: 10px" d="M 457.974 55.958 L 130.546 55.958 L 35.046 374.291 L 139.641 178.744 L 453.427 169.649 L 457.974 55.958 Z"/>
+                    </svg>
                 </yandex-map-marker>
 
                 <yandex-map-marker v-if="props.busLastCoordinate"
@@ -167,7 +168,7 @@ onMounted(() => {
 
 .bus {
     cursor: pointer;
-    width: 80px;
+    width: 100px;
     transform: translate(40px, -25px);
 }
 .bus2 {
@@ -181,14 +182,12 @@ onMounted(() => {
     align-items: center;
     background-color: white;
     position: absolute;
-    height: 30px;
-    width: 100%;
-    right: -42px;
-    top: -25px;
+    height: 16px;
+    right: -25px;
+    top: -10px;
     border-radius: 6px;
-    padding: 2px 6px;
+    padding: 2px 2px;
     color: black;
-    border: 2px solid black;
     z-index: 9900;
 }
 

@@ -11,4 +11,5 @@ export interface BusOnMap {
     emei: string,
     speed: string|number,
     timestamp: string
+    direction: number|null
 }
