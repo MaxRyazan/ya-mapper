@@ -14,7 +14,7 @@
     </d-flex>
 </template>
 <script setup lang="ts">
-import {onMounted, reactive, ref, shallowRef} from "vue";
+import {onMounted, reactive, shallowRef} from "vue";
 import DispatchMap from "@/modules/dispatch/views/hash/DispatchMap.vue";
 import DispatchLinear from "@/modules/dispatch/views/hash/DispatchLinear.vue";
 import router from "@/configs/router.ts";
