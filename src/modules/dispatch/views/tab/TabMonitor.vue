@@ -1,5 +1,5 @@
 <template>
-    <d-flex type="column" style="margin-top: 5px;">
+    <d-flex type="column" style="margin-top: 5px;" gap="0">
         <d-flex gap="0" style="width: 99%">
             <d-text v-for="hashLink in hashes"
                     :key="hashLink.hash"
@@ -10,7 +10,7 @@
                     class="tab">{{ hashLink.tabName }}
             </d-text>
         </d-flex>
-        <component :is="currentComponent"/>
+        <component style="width: 99%; margin-top: -2px;" :is="currentComponent"/>
     </d-flex>
 </template>
 <script setup lang="ts">
