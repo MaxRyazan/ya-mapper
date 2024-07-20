@@ -21,18 +21,18 @@ import MainSubLinks from "@/components/single-use/MainSubLinks.vue";
 
 const route = useRoute()
 const dispatchSubNavs = reactive([
-    {title: 'Мониторинг', key: 1, href: '#monitor'},
-    {title: 'Путь', key: 2, href: '#path'},
-    {title: 'Отклонения', key: 3, href: '#vectors'},
-    {title: 'Обороты', key: 4, href: '#screw'},
-    {title: 'Расписание', key: 5, href: '#list'},
-    {title: 'Выходные дни', key: 6, href: '#weekend'},
-    {title: 'Прохождение узлов', key: 7, href: '#nodes'},
-    {title: 'График движения', key: 8, href: '#graph-map'},
-    {title: 'График, остановка', key: 9, href: '#grap-stations'},
-    {title: 'График, рейс', key: 10, href: '#graph-reis'},
-    {title: 'Прогноз по остановке', key: 11, href: '#future'},
-    {title: 'Сообщение на табло', key: 12, href: '#message'},
+    {title: 'Мониторинг', key: 1, tabQuery: 'monitor'},
+    {title: 'Путь', key: 2, tabQuery: 'path'},
+    {title: 'Отклонения', key: 3, tabQuery: 'vectors'},
+    {title: 'Обороты', key: 4, tabQuery: 'screw'},
+    {title: 'Расписание', key: 5, tabQuery: 'list'},
+    {title: 'Выходные дни', key: 6, tabQuery: 'weekend'},
+    {title: 'Прохождение узлов', key: 7, tabQuery: 'nodes'},
+    {title: 'График движения', key: 8, tabQuery: 'graph-map'},
+    {title: 'График, остановка', key: 9, tabQuery: 'grap-stations'},
+    {title: 'График, рейс', key: 10, tabQuery: '?raph-reis'},
+    {title: 'Прогноз по остановке', key: 11, tabQuery: 'future'},
+    {title: 'Сообщение на табло', key: 12, tabQuery: 'message'},
 ])
 
 const navLinks = reactive([
@@ -85,7 +85,7 @@ const isMenuExpanded = ref(true)
     padding-top: 40px;
     width: 320px;
     min-width: 320px;
-    background-color: hsla(0, 0%, 22%, 1);
+    background-color: var(--main-nav-bg);
     min-height: 100vh;
     transition: .3s !important;
     overflow-y: auto;

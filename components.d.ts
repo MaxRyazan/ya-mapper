@@ -12,6 +12,8 @@ declare module 'vue' {
     ACollapsePanel: typeof import('ant-design-vue/es')['CollapsePanel']
     ASpin: typeof import('ant-design-vue/es')['Spin']
     ATable: typeof import('ant-design-vue/es')['Table']
+    ATabPane: typeof import('ant-design-vue/es')['TabPane']
+    ATabs: typeof import('ant-design-vue/es')['Tabs']
     DaBreadcrumbs: typeof import('./src/components/reus/DaBreadcrumbs.vue')['default']
     DaSpinner: typeof import('./src/components/reus/DaSpinner.vue')['default']
     DaTable: typeof import('./src/components/reus/DaTable.vue')['default']

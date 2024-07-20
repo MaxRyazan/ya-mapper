@@ -8,5 +8,6 @@ html {
 
     --primary-color: rgb(0, 209, 255);
     --primary-gray: hsla(0, 0%, 22%, .75);
+    --main-nav-bg: hsla(0, 0%, 22%, 1);
 }
 

@@ -30,12 +30,13 @@ watch(() => props.isMenuExpanded, () => {
     isSubExpanded.value = props.isMenuExpanded;
 })
 
-watch(() => route.hash, () => {
+watch(() => route.query, () => {
     if(props.link.subNavs) {
-        const exist = props.link.subNavs.find((a:any) => a.href === route.hash)
+        const exist = props.link.subNavs.find((a:any) => a.tabQuery === route.query.tab)
         if(exist) isSubExpanded.value = true
     }
 })
+
 </script>
 
 <template>
@@ -48,9 +49,9 @@ watch(() => route.hash, () => {
     </d-flex>
     <d-flex class="sub-links-dropdown" align="start" type="column" v-if="props.link.subNavs && isSubExpanded">
         <router-link class="sub-link"
-                     :class="{'sub-active': route.hash === sub.href}"
-                     :to="sub.href"
-                     v-for="sub in props.link.subNavs" :key="sub.href">-
+                     :class="{'sub-active': route.query.tab === sub.tabQuery}"
+                     :to="route.path + '?tab=' +sub.tabQuery"
+                     v-for="sub in props.link.subNavs" :key="sub.tabQuery">-
             {{ sub.title }}
         </router-link>
     </d-flex>

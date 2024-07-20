@@ -1,10 +1,10 @@
+<template>
+<div>map</div>
+</template>
 <script setup lang="ts">
 
 </script>
 
-<template>
-<div>map</div>
-</template>
 
 <style scoped>
 
