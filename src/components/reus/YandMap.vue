@@ -160,8 +160,6 @@ onMounted(() => {
 
 .map {
     width: 100%;
-    max-width: 800px;
-    max-height: 800px;
 }
 
 .pin {
@@ -190,7 +188,8 @@ onMounted(() => {
     background-color: white;
     position: absolute;
     height: 16px;
-    right: -25px;
+    font-size: 12px !important;
+    right: -28px;
     top: -10px;
     border-radius: 6px;
     padding: 2px 2px;

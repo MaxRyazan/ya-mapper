@@ -19,7 +19,7 @@ const props = defineProps<{
 
 <style scoped>
 .da-breadcrumbs {
-    text-decoration: none;
+    text-decoration: underline;
     margin: 0;
     padding: 0;
     color: var(--primary-gray);

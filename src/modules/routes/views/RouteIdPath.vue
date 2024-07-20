@@ -1,27 +1,27 @@
 <template>
     <div>
-        <da-breadcrumbs style="margin-top: 20px;" :current-link-name="`/${route.params.id}`" link-to="/routes" prev-location-name="все маршруты"/>
-        <d-flex align="start" style="max-height: calc(100vh - 134px); overflow-y: auto" justify="space-between" gap="40px">
-            <yand-map style="width: 900px; height: 750px"
-                      v-if="isLoaded"
-                      :lines="busesRoadMaps"
-                      :busStationsMarkers="busStations"
-                      :currentBusesCoordinates="busesOnRoute"
-                      :center="center"
-                      :zoom="zoom"/>
-        </d-flex>
+        <da-breadcrumbs style="margin-top: 20px; padding-left: 20px;"
+                        :current-link-name="`/${route.params.id}`"
+                        link-to="/routes"
+                        prev-location-name="все маршруты"/>
+        <yand-map :style="{width: mapSizes.width, height: mapSizes.height}"
+                  v-if="isLoaded"
+                  :lines="busesRoadMaps"
+                  :busStationsMarkers="busStations"
+                  :currentBusesCoordinates="busesOnRoute"
+                  :center="center"
+                  :zoom="zoom"/>
     </div>
 </template>
 
 <script setup lang="ts">
 import {useRoute} from "vue-router";
-import {onMounted, onUnmounted, ref, watch} from "vue";
+import {onMounted, onUnmounted, reactive, ref, watch} from "vue";
 import {getLinesByRegion} from "@/modules/map/api";
 import YandMap from "@/components/reus/YandMap.vue";
 import {BusOnMap, BusRoadMap} from "@/modules/routes/types/Index.ts";
 import {GetLinesByRouteResponse} from "@/modules/map/types/api-models";
 import {transformData} from "@/modules/routes/helpers";
-import DFlex from "@/components/reus/html-containers/DFlex.vue";
 import {getLastPackageWithCoordinates} from "@/modules/routes/api/Index.ts";
 import {Dayjs} from "dayjs";
 import {DateHelper} from "@/helpers/DateHelper.ts";
@@ -38,6 +38,22 @@ const busStations = ref<string[]>([])
 const busesOnRoute = ref<BusOnMap[]>([])
 const outerInterval = ref()
 const innerInterval = ref()
+const mapSizes = reactive({
+    width: '900px',
+    height: '650px'
+})
+
+function setMapSizes() {
+    mapSizes.width = window.innerWidth - 330 + 'px'
+    mapSizes.height = window.innerHeight - 50 + 'px'
+}
+
+window.addEventListener('resize', setMapSizes)
+
+watch([() => window.innerWidth, () => window.innerHeight], () => {
+    setMapSizes()
+}, {immediate: true})
+
 
 const busesRoadMaps = ref<BusRoadMap[]>([
     {
@@ -68,7 +84,7 @@ watch(direction, async () => {
 }, {immediate: true})
 
 
-const currentResponseObject = ref<{emei: string, packageLastTimeStamp: Dayjs|null, coords: [], direction: number|null}[]>([])
+const currentResponseObject = ref<{ emei: string, packageLastTimeStamp: Dayjs | null, coords: [], direction: number | null }[]>([])
 let lastResponseObject = <any>[]
 
 
@@ -76,33 +92,33 @@ async function buildInnerInterval() {
     console.log('outer interval start')
     clearInterval(innerInterval.value)
     const response = await getLastPackageWithCoordinates({route: currentBusRoute})
-    if(response){
+    if (response) {
         currentResponseObject.value = getUniqueEmeis(response)
-        for(let i = 0; i < currentResponseObject.value.length; i++) {
-            const temp = response.filter((r:any) => r.GPS_IMEI === currentResponseObject.value[i].emei)
+        for (let i = 0; i < currentResponseObject.value.length; i++) {
+            const temp = response.filter((r: any) => r.GPS_IMEI === currentResponseObject.value[i].emei)
             currentResponseObject.value[i].packageLastTimeStamp = DateHelper.stringDateToDayjs(temp[temp.length - 1].TimeStamp)
-            currentResponseObject.value[i].coords = temp.map((a:any) => ParseHelper.parseCoords(a.RES_GPS))
+            currentResponseObject.value[i].coords = temp.map((a: any) => ParseHelper.parseCoords(a.RES_GPS))
             currentResponseObject.value[i].direction = +temp[0].DIRECTION
         }
         let counter = 0
-        if(currentResponseObject.value[0].packageLastTimeStamp!.isAfter(lastResponseObject[0]?.packageLastTimeStamp)) {
+        if (currentResponseObject.value[0].packageLastTimeStamp!.isAfter(lastResponseObject[0]?.packageLastTimeStamp)) {
             innerInterval.value = setInterval(() => {
-                    busesOnRoute.value = [{
-                            coord: currentResponseObject.value[0].coords[counter],
-                            emei: currentResponseObject.value[0].emei,
-                            speed: '',
-                            timestamp: '',
-                            direction: currentResponseObject.value[0].direction,
-                        }]
-                    counter++
+                busesOnRoute.value = [{
+                    coord: currentResponseObject.value[0].coords[counter],
+                    emei: currentResponseObject.value[0].emei,
+                    speed: '',
+                    timestamp: '',
+                    direction: currentResponseObject.value[0].direction,
+                }]
+                counter++
             }, 1000)
         }
         lastResponseObject = currentResponseObject.value
     }
 }
 
-function getUniqueEmeis(data: any): {emei: string, packageLastTimeStamp: Dayjs|null, coords: [], direction: number|null}[] {
-    const emeis = data.map((a:any) => a.GPS_IMEI)
+function getUniqueEmeis(data: any): { emei: string, packageLastTimeStamp: Dayjs | null, coords: [], direction: number | null }[] {
+    const emeis = data.map((a: any) => a.GPS_IMEI)
     const uniqueEmeis = new Set(emeis)
     const arr = Array.from(uniqueEmeis) as string[]
     return arr.map(a => {
@@ -114,6 +130,7 @@ function getUniqueEmeis(data: any): {emei: string, packageLastTimeStamp: Dayjs|n
         }
     })
 }
+
 onUnmounted(() => {
     clearInterval(outerInterval.value)
     clearInterval(innerInterval.value)

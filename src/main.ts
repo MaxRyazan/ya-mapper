@@ -8,6 +8,6 @@ const app = createApp(App)
     app
         .use(router)
         .use(createYmaps({
-            apikey: 'b707dc52-a4d4-4a12-a716-c7c608e89bbe',
+            apikey: '1414ea1f-cfdd-4471-9664-5ac276836b3a',
         }))
     .mount('#app')
