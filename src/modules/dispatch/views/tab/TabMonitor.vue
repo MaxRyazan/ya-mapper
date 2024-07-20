@@ -14,7 +14,7 @@
     </d-flex>
 </template>
 <script setup lang="ts">
-import {onMounted, reactive, shallowRef} from "vue";
+import {reactive, shallowRef, watch} from "vue";
 import DispatchMap from "@/modules/dispatch/views/hash/DispatchMap.vue";
 import DispatchLinear from "@/modules/dispatch/views/hash/DispatchLinear.vue";
 import router from "@/configs/router.ts";
@@ -29,21 +29,23 @@ const hashes = reactive([
     {tabName: 'Линейный', hash: '#linear', component: shallowRef(DispatchLinear)},
 ])
 
-function changeComponent(tab: any) {
+async function changeComponent(tab: any) {
     currentComponent.value = tab.component
-    router.push({hash: tab.hash, query: {tab: route.query.tab}})
+    await router.push({hash: tab.hash, query: {tab: route.query.tab}})
 }
 
-onMounted(() => {
+watch(() => route.query, async () => {
     if (!route.hash) {
-        router.push({path: route.path, query: {tab: route.query.tab}, hash: hashes[0].hash})
+        await router.push({path: route.path,  hash: hashes[0].hash, query: {tab: route.query.tab}})
     }
 })
+
 </script>
 
 
 <style scoped>
 .tab {
+    user-select: none;
     padding: 10px;
     width: 100%;
     text-align: center;

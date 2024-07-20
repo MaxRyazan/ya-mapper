@@ -11,11 +11,11 @@ const route = useRoute()
 const router = useRouter()
 const isSubExpanded = ref(false)
 
-function openSubLinks() {
+async function openSubLinks() {
     if(props.link.subNavs && !route.hash) {
-        router.push({ path: props.link.to, hash: props.link.subNavs[0].href })
+        await router.push({ path: props.link.to, hash: props.link.subNavs[0].href })
     } else {
-        router.push({ path: props.link.to })
+        await router.push({ path: props.link.to })
     }
     isSubExpanded.value = !isSubExpanded.value
 }
@@ -50,7 +50,7 @@ watch(() => route.query, () => {
     <d-flex class="sub-links-dropdown" align="start" type="column" v-if="props.link.subNavs && isSubExpanded">
         <router-link class="sub-link"
                      :class="{'sub-active': route.query.tab === sub.tabQuery}"
-                     :to="route.path + '?tab=' +sub.tabQuery"
+                     :to="route.path + '?tab=' + sub.tabQuery"
                      v-for="sub in props.link.subNavs" :key="sub.tabQuery">-
             {{ sub.title }}
         </router-link>

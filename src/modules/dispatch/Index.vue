@@ -22,11 +22,11 @@ watch(() => route.query, () => {
     if(component) currentComponent.value = component
 })
 
-onMounted(() => {
+onMounted(async () => {
     const component = SUB_COMPONENTS_MAP.get(route.query.tab as string)
     if(component) currentComponent.value = component
     if(!route.query.tab) {
-        router.push({query: {tab: 'monitor'}})
+        await router.push({query: {tab: 'monitor'}})
     }
 })
 </script>
