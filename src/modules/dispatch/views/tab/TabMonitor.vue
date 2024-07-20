@@ -1,16 +1,21 @@
 <template>
-    <d-flex type="column" style="margin-top: 5px;" gap="0">
-        <d-flex gap="0" style="width: 99%">
-            <d-text v-for="hashLink in hashes"
-                    :key="hashLink.hash"
-                    cursor="pointer"
-                    :class="{'hash-active': route.hash === hashLink.hash}"
-                    size="18px"
-                    @click="changeComponent(hashLink)"
-                    class="tab">{{ hashLink.tabName }}
-            </d-text>
+    <d-flex type="column" gap="4px">
+        <d-flex style="margin-top: 5px; width: 99%;" gap="0">
+            <d-flex class="tab" gap="0" style="width: 99%; position: relative;" v-for="hashLink in hashes" :key="hashLink.hash">
+                <d-text
+                        cursor="pointer"
+                        :class="{'hash-active': route.hash === hashLink.hash}"
+                        size="18px"
+                        class="tab-item"
+                        @click="changeComponent(hashLink)">
+                    {{ hashLink.tabName }}
+                </d-text>
+                <div v-if="route.hash === hashLink.hash" class="d-connector"></div>
+            </d-flex>
         </d-flex>
-        <component style="width: 99%; margin-top: -2px;" :is="currentComponent"/>
+        <div class="tab-content">
+            <component style="width: calc(99% - 2px)" :is="currentComponent"/>
+        </div>
     </d-flex>
 </template>
 <script setup lang="ts">
@@ -36,7 +41,7 @@ async function changeComponent(tab: any) {
 
 watch(() => route.query, async () => {
     if (!route.hash) {
-        await router.push({path: route.path,  hash: hashes[0].hash, query: {tab: route.query.tab}})
+        await router.push({path: route.path, hash: hashes[0].hash, query: {tab: route.query.tab}})
     }
 })
 
@@ -48,19 +53,39 @@ watch(() => route.query, async () => {
     user-select: none;
     padding: 10px;
     width: 100%;
-    text-align: center;
     border: 1px solid white;
     background-color: var(--main-nav-bg);
-    color: rgba(255, 255, 255, .5) !important;
+
     &:nth-child(1) {
         border-radius: 6px 0 0 6px;
     }
+
     &:last-child {
         border-radius: 0 6px 6px 0;
     }
 }
 
+.tab-item {
+    width: 100%;
+    text-align: center;
+    color: rgba(255, 255, 255, .5) !important;
+}
+
 .hash-active {
     color: var(--primary-color) !important;
+}
+
+.d-connector {
+    position: absolute;
+    top: 38px;
+    left: 0;
+    background-color: var(--main-nav-bg);
+    width: 100%;
+    padding: 4px
+}
+.tab-content {
+    width: calc(99% - 2px);
+    border: 1px solid var(--main-nav-bg);
+    height: calc(100vh - 55px);
 }
 </style>

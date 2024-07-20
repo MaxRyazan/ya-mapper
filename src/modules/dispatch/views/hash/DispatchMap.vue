@@ -1,5 +1,7 @@
 <template>
-<div>map</div>
+    <div class="hash-map">
+
+    </div>
 </template>
 <script setup lang="ts">
 
@@ -7,5 +9,9 @@
 
 
 <style scoped>
-
+.hash-map {
+    position: relative;
+    padding: 5px;
+    width: 100%;
+}
 </style>

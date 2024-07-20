@@ -16,7 +16,7 @@ import {
     StopOutlined
 } from "@ant-design/icons-vue";
 import DFlex from "@/components/reus/html-containers/DFlex.vue";
-import {useRoute} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
 import MainSubLinks from "@/components/single-use/MainSubLinks.vue";
 
 const route = useRoute()
@@ -50,23 +50,31 @@ const navLinks = reactive([
     {title: 'Выход', to: '/exit', icon: StopOutlined},
 ])
 
-
+const router = useRouter()
 const isMenuExpanded = ref(true)
+async function openSubLinks(link:any) {
+    if(link.subNavs && !route.hash) {
+        await router.push({ path: link.to, hash: link.subNavs[0].href })
+    } else {
+        await router.push({ path: link.to })
+    }
+}
 </script>
 
 <template>
     <d-flex type="column" gap="0" class="nav-wrapper" justify="space-between" :class="{mini: !isMenuExpanded}">
         <d-flex type="column" justify="start" gap="0">
-            <span v-for="link in navLinks"
-                         :class="{'current-route': route.path.includes(link.to)}"
-                         :key="link.title"
-                         class="nav__link">
+            <div v-for="link in navLinks"
+                 @click="openSubLinks(link)"
+                 :class="{'current-route': route.path.includes(link.to)}"
+                 :key="link.title"
+                 class="nav__link">
                 <d-flex align="start" gap="15px">
-                    <d-flex align="start" type="column" style="position: relative">
+                    <d-flex align="start" type="column" style="position: relative; width: 100%;">
                         <main-sub-links :is-menu-expanded="isMenuExpanded" :link="link"/>
                     </d-flex>
                 </d-flex>
-            </span>
+            </div>
         </d-flex>
         <d-flex class="nav__link" style="width: 84%; cursor:pointer;" gap="15px"
                 @click="isMenuExpanded = !isMenuExpanded">
@@ -89,6 +97,7 @@ const isMenuExpanded = ref(true)
     min-height: 100vh;
     transition: .3s !important;
     overflow-y: auto;
+
     & > * {
         user-select: none;
     }
