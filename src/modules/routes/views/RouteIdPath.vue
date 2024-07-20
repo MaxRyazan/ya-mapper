@@ -1,34 +1,14 @@
 <template>
     <div>
-        <d-flex gap="0">
-            <router-link to="/routes">маршруты</router-link>
-            <p>/{{ route.params.id }}</p>
-        </d-flex>
-        <d-flex style="margin-top: 20px;">
-            <d-text class="breadcrumbs"
-                    @click="direction = 2" :class="{current: direction === 2}" cursor="pointer">Оба
-            </d-text>
-            <d-text class="breadcrumbs"
-                    @click="isSchema = !isSchema" cursor="pointer">Показать схему
-            </d-text>
-        </d-flex>
-        <d-flex align="start" style="max-height: calc(100vh - 134px); overflow-y: auto" justify="space-between"
-                gap="40px">
-            <bus-stations-card class="bus__stations"
-                               @show-station="changeCenter"
-                               :stations="busStations"
-                               :direction="direction"/>
+        <da-breadcrumbs style="margin-top: 20px;" :current-link-name="`/${route.params.id}`" link-to="/routes" prev-location-name="все маршруты"/>
+        <d-flex align="start" style="max-height: calc(100vh - 134px); overflow-y: auto" justify="space-between" gap="40px">
             <yand-map style="width: 900px; height: 750px"
-                      v-if="isLoaded && !isSchema"
+                      v-if="isLoaded"
                       :lines="busesRoadMaps"
                       :busStationsMarkers="busStations"
                       :currentBusesCoordinates="busesOnRoute"
                       :center="center"
                       :zoom="zoom"/>
-            <div v-if="isSchema" style="display: flex; gap: 10px;  right: 40%">
-                <div v-for="item in busStations" :key="item"
-                     style="border-radius: 50%; width: 20px;height: 20px;border: 2px solid red;"></div>
-            </div>
         </d-flex>
     </div>
 </template>
@@ -42,14 +22,12 @@ import {BusOnMap, BusRoadMap} from "@/modules/routes/types/Index.ts";
 import {GetLinesByRouteResponse} from "@/modules/map/types/api-models";
 import {transformData} from "@/modules/routes/helpers";
 import DFlex from "@/components/reus/html-containers/DFlex.vue";
-import DText from "@/components/reus/texts/DText.vue";
-import BusStationsCard from "@/modules/routes/views/cards/BusStationsCard.vue";
 import {getLastPackageWithCoordinates} from "@/modules/routes/api/Index.ts";
 import {Dayjs} from "dayjs";
 import {DateHelper} from "@/helpers/DateHelper.ts";
 import {ParseHelper} from "@/helpers/ParseHelper.ts";
+import DaBreadcrumbs from "@/components/reus/DaBreadcrumbs.vue";
 
-const isSchema = ref(false)
 const isLoaded = ref(false)
 const route = useRoute()
 const center = ref([63.615375, 53.181536])
@@ -74,13 +52,13 @@ const busesRoadMaps = ref<BusRoadMap[]>([
     }
 ])
 
-function changeCenter(param: { name: string, direction: 1 | 0 | 2 }) {
-    const busRoute = busesRoadMaps.value[direction.value]
-    const station = busRoute.roadMap.find(r => r.descRu === param.name)
-    if (!station) return
-    center.value = [station.coords[0], station.coords[1]]
-    zoom.value = 18
-}
+// function changeCenter(param: { name: string, direction: 1 | 0 | 2 }) {
+//     const busRoute = busesRoadMaps.value[direction.value]
+//     const station = busRoute.roadMap.find(r => r.descRu === param.name)
+//     if (!station) return
+//     center.value = [station.coords[0], station.coords[1]]
+//     zoom.value = 18
+// }
 
 watch(direction, async () => {
     await buildInnerInterval()
@@ -136,27 +114,6 @@ function getUniqueEmeis(data: any): {emei: string, packageLastTimeStamp: Dayjs|n
         }
     })
 }
-
-// watch(direction, async () => {
-//     busStations.value = []
-//     if (direction.value !== 2) {
-//         await getLinesByRoute()
-//     } else {
-//         await getBothLinesByRoute()
-//         interval.value = setInterval(async () => {
-//             const response = await getAllBusesLastCoordinateByRouteNum({region: 'REG_18', route: +(route.params.id)})
-//             busesOnRoute.value = response.map((r: string) => {
-//                 const parsed = JSON.parse(r)
-//                 return {
-//                     coord: ParseHelper.parseCoords(parsed.RES_GPS),
-//                     emei: parsed.GPS_IMEI,
-//                     speed: +parsed.SPEED,
-//                     timestamp: parsed.TimeStamp
-//                 }
-//             })
-//         }, 1000)
-//     }
-// },{immediate:true})
 onUnmounted(() => {
     clearInterval(outerInterval.value)
     clearInterval(innerInterval.value)
@@ -218,6 +175,7 @@ async function getBothLinesByRoute() {
         }
         busesRoadMaps.value[1].roadMap = resArr
     }
+    console.log(busesRoadMaps.value)
 }
 
 // async function getLinesByRoute() {
@@ -281,19 +239,6 @@ onMounted(async () => {
 })
 </script>
 <style scoped>
-.current {
-    background-color: var(--primary-color) !important;
-    color: hsla(0, 0%, 22%, .75) !important;
-}
-
-.bus__stations {
-    padding: 0 10px;
-    max-height: calc(100vh - 154px);
-    overflow-y: auto;
-    overflow-x: hidden;
-    margin-top: 20px;
-    direction: rtl;
-}
 
 ::-webkit-scrollbar {
     width: 4px;
@@ -308,12 +253,4 @@ onMounted(async () => {
     border-radius: 6px;
 }
 
-.breadcrumbs {
-    border-radius: 6px;
-    background-color: white;
-    padding: 4px;
-    border: 2px solid hsla(0, 0%, 22%, .75);
-    width: 120px;
-    text-align: center;
-}
 </style>

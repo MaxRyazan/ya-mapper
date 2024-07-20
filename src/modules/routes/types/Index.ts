@@ -9,7 +9,16 @@ export interface BusRoadMap {
 export interface BusOnMap {
     coord: number[],
     emei: string,
-    speed: string|number,
+    speed: string | number,
     timestamp: string
-    direction: number|null
+    direction: number | null
+}
+
+export interface StationOfRoute {
+    NAME_RU: string,
+    NAME_KZ: string,
+    ID: string,
+    DIRECTION: string
+    KEY: number|null
+    DIRECTION_TEXT: string
 }

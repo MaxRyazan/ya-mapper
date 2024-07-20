@@ -7,5 +7,6 @@ html {
     --borders-color: rgba(0,0,0, .2);
 
     --primary-color: rgb(0, 209, 255);
+    --primary-gray: hsla(0, 0%, 22%, .75);
 }
 

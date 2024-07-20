@@ -57,6 +57,11 @@ const routes = [
                     component: () => import('@/modules/routes/Index.vue'),
                 },
                 {
+                    path: '/routes/stations/:id',
+                    name: 'stations',
+                    component: () => import('@/modules/routes/views/RouteIdStations.vue'),
+                },
+                {
                     path: '/routes/:id',
                     name: 'routes',
                     component: () => import('@/modules/routes/views/RouteIdPath.vue'),
