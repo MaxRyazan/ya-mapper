@@ -40,7 +40,7 @@ const columns = [
         ellipsis: true,
         width: 150,
         sorter: {
-            compare: (a: StationOfRoute, b: StationOfRoute) => b.ID - a.ID
+            compare: (a: StationOfRoute, b: StationOfRoute) => +b.ID - +a.ID
         },
     },
     {
@@ -51,7 +51,7 @@ const columns = [
         ellipsis: true,
         width: 150,
         sorter: {
-            compare: (a: StationOfRoute, b: StationOfRoute) => b.DIRECTION - a.DIRECTION
+            compare: (a: StationOfRoute, b: StationOfRoute) => +b.DIRECTION - +a.DIRECTION
         },
     },
     {

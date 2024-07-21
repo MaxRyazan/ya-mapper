@@ -7,13 +7,8 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    AAnchor: typeof import('ant-design-vue/es')['Anchor']
-    ACollapse: typeof import('ant-design-vue/es')['Collapse']
-    ACollapsePanel: typeof import('ant-design-vue/es')['CollapsePanel']
     ASpin: typeof import('ant-design-vue/es')['Spin']
     ATable: typeof import('ant-design-vue/es')['Table']
-    ATabPane: typeof import('ant-design-vue/es')['TabPane']
-    ATabs: typeof import('ant-design-vue/es')['Tabs']
     DaBreadcrumbs: typeof import('./src/components/reus/DaBreadcrumbs.vue')['default']
     DaSpinner: typeof import('./src/components/reus/DaSpinner.vue')['default']
     DaTable: typeof import('./src/components/reus/DaTable.vue')['default']
@@ -21,7 +16,6 @@ declare module 'vue' {
     DFlex: typeof import('./src/components/reus/html-containers/DFlex.vue')['default']
     DText: typeof import('./src/components/reus/texts/DText.vue')['default']
     MainSubLinks: typeof import('./src/components/single-use/MainSubLinks.vue')['default']
-    PageWithTabs: typeof import('./src/components/reus/samples/PageWithTabs.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     TheHeader: typeof import('./src/components/single-use/TheHeader.vue')['default']

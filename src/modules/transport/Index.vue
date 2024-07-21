@@ -1,7 +1,7 @@
 <template>
     <d-flex style="padding: 20px" type="column" gap="40px">
         <d-text size="26px">Транспорт</d-text>
-        <a-table size="middle"
+        <a-table size="small"
                  :columns="columns"
                  :pagination="{defaultPageSize: 14, showSizeChanger: true, pageSizeOptions: ['10', '14', '20', '50']}"
                  :data-source="allBuses">
