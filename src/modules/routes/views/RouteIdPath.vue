@@ -84,7 +84,7 @@ watch(direction, async () => {
 }, {immediate: true})
 
 
-const currentResponseObject = ref<{ emei: string, packageLastTimeStamp: Dayjs | null, coords: [], direction: number | null }[]>([])
+const currentResponseObject = ref<any[]>([])
 let lastResponseObject = <any>[]
 
 
@@ -94,22 +94,38 @@ async function buildInnerInterval() {
     const response = await getLastPackageWithCoordinates({route: currentBusRoute})
     if (response) {
         currentResponseObject.value = getUniqueEmeis(response)
+
+
         for (let i = 0; i < currentResponseObject.value.length; i++) {
             const temp = response.filter((r: any) => r.GPS_IMEI === currentResponseObject.value[i].emei)
             currentResponseObject.value[i].packageLastTimeStamp = DateHelper.stringDateToDayjs(temp[temp.length - 1].TimeStamp)
             currentResponseObject.value[i].coords = temp.map((a: any) => ParseHelper.parseCoords(a.RES_GPS))
-            currentResponseObject.value[i].direction = +temp[0].DIRECTION
+            currentResponseObject.value[i].direction = +(temp[0].DIRECTION)
         }
+
+
+
         let counter = 0
         if (currentResponseObject.value[0].packageLastTimeStamp!.isAfter(lastResponseObject[0]?.packageLastTimeStamp)) {
+
+
             innerInterval.value = setInterval(() => {
-                busesOnRoute.value = [{
-                    coord: currentResponseObject.value[0].coords[counter],
-                    emei: currentResponseObject.value[0].emei,
-                    speed: '',
-                    timestamp: '',
-                    direction: currentResponseObject.value[0].direction,
-                }]
+                busesOnRoute.value = currentResponseObject.value.map(a => {
+                    return {
+                        ...a,
+                        coord: a.coords[counter]
+                    }
+                })
+
+
+
+                // busesOnRoute.value = [{
+                //     coord: currentResponseObject.value[0].coords[counter],
+                //     emei: currentResponseObject.value[0].emei,
+                //     speed: '',
+                //     timestamp: '',
+                //     direction: currentResponseObject.value[0].direction,
+                // }]
                 counter++
             }, 1000)
         }
@@ -192,7 +208,6 @@ async function getBothLinesByRoute() {
         }
         busesRoadMaps.value[1].roadMap = resArr
     }
-    console.log(busesRoadMaps.value)
 }
 
 // async function getLinesByRoute() {
