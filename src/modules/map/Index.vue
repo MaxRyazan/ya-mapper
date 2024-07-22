@@ -82,7 +82,7 @@ const watchData = reactive({
     date: DateHelper.getDateNow(),
     TIME_Start: DateHelper.getTimeNowMinusHours(2),
     TIME_Stop: DateHelper.getTimeNow(),
-    interval: 5
+    interval: 0.9
 })
 const isDataLoading = ref(false)
 const apiData = ref<GetSingleBusCoordinates[]>([])
