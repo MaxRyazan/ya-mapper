@@ -34,7 +34,9 @@
                          v-if="isDialogVisible && selectedStation && marker.coords === selectedStation.coords">
                         {{ selectedStation.code }} - {{ selectedStation.descRu }}
                     </div>
-                    <div @click="produceAnAlert(marker)"
+                    <div
+                         @mouseover="produceAnAlert(marker)"
+                         @mouseout="isDialogVisible = false"
                          style="border: 2px solid black; background-color:white; position: relative; border-radius: 50%; height: 12px; width: 12px; cursor:pointer;"
                          :style="{
                              border:  marker.coords === selectedStation?.coords ? '2px solid blue' : '2px solid black',
