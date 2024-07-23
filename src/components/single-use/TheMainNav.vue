@@ -16,7 +16,7 @@ import {
     StopOutlined
 } from "@ant-design/icons-vue";
 import DFlex from "@/components/reus/html-containers/DFlex.vue";
-import {useRoute, useRouter} from "vue-router";
+import {useRoute} from "vue-router";
 import MainSubLinks from "@/components/single-use/MainSubLinks.vue";
 
 const route = useRoute()
@@ -29,8 +29,8 @@ const dispatchSubNavs = reactive([
     {title: 'Выходные дни', key: 6, tabQuery: 'weekend'},
     {title: 'Прохождение узлов', key: 7, tabQuery: 'nodes'},
     {title: 'График движения', key: 8, tabQuery: 'graph-map'},
-    {title: 'График, остановка', key: 9, tabQuery: 'grap-stations'},
-    {title: 'График, рейс', key: 10, tabQuery: '?raph-reis'},
+    {title: 'График, остановка', key: 9, tabQuery: 'graph-stations'},
+    {title: 'График, рейс', key: 10, tabQuery: 'graph-reis'},
     {title: 'Прогноз по остановке', key: 11, tabQuery: 'future'},
     {title: 'Сообщение на табло', key: 12, tabQuery: 'message'},
 ])
@@ -50,22 +50,15 @@ const navLinks = reactive([
     {title: 'Выход', to: '/exit', icon: StopOutlined},
 ])
 
-const router = useRouter()
 const isMenuExpanded = ref(true)
-async function openSubLinks(link:any) {
-    if(link.subNavs && !route.hash) {
-        await router.push({ path: link.to, hash: link.subNavs[0].href })
-    } else {
-        await router.push({ path: link.to })
-    }
-}
+
 </script>
 
 <template>
     <d-flex type="column" gap="0" class="nav-wrapper" justify="space-between" :class="{mini: !isMenuExpanded}">
         <d-flex type="column" justify="start" gap="0">
-            <div v-for="link in navLinks"
-                 @click="openSubLinks(link)"
+            <router-link v-for="link in navLinks"
+                :to="{path: link.to}"
                  :class="{'current-route': route.path.includes(link.to)}"
                  :key="link.title"
                  class="nav__link">
@@ -74,7 +67,7 @@ async function openSubLinks(link:any) {
                         <main-sub-links :is-menu-expanded="isMenuExpanded" :link="link"/>
                     </d-flex>
                 </d-flex>
-            </div>
+            </router-link>
         </d-flex>
         <d-flex class="nav__link" style="width: 84%; cursor:pointer;" gap="15px"
                 @click="isMenuExpanded = !isMenuExpanded">

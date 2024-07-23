@@ -19,7 +19,7 @@
     </d-flex>
 </template>
 <script setup lang="ts">
-import {reactive, shallowRef, watch} from "vue";
+import {reactive, shallowRef} from "vue";
 import DispatchMap from "@/modules/dispatch/views/hash/DispatchMap.vue";
 import DispatchLinear from "@/modules/dispatch/views/hash/DispatchLinear.vue";
 import DispatchReport from "@/modules/dispatch/views/hash/DispatchReport.vue";
@@ -40,12 +40,6 @@ async function changeComponent(tab: any) {
     currentComponent.value = tab.component
     await router.push({hash: tab.hash, query: {tab: route.query.tab}})
 }
-
-watch(() => route.query, async () => {
-    if (!route.hash) {
-        await router.push({path: route.path, hash: hashes[0].hash, query: {tab: route.query.tab}})
-    }
-})
 
 </script>
 

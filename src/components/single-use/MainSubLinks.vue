@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import DFlex from "@/components/reus/html-containers/DFlex.vue";
 import {useRoute} from "vue-router";
-import {ref, watch} from "vue";
+import {onMounted, ref} from "vue";
+import {CaretDownOutlined, CaretUpOutlined} from "@ant-design/icons-vue";
 
 const props = defineProps<{
     link: any,
@@ -10,21 +11,9 @@ const props = defineProps<{
 const route = useRoute()
 const isSubExpanded = ref(false)
 
-watch(() => route.path, () => {
-    if(route.path !== props.link.to) {
-        isSubExpanded.value = false
-    }
-})
 
-watch(() => props.isMenuExpanded, () => {
-    isSubExpanded.value = props.isMenuExpanded;
-})
-
-watch(() => route.query, () => {
-    if(props.link.subNavs) {
-        const exist = props.link.subNavs.find((a:any) => a.tabQuery === route.query.tab)
-        if(exist) isSubExpanded.value = true
-    }
+onMounted(() => {
+    console.log(route.path)
 })
 
 </script>
@@ -35,13 +24,18 @@ watch(() => route.query, () => {
                    :title="link.title"
                    :is="link.icon"
                    class="da-icon"/>
-        <span @click="isSubExpanded = !isSubExpanded" class="link-title" v-if="props.isMenuExpanded">{{link.title }}</span>
+        <d-flex>
+            <span @click="isSubExpanded = !isSubExpanded" class="link-title" v-if="props.isMenuExpanded">{{link.title }}</span>
+            <caret-up-outlined v-if="isSubExpanded && link.subNavs?.length" @click="isSubExpanded = false" />
+            <caret-down-outlined v-if="!isSubExpanded && link.subNavs?.length" @click="isSubExpanded = true" />
+        </d-flex>
     </d-flex>
     <d-flex class="sub-links-dropdown" align="start" type="column" v-if="props.link.subNavs && isSubExpanded">
         <router-link class="sub-link"
                      :class="{'sub-active': route.query.tab === sub.tabQuery}"
-                     :to="route.path + '?tab=' + sub.tabQuery"
-                     v-for="sub in props.link.subNavs" :key="sub.tabQuery">-
+                     v-for="sub in props.link.subNavs"
+                     :to="{path: route.path, query: {tab: sub.tabQuery}}"
+                     :key="sub.tabQuery">-
             {{ sub.title }}
         </router-link>
     </d-flex>
@@ -49,11 +43,15 @@ watch(() => route.query, () => {
 
 <style scoped>
 .sub-link {
+    width: 100%;
     color: rgba(255, 255, 255, .5);
     text-decoration: none;
+    &:hover{
+        color: white;
+    }
 }
 .sub-active {
-    color: var(--primary-color) !important;
+    color: white !important;
 }
 .link-title {
     white-space: nowrap;
