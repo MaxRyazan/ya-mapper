@@ -18,7 +18,7 @@ import TabGraphReis from "@/modules/dispatch/views/tab/TabGraphReis.vue";
 import TabFuture from "@/modules/dispatch/views/tab/TabFuture.vue";
 import TabMessage from "@/modules/dispatch/views/tab/TabMessage.vue";
 
-const currentComponent = shallowRef<Component>(TabMonitor)
+const currentComponent = shallowRef<Component|null>(null)
 const route = useRoute()
 
 const SUB_COMPONENTS_MAP = new Map([
@@ -36,8 +36,10 @@ const SUB_COMPONENTS_MAP = new Map([
     ['message', TabMessage],
 ])
 
+
 watch(() => route.query, () => {
     const component = SUB_COMPONENTS_MAP.get(route.query.tab as string)
+    if(!component) currentComponent.value = null
     if(component) currentComponent.value = component
 })
 

@@ -22,7 +22,6 @@
 import {reactive, shallowRef} from "vue";
 import DispatchMap from "@/modules/dispatch/views/hash/DispatchMap.vue";
 import DispatchLinear from "@/modules/dispatch/views/hash/DispatchLinear.vue";
-import DispatchReport from "@/modules/dispatch/views/hash/DispatchReport.vue";
 import router from "@/configs/router.ts";
 import {useRoute} from "vue-router";
 import DText from "@/components/reus/texts/DText.vue";
@@ -31,7 +30,6 @@ const route = useRoute()
 const currentComponent = shallowRef(DispatchMap)
 
 const hashes = reactive([
-    {tabName: 'Сводный отчет', hash: '#report', component: shallowRef(DispatchReport)},
     {tabName: 'Карта', hash: '#map', component: shallowRef(DispatchMap)},
     {tabName: 'Линейный', hash: '#linear', component: shallowRef(DispatchLinear)},
 ])
