@@ -10,7 +10,6 @@ const props = defineProps<{
 const route = useRoute()
 const isSubExpanded = ref(false)
 
-
 watch(() => route.path, () => {
     if(route.path !== props.link.to) {
         isSubExpanded.value = false
@@ -36,7 +35,7 @@ watch(() => route.query, () => {
                    :title="link.title"
                    :is="link.icon"
                    class="da-icon"/>
-        <span class="link-title" v-if="props.isMenuExpanded">{{link.title }}</span>
+        <span @click="isSubExpanded = !isSubExpanded" class="link-title" v-if="props.isMenuExpanded">{{link.title }}</span>
     </d-flex>
     <d-flex class="sub-links-dropdown" align="start" type="column" v-if="props.link.subNavs && isSubExpanded">
         <router-link class="sub-link"

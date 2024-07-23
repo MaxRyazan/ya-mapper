@@ -98,6 +98,7 @@ async function buildInnerInterval() {
 
         for (let i = 0; i < currentResponseObject.value.length; i++) {
             const temp = response.filter((r: any) => r.GPS_IMEI === currentResponseObject.value[i].emei)
+            console.log(temp[temp.length - 1].TimeStamp)
             currentResponseObject.value[i].packageLastTimeStamp = DateHelper.stringDateToDayjs(temp[temp.length - 1].TimeStamp)
             currentResponseObject.value[i].coords = temp.map((a: any) => ParseHelper.parseCoords(a.RES_GPS))
             currentResponseObject.value[i].direction = +(temp[0].DIRECTION)
@@ -106,8 +107,9 @@ async function buildInnerInterval() {
 
 
         let counter = 0
+        console.log(currentResponseObject.value[0])
         if (currentResponseObject.value[0].packageLastTimeStamp!.isAfter(lastResponseObject[0]?.packageLastTimeStamp)) {
-
+            console.log('1111')
 
             innerInterval.value = setInterval(() => {
                 busesOnRoute.value = currentResponseObject.value.map(a => {
@@ -126,6 +128,7 @@ async function buildInnerInterval() {
                 //     timestamp: '',
                 //     direction: currentResponseObject.value[0].direction,
                 // }]
+                console.log(busesOnRoute.value)
                 counter++
             }, 1000)
         }
