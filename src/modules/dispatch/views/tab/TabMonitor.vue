@@ -1,43 +1,38 @@
 <template>
-    <d-flex type="column" gap="4px">
-        <d-flex style="margin-top: 5px; width: 99%;" gap="0">
-            <d-flex class="tab" gap="0" style="width: 99%; position: relative;" v-for="hashLink in hashes" :key="hashLink.hash">
-                <d-text
-                        cursor="pointer"
-                        :class="{'hash-active': route.hash === hashLink.hash}"
-                        size="18px"
-                        class="tab-item"
-                        @click="changeComponent(hashLink)">
-                    {{ hashLink.tabName }}
-                </d-text>
-                <div v-if="route.hash === hashLink.hash" class="d-connector"></div>
-            </d-flex>
-        </d-flex>
-        <div class="tab-content">
-            <component style="width: calc(99% - 2px)" :is="currentComponent"/>
-        </div>
-    </d-flex>
+    <div class="tab-content">
+        <a-table size="small"
+                 v-if="route.query.tab && !route.hash"
+                 :pagination="{defaultPageSize: 14, showSizeChanger: true, pageSizeOptions: ['10', '14', '20', '50']}"
+                 :columns="dispatchColumn"
+                 :data-source="dataSource">
+            <template #bodyCell="{column}">
+                <d-flex v-if="column.key === 'actions'" justify="center">
+                    <router-link :to="{query: {tab: 'monitor'}, hash: '#map'}">карта</router-link>
+                    <router-link :to="{query: {tab: 'monitor'}, hash: '#linear'}">линейный</router-link>
+                </d-flex>
+            </template>
+        </a-table>
+    </div>
 </template>
 <script setup lang="ts">
-import {reactive, shallowRef} from "vue";
-import DispatchMap from "@/modules/dispatch/views/hash/DispatchMap.vue";
-import DispatchLinear from "@/modules/dispatch/views/hash/DispatchLinear.vue";
-import router from "@/configs/router.ts";
 import {useRoute} from "vue-router";
-import DText from "@/components/reus/texts/DText.vue";
+import {dispatchColumn} from "@/modules/dispatch/constants";
 
 const route = useRoute()
-const currentComponent = shallowRef(DispatchMap)
 
-const hashes = reactive([
-    {tabName: 'Карта', hash: '#map', component: shallowRef(DispatchMap)},
-    {tabName: 'Линейный', hash: '#linear', component: shallowRef(DispatchLinear)},
-])
 
-async function changeComponent(tab: any) {
-    currentComponent.value = tab.component
-    await router.push({hash: tab.hash, query: {tab: route.query.tab}})
-}
+const dataSource = [
+    {
+        number: 1,
+        route: 24,
+        points: '1-2',
+    },
+    {
+        number: 2,
+        route: 27,
+        points: '3-4',
+    }
+]
 
 </script>
 
@@ -78,8 +73,6 @@ async function changeComponent(tab: any) {
     padding: 4px
 }
 .tab-content {
-    width: calc(99% - 2px);
-    border: 1px solid var(--main-nav-bg);
-    height: calc(100vh - 55px);
+    min-width: 100%;
 }
 </style>

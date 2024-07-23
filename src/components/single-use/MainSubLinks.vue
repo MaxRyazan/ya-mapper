@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import DFlex from "@/components/reus/html-containers/DFlex.vue";
 import {useRoute} from "vue-router";
-import {onMounted, ref} from "vue";
+import {ref, watch} from "vue";
 import {CaretDownOutlined, CaretUpOutlined} from "@ant-design/icons-vue";
 
 const props = defineProps<{
@@ -12,8 +12,14 @@ const route = useRoute()
 const isSubExpanded = ref(false)
 
 
-onMounted(() => {
-    console.log(route.path)
+watch(() => route.query, () => {
+    if(route.query) {
+        if(props.link.subNavs) {
+            if(props.link.subNavs.some((f:any) => f.tabQuery === route.query.tab)) {
+                isSubExpanded.value = true
+            }
+        }
+    }
 })
 
 </script>
