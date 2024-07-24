@@ -27,8 +27,9 @@ const route = useRoute()
 const currentHashComponent = shallowRef<Component | null>(null)
 
 watch(() => route.hash, () => {
+    currentHashComponent.value = null
     if(route.hash) {
-        currentHashComponent.value = componentMap.get(route.hash)
+        currentHashComponent.value = componentMap.get(route.hash) as any
     }
 })
 
