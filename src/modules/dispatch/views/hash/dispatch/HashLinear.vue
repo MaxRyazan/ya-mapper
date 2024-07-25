@@ -2,7 +2,10 @@
     <d-flex type="column" gap="200px" style="height: calc(100vh - 430px); margin-top: 40px; justify-content: space-between">
         <d-flex justify="space-between" align="start" gap="30px" style="width: 100%; padding: 0 40px 0 20px; position: relative">
             <div class="line__schema"></div>
-            <linear-item v-for="station in ascBusStations" :key="station.ID" :station="station"/>
+            <linear-item :show-bus-icon="showBus(station)"
+                         v-for="station in ascBusStations"
+                         :key="station.ID"
+                         :station="station"/>
         </d-flex>
         <d-flex justify="space-between" align="start" gap="30px" style="width: 100%; padding: 0 40px 0 20px; position: relative">
             <div class="line__schema"></div>
@@ -17,11 +20,13 @@ import {GetLinesByRouteResponse} from "@/modules/map/types/api-models.ts";
 import {getLinesByRegion} from "@/modules/map/api";
 import LinearItem from "@/modules/dispatch/views/LinearItem.vue";
 import DFlex from "@/components/reus/html-containers/DFlex.vue";
+import {getAllBusesOfRouteInContextOfStations} from "@/modules/dispatch/api";
 const route = useRoute()
 
 const currentRoute = ref()
 let ascBusStations = ref<any>([])
 let descBusStations = ref<any>([])
+const basesInContextOfStations = ref([])
 
 onMounted(async () => {
     currentRoute.value = route.query.route
@@ -54,7 +59,16 @@ onMounted(async () => {
         })
         descBusStations.value.forEach((d, idx) => d.KEY = idx+1)
     }
+
+    const resp = await getAllBusesOfRouteInContextOfStations({route: currentRoute.value, direction: 0})
+    basesInContextOfStations.value = resp.Imei
+    console.log(basesInContextOfStations.value)
 })
+
+
+function showBus(station: any) {
+    return basesInContextOfStations.value.some(a => a.STATION1 === station.ID)
+}
 </script>
 
 

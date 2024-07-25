@@ -1,5 +1,6 @@
 <template>
     <d-flex class="station__card" align="start">
+        <div class="bus__icon" v-if="props.showBusIcon"></div>
         <div class="station__point"></div>
         <d-text class="station__name">{{props.station.NAME_RU}}</d-text>
     </d-flex>
@@ -8,9 +9,16 @@
 import DFlex from "@/components/reus/html-containers/DFlex.vue";
 import DText from "@/components/reus/texts/DText.vue";
 
-const props = defineProps<{
+
+interface LinearItemInterface {
     station: any
-}>()
+    showBusIcon?: boolean
+}
+
+const props = withDefaults(defineProps<LinearItemInterface>(), {
+    showBusIcon: false
+})
+
 </script>
 
 
@@ -33,5 +41,14 @@ const props = defineProps<{
     position: absolute;
     top: 0;
     left: 15px;
+}
+.bus__icon {
+    width: 20px;
+    height: 12px;
+    background-color: red;
+    transform: rotate(-70deg);
+    position: absolute;
+    top: -30px;
+    left: -10px;
 }
 </style>
