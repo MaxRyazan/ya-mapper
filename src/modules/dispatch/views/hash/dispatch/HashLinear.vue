@@ -77,10 +77,15 @@ async function setBusesOnLinearView(){
     const resp = await getAllBusesOfRouteInContextOfStations({route: currentRoute.value, direction: 0})
     const resp2 = await getAllBusesOfRouteInContextOfStations({route: currentRoute.value, direction: 1})
     basesInContextOfStations.value = [...resp.Imei, ...resp2.Imei]
+    console.log(basesInContextOfStations.value)
 }
 
 function showBus(station: any) {
-    return basesInContextOfStations.value.some(a => a.STATION1 === station.ID)
+    const exist =  basesInContextOfStations.value.find(a => a.STATION1 === station.ID)
+    return {
+        visible: !!exist ?? false,
+        GRN: exist?.GRN
+    }
 }
 </script>
 
