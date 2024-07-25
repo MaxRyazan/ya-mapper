@@ -1,11 +1,11 @@
 <template>
     <d-flex class="station__card" align="start">
-        <div class="bus__icon" v-if="props.showBusIcon.visible">
+        <div class="bus__icon" v-if="props.showBusIcon?.visible">
             <d-text size="12px" style="position: absolute; left: -55%; top: -15px;"
-            >{{showBusIcon.GRN}}</d-text>
+            >{{showBusIcon?.GRN}}</d-text>
         </div>
         <div class="station__point"></div>
-        <d-text class="station__name">{{props.station.NAME_RU}}</d-text>
+        <d-text class="station__name">{{props.station?.NAME_RU}}</d-text>
     </d-flex>
 </template>
 <script setup lang="ts">
@@ -14,7 +14,7 @@ import DText from "@/components/reus/texts/DText.vue";
 
 
 interface LinearItemInterface {
-    station: any
+    station?: any
     showBusIcon?: {
         visible: boolean,
         GRN: string
