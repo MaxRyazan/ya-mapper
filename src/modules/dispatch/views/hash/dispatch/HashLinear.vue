@@ -48,7 +48,7 @@ onMounted(async () => {
                 DIRECTION_TEXT: 'Прямое'
             }
         })
-        ascBusStations.value.forEach((d, idx) => d.KEY = idx+1)
+        ascBusStations.value.forEach((d:any, idx:any) => d.KEY = idx+1)
     }
     if(descResponse) {
         descBusStations.value = descResponse.map((r: GetLinesByRouteResponse) => {
@@ -61,7 +61,7 @@ onMounted(async () => {
                 DIRECTION_TEXT: 'Обратное'
             }
         })
-        descBusStations.value.forEach((d, idx) => d.KEY = idx+1)
+        descBusStations.value.forEach((d:any, idx:any) => d.KEY = idx+1)
     }
     await setBusesOnLinearView()
     interval.value = setInterval(async () => {
@@ -81,7 +81,7 @@ async function setBusesOnLinearView(){
 }
 
 function showBus(station: any) {
-    const exist =  basesInContextOfStations.value.find(a => a.STATION1 === station.ID)
+    const exist =  basesInContextOfStations.value.find((a:any) => a.STATION1 === station.ID)
     return {
         visible: !!exist ?? false,
         GRN: exist?.GRN
