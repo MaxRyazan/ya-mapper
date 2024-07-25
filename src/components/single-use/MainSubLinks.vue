@@ -40,7 +40,7 @@ watch(() => route.query, () => {
         <router-link class="sub-link"
                      :class="{'sub-active': route.query.tab === sub.tabQuery}"
                      v-for="sub in props.link.subNavs"
-                     :to="{path: route.path, query: {tab: sub.tabQuery}}"
+                     :to="{path: link.to, query: {tab: sub.tabQuery}}"
                      :key="sub.tabQuery">-
             {{ sub.title }}
         </router-link>
