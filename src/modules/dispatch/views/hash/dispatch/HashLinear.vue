@@ -9,12 +9,15 @@
         </d-flex>
         <d-flex justify="space-between" align="start" gap="30px" style="width: 100%; padding: 0 40px 0 20px; position: relative">
             <div class="line__schema"></div>
-            <linear-item v-for="station in descBusStations" :key="station.ID" :station="station"/>
+            <linear-item :show-bus-icon="showBus(station)"
+                         v-for="station in descBusStations"
+                         :key="station.ID"
+                         :station="station"/>
         </d-flex>
     </d-flex>
 </template>
 <script setup lang="ts">
-import {onMounted, ref} from "vue";
+import {onMounted, onUnmounted, ref} from "vue";
 import {useRoute} from "vue-router";
 import {GetLinesByRouteResponse} from "@/modules/map/types/api-models.ts";
 import {getLinesByRegion} from "@/modules/map/api";
@@ -26,7 +29,8 @@ const route = useRoute()
 const currentRoute = ref()
 let ascBusStations = ref<any>([])
 let descBusStations = ref<any>([])
-const basesInContextOfStations = ref([])
+const basesInContextOfStations = ref<any>([])
+const interval = ref<any>(null)
 
 onMounted(async () => {
     currentRoute.value = route.query.route
@@ -59,12 +63,21 @@ onMounted(async () => {
         })
         descBusStations.value.forEach((d, idx) => d.KEY = idx+1)
     }
-
-    const resp = await getAllBusesOfRouteInContextOfStations({route: currentRoute.value, direction: 0})
-    basesInContextOfStations.value = resp.Imei
-    console.log(basesInContextOfStations.value)
+    await setBusesOnLinearView()
+    interval.value = setInterval(async () => {
+        await setBusesOnLinearView()
+    }, 5000)
 })
 
+onUnmounted(() => {
+    clearInterval(interval.value)
+})
+
+async function setBusesOnLinearView(){
+    const resp = await getAllBusesOfRouteInContextOfStations({route: currentRoute.value, direction: 0})
+    const resp2 = await getAllBusesOfRouteInContextOfStations({route: currentRoute.value, direction: 1})
+    basesInContextOfStations.value = [...resp.Imei, ...resp2.Imei]
+}
 
 function showBus(station: any) {
     return basesInContextOfStations.value.some(a => a.STATION1 === station.ID)
