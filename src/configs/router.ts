@@ -9,7 +9,7 @@ const routes = [
             children: [
                 {
                     path: '/',
-                    redirect: '/routes'
+                    redirect: '/login'
                 },
                 {
                     path: '/login',
