@@ -100,7 +100,7 @@ async function buildInnerInterval() {
         fillCurrentResponseObject(response)
         let test = []
         if(lastResponseObject.length) {
-            lastResponseObject.forEach(last => {
+            lastResponseObject.forEach((last:any) => {
                 const exist = currentResponseObject.value.find(current => current.emei === last.emei)
                 if(exist) {
                     if(exist.packageLastTimeStamp.isAfter(last.packageLastTimeStamp)) {
