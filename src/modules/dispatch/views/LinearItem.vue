@@ -15,10 +15,7 @@ import DText from "@/components/reus/texts/DText.vue";
 
 interface LinearItemInterface {
     station?: any
-    showBusIcon?: {
-        visible: boolean,
-        GRN: string
-    }
+    showBusIcon?: any
 }
 
 const props = withDefaults(defineProps<LinearItemInterface>(), {
