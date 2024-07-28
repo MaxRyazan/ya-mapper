@@ -19,6 +19,7 @@ declare module 'vue' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     TheHeader: typeof import('./src/components/single-use/TheHeader.vue')['default']
+    TheLogin: typeof import('./src/components/single-use/TheLogin.vue')['default']
     TheMainNav: typeof import('./src/components/single-use/TheMainNav.vue')['default']
     YandMap: typeof import('./src/components/reus/YandMap.vue')['default']
   }

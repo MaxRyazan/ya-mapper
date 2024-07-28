@@ -12,9 +12,17 @@ const routes = [
                     redirect: '/routes'
                 },
                 {
+                    path: '/login',
+                    name: 'login',
+                    component: () => import('@/components/single-use/TheLogin.vue'),
+                },
+                {
                     path: '/map',
                     name: 'map',
                     component: () => import('@/modules/map/Index.vue'),
+                    meta: {
+                        public: true
+                    }
                 },
                 {
                     path: '/change-password',
@@ -86,10 +94,20 @@ const routes = [
 ]
 
 
-
 const router = createRouter({
     history: createWebHistory(),
     routes: routes
 })
 
 export default router
+
+// router.beforeEach(async (to: RouteLocationNormalized, _, next:NavigationGuardNext) => {
+//     if(to.path !== '/login') {
+//         if(authUser.value) {
+//             next()
+//         } else {
+//             if(to.meta.public) next()
+//             else next('/login')
+//         }
+//     } else next()
+// })
