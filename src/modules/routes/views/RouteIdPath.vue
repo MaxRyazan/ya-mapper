@@ -80,19 +80,23 @@ const currentResponseObject = ref<any[]>([])
 let lastResponseObject = <any>[]
 
 
+function fillCurrentResponseObject(response:any) {
+    currentResponseObject.value = getUniqueEmeis(response)
+
+    for (let i = 0; i < currentResponseObject.value.length; i++) {
+        const temp = response.filter((r: any) => r.GPS_IMEI === currentResponseObject.value[i].emei)
+        currentResponseObject.value[i].packageLastTimeStamp = DateHelper.stringDateToDayjs(temp[temp.length - 1].TimeStamp)
+        currentResponseObject.value[i].coords = temp.map((a: any) => ParseHelper.parseCoords(a.RES_GPS))
+        currentResponseObject.value[i].direction = +(temp[0].DIRECTION)
+    }
+}
+
 async function buildInnerInterval() {
     console.log('outer interval start')
     clearInterval(innerInterval.value)
     const response = await getLastPackageWithCoordinates({route: currentBusRoute})
     if (response) {
-        currentResponseObject.value = getUniqueEmeis(response)
-
-        for (let i = 0; i < currentResponseObject.value.length; i++) {
-            const temp = response.filter((r: any) => r.GPS_IMEI === currentResponseObject.value[i].emei)
-            currentResponseObject.value[i].packageLastTimeStamp = DateHelper.stringDateToDayjs(temp[temp.length - 1].TimeStamp)
-            currentResponseObject.value[i].coords = temp.map((a: any) => ParseHelper.parseCoords(a.RES_GPS))
-            currentResponseObject.value[i].direction = +(temp[0].DIRECTION)
-        }
+        fillCurrentResponseObject(response)
 
 
 
