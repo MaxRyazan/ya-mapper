@@ -7,11 +7,12 @@ export interface BusRoadMap {
 }
 
 export interface BusOnMap {
-    coord: number[],
+    coords: number[],
     emei: string,
     speed: string | number,
     timestamp: string
     direction: number | null
+    GRN: string
 }
 
 export interface StationOfRoute {

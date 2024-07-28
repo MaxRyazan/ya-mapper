@@ -47,26 +47,26 @@
                 </yandex-map-marker>
 
                 <yandex-map-marker v-for="(bus, idx) in props.currentBusesCoordinates" :key="idx"
-                                   :settings="{ coordinates: bus.coord as any}"
+                                   :settings="{ coordinates: bus.coords as any}"
                                    position="top-center left-center">
-                    <d-text class="bus__number-container">{{ getBusGRN(bus?.emei) }}</d-text>
+                    <d-text class="bus__number-container">{{ bus?.GRN }}</d-text>
                     <svg v-if="bus.direction === 0" fill="white" stroke="red"
                          class="bus" viewBox="0 0 500 500"
-                         @click="produceAnAlert(bus.coord)"
+                         @click="produceAnAlert(bus.coords)"
                          xmlns="http://www.w3.org/2000/svg">
                         <defs/>
                         <path style="stroke-width: 10px" d="M 457.974 55.958 L 130.546 55.958 L 35.046 374.291 L 139.641 178.744 L 453.427 169.649 L 457.974 55.958 Z"/>
                     </svg>
                     <svg v-if="bus.direction === 1" fill="white" stroke="blue"
                          class="bus" viewBox="0 0 500 500"
-                         @click="produceAnAlert(bus.coord)"
+                         @click="produceAnAlert(bus.coords)"
                          xmlns="http://www.w3.org/2000/svg">
                         <defs/>
                         <path style="stroke-width: 10px" d="M 457.974 55.958 L 130.546 55.958 L 35.046 374.291 L 139.641 178.744 L 453.427 169.649 L 457.974 55.958 Z"/>
                     </svg>
                     <svg v-if="bus.direction === 7" fill="white" stroke="black"
                          class="bus" viewBox="0 0 500 500"
-                         @click="produceAnAlert(bus.coord)"
+                         @click="produceAnAlert(bus.coords)"
                          xmlns="http://www.w3.org/2000/svg">
                         <defs/>
                         <path style="stroke-width: 10px" d="M 457.974 55.958 L 130.546 55.958 L 35.046 374.291 L 139.641 178.744 L 453.427 169.649 L 457.974 55.958 Z"/>
@@ -100,7 +100,6 @@ import {
 import {Station} from "@/modules/map/types";
 import DText from "@/components/reus/texts/DText.vue";
 import {BusOnMap} from "@/modules/routes/types/Index.ts";
-import {getBusGRN} from "@/stores/buses.ts";
 
 const myMap = shallowRef<null | any>(null);
 let markers = ref<any>([])

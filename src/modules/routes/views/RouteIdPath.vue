@@ -27,6 +27,7 @@ import {Dayjs} from "dayjs";
 import {DateHelper} from "@/helpers/DateHelper.ts";
 import {ParseHelper} from "@/helpers/ParseHelper.ts";
 import DaBreadcrumbs from "@/components/reus/DaBreadcrumbs.vue";
+import {getBusGRN} from "@/stores/buses.ts";
 
 const isLoaded = ref(false)
 const route = useRoute()
@@ -97,32 +98,40 @@ async function buildInnerInterval() {
     const response = await getLastPackageWithCoordinates({route: currentBusRoute})
     if (response) {
         fillCurrentResponseObject(response)
-
+        let test = []
+        if(lastResponseObject.length) {
+            lastResponseObject.forEach(last => {
+                const exist = currentResponseObject.value.find(current => current.emei === last.emei)
+                if(exist) {
+                    if(exist.packageLastTimeStamp.isAfter(last.packageLastTimeStamp)) {
+                        console.log(`время обновилось для ${exist.GRN}`)
+                        test.push(exist)
+                    } else {
+                        test.push({
+                            ...exist,
+                            coords: [exist.coords[exist.coords.length - 1]]
+                        })
+                    }
+                }
+            })
+        } else test = currentResponseObject.value
 
 
         let counter = 0
-        if (currentResponseObject.value[0].packageLastTimeStamp!.isAfter(lastResponseObject[0]?.packageLastTimeStamp)) {
+        // if (currentResponseObject.value[0].packageLastTimeStamp!.isAfter(lastResponseObject[0]?.packageLastTimeStamp)) {
 
             innerInterval.value = setInterval(() => {
-                busesOnRoute.value = currentResponseObject.value.map(a => {
+                busesOnRoute.value = test.map(a => {
                     return {
                         ...a,
-                        coord: a.coords[counter]
+                        coords: a.coords[counter]
                     }
                 })
 
-
-
-                // busesOnRoute.value = [{
-                //     coord: currentResponseObject.value[0].coords[counter],
-                //     emei: currentResponseObject.value[0].emei,
-                //     speed: '',
-                //     timestamp: '',
-                //     direction: currentResponseObject.value[0].direction,
-                // }]
                 counter++
             }, 1000)
-        }
+        // }
+        console.log(busesOnRoute.value)
         lastResponseObject = currentResponseObject.value
     }
 }
@@ -136,7 +145,8 @@ function getUniqueEmeis(data: any): { emei: string, packageLastTimeStamp: Dayjs 
             emei: a,
             direction: null,
             packageLastTimeStamp: null,
-            coords: []
+            coords: [],
+            GRN: getBusGRN(a)
         }
     })
 }
