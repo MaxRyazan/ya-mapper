@@ -13,4 +13,4 @@ interface IUser {
     Valid: boolean
 }
 
-export const authUser = ref<IUser>(null)
+export const authUser = ref<IUser|null>(null)

@@ -4,6 +4,7 @@
     <div style="height: 50px;">
         <a-spin size="large" v-if="isAuthInProgress"/>
     </div>
+    <qrcode-vue value="Рязань222" :size="300" level="H" />
 </d-flex>
 </template>
 <script setup lang="ts">
@@ -12,6 +13,7 @@ import DText from "@/components/reus/texts/DText.vue";
 import DFlex from "@/components/reus/html-containers/DFlex.vue";
 import {authUser} from "@/stores/user.ts";
 import {message} from "ant-design-vue";
+import QrcodeVue from 'qrcode.vue'
 
 const isAuthInProgress = ref(false)
 const getAuthMessage = computed(() => isAuthInProgress.value ? 'Ждите... идёт авторизация' : 'Страница Авторизации')
