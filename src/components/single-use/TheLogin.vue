@@ -39,7 +39,7 @@ onMounted(async () => {
         isAuthInProgress.value = false
     } catch (e) {
         isAuthInProgress.value = false
-        message.error('Вы не имеете права доступа в приложение. Авторизуйтесь через QR-код!', 8000)
+        message.error('Вы не имеете права доступа в приложение. Авторизуйтесь через QR-код!', 8)
         console.error(e)
     }
 })
