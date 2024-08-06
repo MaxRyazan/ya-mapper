@@ -18,6 +18,7 @@ import {
 import DFlex from "@/components/reus/html-containers/DFlex.vue";
 import {useRoute} from "vue-router";
 import MainSubLinks from "@/components/single-use/MainSubLinks.vue";
+import {authUser} from "@/stores/user.ts";
 
 const route = useRoute()
 const dispatchSubNavs = reactive([
@@ -55,13 +56,16 @@ const isMenuExpanded = ref(true)
 </script>
 
 <template>
-    <d-flex type="column" gap="0" class="nav-wrapper" justify="space-between" :class="{mini: !isMenuExpanded}">
+    <d-flex v-if="authUser?.REG_ID || authUser?.FIO"
+            type="column" gap="0"
+            class="nav-wrapper"
+            justify="space-between" :class="{mini: !isMenuExpanded}">
         <d-flex type="column" justify="start" gap="0">
             <router-link v-for="link in navLinks"
-                :to="{path: link.to}"
-                 :class="{'current-route': route.path.includes(link.to)}"
-                 :key="link.title"
-                 class="nav__link">
+                         :to="{path: link.to}"
+                         :class="{'current-route': route.path.includes(link.to)}"
+                         :key="link.title"
+                         class="nav__link">
                 <d-flex align="start" gap="15px">
                     <d-flex align="start" type="column" style="position: relative; width: 100%;">
                         <main-sub-links :is-menu-expanded="isMenuExpanded" :link="link"/>

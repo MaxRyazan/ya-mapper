@@ -1,3 +1,1 @@
-export class CONSTANTS {
-    public static REG:'REG_18' = 'REG_18'
-}
+export const APP_ID = 'F4870000050001'
