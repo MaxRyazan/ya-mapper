@@ -14,7 +14,7 @@ const routes = [
                 {
                     path: '/login',
                     name: 'login',
-                    component: () => import('@/components/single-use/TheLogin.vue'),
+                    component: () => import('@/modules/login/Index.vue'),
                 },
                 {
                     path: '/map',

@@ -8,7 +8,7 @@
     </d-flex>
 </template>
 <script setup lang="ts">
-import {computed, onMounted, ref} from "vue";
+import {computed, onMounted, onUnmounted, ref} from "vue";
 import DText from "@/components/reus/texts/DText.vue";
 import DFlex from "@/components/reus/html-containers/DFlex.vue";
 import {message} from "ant-design-vue";
@@ -87,6 +87,10 @@ onMounted(async () => {
         message.error('Вы не имеете права доступа в приложение. Авторизуйтесь через QR-код!', 8)
         console.error(e)
     }
+})
+
+onUnmounted(() => {
+    clearInterval(interval.value)
 })
 </script>
 

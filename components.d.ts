@@ -7,6 +7,9 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AButton: typeof import('ant-design-vue/es')['Button']
+    AInput: typeof import('ant-design-vue/es')['Input']
+    AInputPassword: typeof import('ant-design-vue/es')['InputPassword']
     ASpin: typeof import('ant-design-vue/es')['Spin']
     ATable: typeof import('ant-design-vue/es')['Table']
     DaBreadcrumbs: typeof import('./src/components/reus/DaBreadcrumbs.vue')['default']
@@ -21,6 +24,7 @@ declare module 'vue' {
     TheHeader: typeof import('./src/components/single-use/TheHeader.vue')['default']
     TheLogin: typeof import('./src/components/single-use/TheLogin.vue')['default']
     TheMainNav: typeof import('./src/components/single-use/TheMainNav.vue')['default']
+    TheQr: typeof import('./src/components/single-use/TheQr.vue')['default']
     YandMap: typeof import('./src/components/reus/YandMap.vue')['default']
   }
 }
