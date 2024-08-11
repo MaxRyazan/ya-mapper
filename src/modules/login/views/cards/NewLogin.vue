@@ -1,25 +1,29 @@
 <template>
-    <d-flex type="column" class="login">
-        <a-input @input="isValidationFailed = false" :class="{err: isValidationFailed}"
-                 v-model:value="userInfo.login" placeholder="Логин">
-            <template #prefix>
-                <user-outlined />
-            </template>
-        </a-input>
-        <a-input-password
-                @input="isValidationFailed = false"
-                :class="{err: isValidationFailed}"
-                v-model:value="userInfo.password"
-                v-model:visible="isPasswordVisible"
-                placeholder="Пароль"
-        />
-        <a-button @click="login" style="margin-top: 40px; padding: 0 30px" type="primary">Войти</a-button>
+    <d-flex gap="80px">
+        <d-flex type="column" class="login">
+            <a-input @input="isValidationFailed = false" :class="{err: isValidationFailed}"
+                     v-model:value="userInfo.login" placeholder="Логин">
+                <template #prefix>
+                    <user-outlined/>
+                </template>
+            </a-input>
+            <a-input-password
+                    @input="isValidationFailed = false"
+                    :class="{err: isValidationFailed}"
+                    v-model:value="userInfo.password"
+                    v-model:visible="isPasswordVisible"
+                    placeholder="Пароль"
+            />
+            <a-button @click="login" style="margin-top: 80px; " type="primary">Войти</a-button>
+        </d-flex>
+        <the-qr />
     </d-flex>
 </template>
 <script setup lang="ts">
 import {UserOutlined} from "@ant-design/icons-vue";
 import DFlex from "@/components/reus/html-containers/DFlex.vue";
 import {reactive, ref} from "vue";
+import TheQr from "@/modules/login/views/cards/TheQr.vue";
 
 const isValidationFailed = ref(false)
 const isPasswordVisible = ref(false)
@@ -35,7 +39,10 @@ function login() {
 <style scoped>
 .login {
     padding: 20px;
-    width: 400px;
-    height: 400px;
+    min-width: 400px;
+    & > * {
+        height: 100%;
+        width: 100%;
+    }
 }
 </style>

@@ -59,12 +59,12 @@ const isPasswordVisible = ref(false)
 const isConfirmPasswordVisible = ref(false)
 const isLoading = ref(false)
 const userInfo = reactive({
-    login: 'Какойтологин',
-    password: 'какойтопароль',
-    confirmPassword: 'какойтопароль',
-    name: 'какойтонейм',
-    surname: 'какойтосурнайм',
-    patronymic: 'какойтопатронумик'
+    login: '',
+    password: '',
+    confirmPassword: '',
+    name: '',
+    surname: '',
+    patronymic: ''
 })
 
 async function registr() {

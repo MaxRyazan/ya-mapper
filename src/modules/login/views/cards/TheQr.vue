@@ -1,15 +1,13 @@
 <template>
-    <d-flex type="column" style="width: 100%;height: 100%;" justify="center">
-        <d-text color="var(--primary-color)" size="30px">{{ getAuthMessage }}</d-text>
+    <d-flex type="column" style="width: 200px; height: 200px" justify="center">
         <div style="height: 50px;">
             <a-spin size="large" v-if="isAuthInProgress"/>
         </div>
-        <qrcode-vue v-if="isDataExist" :value="qrCodeResponse" :size="300" level="H"/>
+        <qrcode-vue v-if="isDataExist" :value="qrCodeResponse" :size="200" level="H"/>
     </d-flex>
 </template>
 <script setup lang="ts">
-import {computed, onMounted, onUnmounted, ref} from "vue";
-import DText from "@/components/reus/texts/DText.vue";
+import {onMounted, onUnmounted, ref} from "vue";
 import DFlex from "@/components/reus/html-containers/DFlex.vue";
 import {message} from "ant-design-vue";
 import QrcodeVue from 'qrcode.vue'
@@ -19,7 +17,6 @@ import {APP_ID} from "@/constants.ts";
 
 const interval = ref<any>()
 const isAuthInProgress = ref(false)
-const getAuthMessage = computed(() => isAuthInProgress.value ? 'Ждите...' : 'Отсканируйте QR-code в вашем телефоне')
 const qrCodeResponse = ref<string>('')
 const isDataExist = ref(false)
 const sessId = ref('')
