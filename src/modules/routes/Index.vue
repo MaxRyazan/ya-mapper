@@ -137,7 +137,7 @@ watch(allRoutes, async () => {
 
 <style scoped>
 .route__wrapper {
-    min-height: 100vh;
+    min-height: calc(100vh - var(--header-height));
     padding: 20px;
     position: relative;
 }

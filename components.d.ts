@@ -23,6 +23,7 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     TheHeader: typeof import('./src/components/single-use/TheHeader.vue')['default']
     TheMainNav: typeof import('./src/components/single-use/TheMainNav.vue')['default']
+    UserInfo: typeof import('./src/components/single-use/UserInfo.vue')['default']
     YandMap: typeof import('./src/components/reus/YandMap.vue')['default']
   }
 }

@@ -1,8 +1,11 @@
 <template>
-    <d-flex justify="start" align="start" style="height: 100vh; max-height: 100vh; position: relative;">
+    <d-flex gap="0" justify="start" align="start" style="height: 100vh; max-height: 100vh; position: relative;">
         <the-main-nav />
-        <d-flex class="content-wrapper">
-            <default-layout />
+        <d-flex type="column" style="width: 100%; height: 100%;">
+            <the-header v-if="!publicRoutes.includes(route.path)"/>
+            <d-flex class="content-wrapper">
+                <default-layout />
+            </d-flex>
         </d-flex>
     </d-flex>
 </template>
@@ -14,7 +17,11 @@ import {onMounted} from "vue";
 import DFlex from "@/components/reus/html-containers/DFlex.vue";
 import TheMainNav from "@/components/single-use/TheMainNav.vue";
 import DefaultLayout from "@/components/layouts/DefaultLayout.vue";
+import TheHeader from "@/components/single-use/TheHeader.vue";
+import {useRoute} from "vue-router";
 
+const publicRoutes = ['/', '/login', '/registration']
+const route = useRoute()
 onMounted(async () => {
     isAllBusesInLoading.value = true
     const result: Bus[] = await getAllBuses({bin: '10540003043', region: 'REG_18'})

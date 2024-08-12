@@ -6,3 +6,9 @@
     margin: 0;
     box-sizing: border-box;
 }
+
+.page-wrapper {
+    padding: 20px;
+    position: relative;
+    height: calc(100vh - var(--header-height));
+}

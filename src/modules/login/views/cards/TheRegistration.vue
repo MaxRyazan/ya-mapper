@@ -40,6 +40,7 @@
         <span style="font-size: 12px; color: red; height: 20px;"
               v-if="isLoginNotValid || isValidationFailed || isFioNotValid">{{ errorMessage }}</span>
         <a-button :loading="isLoading" type="primary" style="margin-top: 40px;" @click="registr">Зарегистрироваться</a-button>
+        <a-button title="Приложение для авторизации по QR на андроид"><a href="src/files/CTSVirt.apk">CTSVirt.apk</a></a-button>
     </d-flex>
 </template>
 <script setup lang="ts">
