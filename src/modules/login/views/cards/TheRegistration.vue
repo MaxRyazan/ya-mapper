@@ -3,6 +3,9 @@
         <a-input @input="isLoginNotValid = false" title="Логин" :class="{err: isLoginNotValid}"
                  v-model:value="userInfo.login" placeholder="Логин">
         </a-input>
+        <a-input @input="isPhoneNotValid = false" type="phone" title="Телефон" :class="{err: isPhoneNotValid}"
+                 v-model:value="userInfo.phone" placeholder="Телефон в формате 89507505050">
+        </a-input>
         <a-input @input="isFioNotValid = false" title="Фамилия" :class="{err: isFioNotValid}"
                  v-model:value="userInfo.name" placeholder="Фамилия">
             <template #prefix>
@@ -53,6 +56,7 @@ import {useRouter} from "vue-router";
 
 const router = useRouter()
 const errorMessage = ref('')
+const isPhoneNotValid = ref(false)
 const isFioNotValid = ref(false)
 const isLoginNotValid = ref(false)
 const isValidationFailed = ref(false)
@@ -61,6 +65,7 @@ const isConfirmPasswordVisible = ref(false)
 const isLoading = ref(false)
 const userInfo = reactive({
     login: '',
+    phone: undefined,
     password: '',
     confirmPassword: '',
     name: '',
@@ -68,11 +73,19 @@ const userInfo = reactive({
     patronymic: ''
 })
 
+function phoneTest(phone: any) {
+    return /^\d+$/.test(phone);
+}
+
 async function registr() {
     if (!userInfo.login.length) {
         isLoginNotValid.value = true
         errorMessage.value = 'Логин не может быть пустым!'
         return;
+    }
+    if(!userInfo.phone || !phoneTest(userInfo.phone)) {
+        isPhoneNotValid.value = true
+        errorMessage.value = 'Номер телефона отсутствует, или введен некорректно.'
     }
     if(userInfo.name.length < 2 || userInfo.surname.length < 2 || userInfo.patronymic.length < 2) {
         isFioNotValid.value = true
@@ -95,7 +108,9 @@ async function registr() {
         password: userInfo.password,
         FIO: userInfo.name + ' ' + userInfo.surname + ' ' + userInfo.patronymic
     })
+    console.log(newUser)
     if(newUser && newUser.Comp_AID) {
+        console.log('2222')
         authUser.value = newUser
         await router.push('/routes')
     }
