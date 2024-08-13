@@ -101,6 +101,11 @@ const routes = [
                 name: 'auto-work',
                 component: () => import('@/modules/transport-work/Index.vue'),
             },
+            {
+                path: '/admin',
+                name: 'AdminPage',
+                component: () => import('@/modules/admin/Index.vue'),
+            },
         ]
     }
 ]

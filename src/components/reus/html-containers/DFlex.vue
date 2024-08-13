@@ -12,7 +12,7 @@
 
 <script setup lang="ts">
 export interface IProps {
-    align?: 'center' | 'start' | 'end',
+    align?: 'center' | 'start' | 'end' | 'stretch',
     justify?: 'center' | 'start' | 'end' | 'space-between',
     type?: "row" | 'column' | 'column-reverse',
     gap?: string

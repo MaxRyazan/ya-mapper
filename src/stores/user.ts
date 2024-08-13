@@ -1,9 +1,11 @@
 import {ref} from "vue";
 
-interface IUser {
+export interface IUser {
     BIN: string
     Comp_AID: string
     EmUID: string
+    STR_LOGIN: string
+    STR_PASS: string
     FIO: string
     IIN: string
     LOGIN: string

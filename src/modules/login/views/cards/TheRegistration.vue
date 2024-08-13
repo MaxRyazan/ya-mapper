@@ -4,7 +4,7 @@
                  v-model:value="userInfo.login" placeholder="Логин">
         </a-input>
         <a-input @input="isPhoneNotValid = false" type="phone" title="Телефон" :class="{err: isPhoneNotValid}"
-                 v-model:value="userInfo.phone" placeholder="Телефон в формате 89507505050">
+                 v-model:value="userInfo.phone" placeholder="Телефон в формате +79507505050">
         </a-input>
         <a-input @input="isFioNotValid = false" title="Фамилия" :class="{err: isFioNotValid}"
                  v-model:value="userInfo.name" placeholder="Фамилия">
@@ -108,9 +108,7 @@ async function registr() {
         password: userInfo.password,
         FIO: userInfo.name + ' ' + userInfo.surname + ' ' + userInfo.patronymic
     })
-    console.log(newUser)
     if(newUser && newUser.Comp_AID) {
-        console.log('2222')
         authUser.value = newUser
         await router.push('/routes')
     }
