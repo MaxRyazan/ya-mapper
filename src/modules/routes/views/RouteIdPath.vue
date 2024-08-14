@@ -5,6 +5,7 @@
                         link-to="/routes"
                         prev-location-name="все маршруты"/>
         <yand-map :style="{width: mapSizes.width, height: mapSizes.height}"
+                  style="margin: 0 auto"
                   v-if="isLoaded"
                   :lines="busesRoadMaps"
                   :busStationsMarkers="busStations"
@@ -45,8 +46,8 @@ const mapSizes = reactive({
 })
 
 function setMapSizes() {
-    mapSizes.width = window.innerWidth - 330 + 'px'
-    mapSizes.height = window.innerHeight - 50 + 'px'
+    mapSizes.width = window.innerWidth - 370 + 'px'
+    mapSizes.height = window.innerHeight - 120 + 'px'
 }
 
 window.addEventListener('resize', setMapSizes)

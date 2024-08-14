@@ -1,5 +1,5 @@
 <template>
-    <d-flex gap="0" justify="start" align="start" style="height: 100vh; max-height: 100vh; position: relative;">
+    <d-flex gap="0" justify="start" align="start" style="height: 100vh; max-height: 100vh; position: relative; background: rgba(0,0,0, .08);">
         <the-main-nav />
         <d-flex type="column" style="width: 100%; height: 100%;">
             <the-header v-if="!publicRoutes.includes(route.path)"/>
@@ -46,8 +46,10 @@ onMounted(async () => {
 </script>
 <style scoped>
 .content-wrapper {
-    max-width: 100%;
-    width: 100%;
+    max-width: 96%;
+    width: 96%;
     overflow: hidden;
+    background: white;
+    border-radius: 8px;
 }
 </style>
