@@ -1,6 +1,5 @@
 <template>
-    <d-flex class="route__wrapper" gap="40px" type="column">
-        <d-text size="26px">Маршруты</d-text>
+    <d-flex class="route__wrapper" type="column">
         <a-spin size="large" class="route__spinner" v-if="isLoading"/>
         <a-table size="middle"
                  :columns="columns"
@@ -21,7 +20,6 @@
 <script setup lang="ts">
 import {ref, watch} from "vue";
 import {getAllRoutes} from "@/modules/routes/api/Index.ts";
-import DText from "@/components/reus/texts/DText.vue";
 import {allRoutes, isAllRoutesLoading} from "@/modules/routes/stores/allRoutes.ts";
 
 const isLoading = ref(false)
@@ -137,8 +135,6 @@ watch(allRoutes, async () => {
 
 <style scoped>
 .route__wrapper {
-    min-height: calc(100vh - var(--header-height));
-    padding: 20px;
     position: relative;
 }
 .route__spinner {

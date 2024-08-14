@@ -23,6 +23,7 @@ declare module 'vue' {
     MainSubLinks: typeof import('./src/components/single-use/MainSubLinks.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    TheFooter: typeof import('./src/components/single-use/TheFooter.vue')['default']
     TheHeader: typeof import('./src/components/single-use/TheHeader.vue')['default']
     TheMainNav: typeof import('./src/components/single-use/TheMainNav.vue')['default']
     UserInfo: typeof import('./src/components/single-use/UserInfo.vue')['default']

@@ -1,11 +1,12 @@
 <template>
-    <d-flex gap="0" justify="start" align="start" style="height: 100vh; max-height: 100vh; position: relative; background: rgba(0,0,0, .08);">
+    <d-flex justify="start" align="start" style="height: 100vh; max-height: 100vh; position: relative; background: rgba(0,0,0, .08);">
         <the-main-nav />
-        <d-flex type="column" style="width: 100%; height: 100%;">
+        <d-flex gap="20px" type="column" style="width: 100%; height: 100%;">
             <the-header v-if="!publicRoutes.includes(route.path)"/>
-            <d-flex class="content-wrapper">
+            <d-flex style="flex-grow: 1" class="content-wrapper">
                 <default-layout />
             </d-flex>
+            <the-footer />
         </d-flex>
     </d-flex>
 </template>
@@ -19,6 +20,7 @@ import TheMainNav from "@/components/single-use/TheMainNav.vue";
 import DefaultLayout from "@/components/layouts/DefaultLayout.vue";
 import TheHeader from "@/components/single-use/TheHeader.vue";
 import {useRoute} from "vue-router";
+import TheFooter from "@/components/single-use/TheFooter.vue";
 
 const publicRoutes = ['/', '/login', '/registration']
 const route = useRoute()
@@ -46,7 +48,6 @@ onMounted(async () => {
 </script>
 <style scoped>
 .content-wrapper {
-    max-width: 96%;
     width: 96%;
     overflow: hidden;
     background: white;

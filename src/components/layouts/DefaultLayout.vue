@@ -10,7 +10,7 @@
 <style scoped>
 .def_layout-wrapper {
     flex-grow: 1;
-    height: calc(100vh - var(--header-height));
+    height: 100%;
     overflow-y: auto;
     & > * {
         flex-grow: 1;
