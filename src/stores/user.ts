@@ -1,4 +1,5 @@
 import {ref} from "vue";
+import {IRoles} from "@/enums.ts";
 
 export interface IUser {
     BIN: string
@@ -10,7 +11,7 @@ export interface IUser {
     IIN: string
     LOGIN: string
     REG_ID: string
-    Role: number
+    Role: IRoles
     RoleREGION: string
     Valid: boolean
 }

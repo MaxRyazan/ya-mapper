@@ -74,7 +74,7 @@ const userInfo = reactive({
 })
 
 function phoneTest(phone: any) {
-    return /^\d+$/.test(phone);
+    return /^\d+$/.test(phone.toString().replace('+', ''));
 }
 
 async function registr() {
@@ -86,6 +86,7 @@ async function registr() {
     if(!userInfo.phone || !phoneTest(userInfo.phone)) {
         isPhoneNotValid.value = true
         errorMessage.value = 'Номер телефона отсутствует, или введен некорректно.'
+        return
     }
     if(userInfo.name.length < 2 || userInfo.surname.length < 2 || userInfo.patronymic.length < 2) {
         isFioNotValid.value = true
@@ -106,7 +107,9 @@ async function registr() {
     const newUser = await registration({
         login: userInfo.login,
         password: userInfo.password,
-        FIO: userInfo.name + ' ' + userInfo.surname + ' ' + userInfo.patronymic
+        confirmPassword: userInfo.confirmPassword,
+        phone: userInfo.phone,
+        fio: userInfo.name + ' ' + userInfo.surname + ' ' + userInfo.patronymic
     })
     if(newUser && newUser.Comp_AID) {
         authUser.value = newUser
