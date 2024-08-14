@@ -31,7 +31,9 @@ watch(() => route.query, () => {
                    :is="link.icon"
                    class="da-icon"/>
         <d-flex>
-            <span @click="isSubExpanded = !isSubExpanded" class="link-title" v-if="props.isMenuExpanded">{{link.title }}</span>
+            <span @click="isSubExpanded = !isSubExpanded"
+                  class="link-title"
+                  v-if="props.isMenuExpanded">{{link.title }}</span>
             <caret-up-outlined v-if="isSubExpanded && link.subNavs?.length" @click="isSubExpanded = false" />
             <caret-down-outlined v-if="!isSubExpanded && link.subNavs?.length" @click="isSubExpanded = true" />
         </d-flex>

@@ -13,7 +13,7 @@ import {
     StarOutlined,
     FileTextOutlined,
     UserOutlined,
-    StopOutlined
+    StopOutlined, LockOutlined
 } from "@ant-design/icons-vue";
 import DFlex from "@/components/reus/html-containers/DFlex.vue";
 import {useRoute} from "vue-router";
@@ -49,6 +49,7 @@ const navLinks = reactive([
     {title: 'Журнал', to: '/journal', icon: FileTextOutlined},
     {title: 'Изменить пароль', to: '/change-password', icon: UserOutlined},
     {title: 'Выход', to: '/exit', icon: StopOutlined},
+    {title: 'Администраторам', to: '/admin', icon: LockOutlined},
 ])
 
 const isMenuExpanded = ref(true)

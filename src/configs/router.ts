@@ -1,4 +1,5 @@
-import {createRouter, createWebHistory} from "vue-router";
+import {createRouter, createWebHistory, NavigationGuardNext, RouteLocationNormalized} from "vue-router";
+import {authUser} from "@/stores/user.ts";
 
 
 
@@ -105,6 +106,9 @@ const routes = [
                 path: '/admin',
                 name: 'AdminPage',
                 component: () => import('@/modules/admin/Index.vue'),
+                meta: {
+                    roleRequired: 7
+                }
             },
         ]
     }
@@ -118,13 +122,13 @@ const router = createRouter({
 
 export default router
 
-// router.beforeEach(async (to: RouteLocationNormalized, _, next:NavigationGuardNext) => {
-//     if(to.path !== '/login') {
-//         if(authUser.value) {
-//             next()
-//         } else {
-//             if(to.meta.public) next()
-//             else next('/login')
-//         }
-//     } else next()
-// })
+router.beforeEach(async (to: RouteLocationNormalized, _, next:NavigationGuardNext) => {
+    if(to.path !== '/login') {
+        if(authUser.value) {
+            next()
+        } else {
+            if(to.meta.public) next()
+            else next('/login')
+        }
+    } else next()
+})
