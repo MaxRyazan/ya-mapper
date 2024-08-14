@@ -1,12 +1,12 @@
 <template>
-    <d-flex justify="start" align="start" style="height: 100vh; max-height: 100vh; position: relative; background: rgba(0,0,0, .08);">
+    <d-flex gap="0" justify="start" align="start" style="overflow: hidden; height: 100vh; max-height: 100vh; max-width: 100vw; position: relative; background: rgba(0,0,0, .08);">
         <the-main-nav />
         <d-flex gap="20px" type="column" style="width: 100%; height: 100%;">
             <the-header v-if="!publicRoutes.includes(route.path)"/>
             <d-flex style="flex-grow: 1" class="content-wrapper">
                 <default-layout />
             </d-flex>
-            <the-footer />
+            <the-footer v-if="!publicRoutes.includes(route.path)"/>
         </d-flex>
     </d-flex>
 </template>

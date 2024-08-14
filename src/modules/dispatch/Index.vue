@@ -1,5 +1,5 @@
 <template>
-    <d-flex align="start" type="column" gap="40px" style="overflow: hidden; height: calc(100vh - 100px);">
+    <d-flex align="start" type="column" gap="40px" style="overflow: hidden; height: 100%;">
         <d-flex style="height: 40px">
             <da-breadcrumbs v-if="route.query.tab && route.hash" style="margin-top: 20px; padding-left: 20px;"
                             :current-link-name="`${route.hash ? '/' + aliasHashMap.get(route.hash) : ''}/${route.query.route}`"

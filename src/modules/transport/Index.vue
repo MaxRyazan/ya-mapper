@@ -1,6 +1,5 @@
 <template>
-    <d-flex style="padding: 20px" type="column" gap="40px">
-        <d-text size="26px">Транспорт</d-text>
+    <d-flex type="column" gap="40px">
         <a-table size="small"
                  :columns="columns"
                  :pagination="{defaultPageSize: 14, showSizeChanger: true, pageSizeOptions: ['10', '14', '20', '50']}"
@@ -14,9 +13,6 @@ import {watch} from "vue";
 import {getAllBuses} from "@/modules/map/api";
 import {Bus} from "@/models/Bus.ts";
 import {allBuses, isAllBusesInLoading} from "@/stores/buses.ts";
-import DText from "@/components/reus/texts/DText.vue";
-
-
 
 const columns = [
     {

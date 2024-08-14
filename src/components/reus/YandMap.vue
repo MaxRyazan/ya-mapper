@@ -159,7 +159,6 @@ onMounted(() => {
 .wrapper {
     display: flex;
     justify-content: space-between;
-    padding: 20px;
     gap: 30px;
     width: 100%;
     height: 100%;

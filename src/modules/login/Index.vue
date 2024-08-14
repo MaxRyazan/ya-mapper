@@ -1,5 +1,5 @@
 <template>
-    <d-flex type="column" class="page-wrapper">
+    <d-flex  type="column" style="padding: 20px;">
         <d-flex style="width: 100%;" justify="end">
             <a-button :type="route.path === '/registration'?'primary':'default'" @click="router.push('/registration')">
                 Регистрация

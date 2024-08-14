@@ -1,5 +1,4 @@
 import {APP_ID} from "@/constants.ts";
-import {IUser} from "@/stores/user.ts";
 
 
 export async function registration(userInfo: {
@@ -29,8 +28,18 @@ export async function registration(userInfo: {
 
 export async function authorize(userInfo: {login: string, password: string}) {
     try {
-        console.log(userInfo)
-        return '' as unknown as IUser
+        const response = await fetch('https://www.asts.kz:5554/api/AUTH/AVTORIZATION?DD=""', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            body: JSON.stringify({
+                LOGIN: userInfo.login,
+                PASS: userInfo.password,
+                Comp_AID: APP_ID
+            })
+        })
+        return JSON.parse(await response.json())
     } catch (e) {
         console.log(e)
         return null

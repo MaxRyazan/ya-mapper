@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div ref="mapWrapper" class="map-wrapper" style="width: 100%; height: calc(100% - 50px); overflow: hidden;">
         <da-breadcrumbs style="margin-top: 20px; padding-left: 20px;"
                         :current-link-name="`/${route.params.id}`"
                         link-to="/routes"
@@ -33,21 +33,23 @@ import {getBusGRN} from "@/stores/buses.ts";
 const isLoaded = ref(false)
 const route = useRoute()
 const center = ref([63.615375, 53.181536])
-const zoom = ref(15)
+const zoom = ref(13)
 const direction = ref<0 | 1 | 2>(2)
 const currentBusRoute = +route.params.id
 const busStations = ref<string[]>([])
 const busesOnRoute = ref<BusOnMap[]>([])
 const outerInterval = ref()
 const innerInterval = ref()
+const mapWrapper = ref()
 const mapSizes = reactive({
     width: '900px',
     height: '650px'
 })
 
 function setMapSizes() {
-    mapSizes.width = window.innerWidth - 370 + 'px'
-    mapSizes.height = window.innerHeight - 120 + 'px'
+    const wrapper = document.querySelector('.map-wrapper')
+    mapSizes.width = wrapper?.clientWidth! - 150 + 'px'
+    mapSizes.height = wrapper?.clientHeight + 'px'
 }
 
 window.addEventListener('resize', setMapSizes)
@@ -82,7 +84,7 @@ const currentResponseObject = ref<any[]>([])
 let lastResponseObject = <any>[]
 
 
-function fillCurrentResponseObject(response:any) {
+function fillCurrentResponseObject(response: any) {
     currentResponseObject.value = getUniqueEmeis(response)
 
     for (let i = 0; i < currentResponseObject.value.length; i++) {
@@ -94,18 +96,16 @@ function fillCurrentResponseObject(response:any) {
 }
 
 async function buildInnerInterval() {
-    console.log('outer interval start')
     clearInterval(innerInterval.value)
     const response = await getLastPackageWithCoordinates({route: currentBusRoute})
     if (response) {
         fillCurrentResponseObject(response)
         let test = []
-        if(lastResponseObject.length) {
-            lastResponseObject.forEach((last:any) => {
+        if (lastResponseObject.length) {
+            lastResponseObject.forEach((last: any) => {
                 const exist = currentResponseObject.value.find(current => current.emei === last.emei)
-                if(exist) {
-                    if(exist.packageLastTimeStamp.isAfter(last.packageLastTimeStamp)) {
-                        console.log(`время обновилось для ${exist.GRN}`)
+                if (exist) {
+                    if (exist.packageLastTimeStamp.isAfter(last.packageLastTimeStamp)) {
                         test.push(exist)
                     } else {
                         test.push({
@@ -116,28 +116,26 @@ async function buildInnerInterval() {
                 }
             })
         } else test = currentResponseObject.value
-
-
         let counter = 0
-        // if (currentResponseObject.value[0].packageLastTimeStamp!.isAfter(lastResponseObject[0]?.packageLastTimeStamp)) {
-
-            innerInterval.value = setInterval(() => {
-                busesOnRoute.value = test.map(a => {
-                    return {
-                        ...a,
-                        coords: a.coords[counter]
-                    }
-                })
-
-                counter++
-            }, 1000)
-        // }
-        console.log(busesOnRoute.value)
+        innerInterval.value = setInterval(() => {
+            busesOnRoute.value = test.map(a => {
+                return {
+                    ...a,
+                    coords: a.coords[counter]
+                }
+            })
+            counter++
+        }, 1000)
         lastResponseObject = currentResponseObject.value
     }
 }
 
-function getUniqueEmeis(data: any): { emei: string, packageLastTimeStamp: Dayjs | null, coords: [], direction: number | null }[] {
+function getUniqueEmeis(data: any): {
+    emei: string,
+    packageLastTimeStamp: Dayjs | null,
+    coords: [],
+    direction: number | null
+}[] {
     const emeis = data.map((a: any) => a.GPS_IMEI)
     const uniqueEmeis = new Set(emeis)
     const arr = Array.from(uniqueEmeis) as string[]

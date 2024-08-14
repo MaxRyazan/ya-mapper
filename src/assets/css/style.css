@@ -8,7 +8,8 @@
 }
 
 .page-wrapper {
-    padding: 20px;
     position: relative;
-    height: calc(100vh - var(--header-height));
+}
+.ant-table-thead {
+    height: 50px;
 }

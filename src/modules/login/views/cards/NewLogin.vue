@@ -2,7 +2,7 @@
     <d-flex gap="80px">
         <d-flex type="column" class="login">
             <a-input @input="isValidationFailed = false" :class="{err: isValidationFailed}"
-                     v-model:value="userInfo.STR_LOGIN" placeholder="Логин">
+                     v-model:value="userInfo.login" placeholder="Логин">
                 <template #prefix>
                     <user-outlined/>
                 </template>
@@ -10,7 +10,7 @@
             <a-input-password
                     @input="isValidationFailed = false"
                     :class="{err: isValidationFailed}"
-                    v-model:value="userInfo.STR_PASS"
+                    v-model:value="userInfo.password"
                     v-model:visible="isPasswordVisible"
                     placeholder="Пароль"
             />
@@ -31,12 +31,13 @@ import router from "@/configs/router.ts";
 const isValidationFailed = ref(false)
 const isPasswordVisible = ref(false)
 const userInfo = reactive({
-    STR_LOGIN: '',
-    STR_PASS: ''
+    login: '',
+    password: ''
 })
 
 async function login() {
     const res: IUser|null = await authorize(userInfo)
+    console.log(res)
     if(res && res.STR_LOGIN) {
         authUser.value = res
         await router.push('/routes')
