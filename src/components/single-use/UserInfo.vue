@@ -1,7 +1,18 @@
 <template>
-    <d-flex class="user-info">
-        <d-text cursor="pointer" class="user-info__fio">{{userFIO}}</d-text>
-        <logout-outlined @click="logout" class="logout-icon" title="Выйти"/>
+    <d-flex gap="15px" class="user-info">
+        <d-flex gap="2px" type="column">
+            <d-text weight="600" cursor="pointer" class="user-info__fio">{{userFIO}}</d-text>
+            <d-text>{{userRole}}</d-text>
+        </d-flex>
+        <a-popconfirm
+                placement="rightBottom"
+                title="Выйти из аккаунта?"
+                ok-text="Да"
+                cancel-text="Отмена"
+                @confirm="logout"
+        >
+        <logout-outlined class="logout-icon" title="Выйти"/>
+        </a-popconfirm>
     </d-flex>
 </template>
 <script setup lang="ts">
@@ -10,6 +21,7 @@ import {authUser} from "@/stores/user.ts";
 import DText from "@/components/reus/texts/DText.vue";
 import {computed} from "vue";
 import router from "@/configs/router.ts";
+import {USER_ROLES_MAP} from "@/constants.ts";
 
 const userFIO = computed(() => {
     if(authUser?.value?.FIO) {
@@ -21,6 +33,8 @@ const userFIO = computed(() => {
     }
     else return ''
 })
+
+const userRole = computed(() => USER_ROLES_MAP.get(authUser.value?.Role as any))
 
 function logout() {
     authUser.value = null
@@ -39,7 +53,7 @@ function logout() {
     font-size: 30px;
     transition: .3s;
     cursor: pointer;
-    color: var(--primary-color);
+    color: var(--main-nav-bg);
     &:hover{
         transform: scale(1.1);
         transition: .3s;

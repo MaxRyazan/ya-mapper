@@ -12,6 +12,7 @@ declare module 'vue' {
     ADrawer: typeof import('ant-design-vue/es')['Drawer']
     AInput: typeof import('ant-design-vue/es')['Input']
     AInputPassword: typeof import('ant-design-vue/es')['InputPassword']
+    APopconfirm: typeof import('ant-design-vue/es')['Popconfirm']
     ASpin: typeof import('ant-design-vue/es')['Spin']
     ATable: typeof import('ant-design-vue/es')['Table']
     DaBreadcrumbs: typeof import('./src/components/reus/DaBreadcrumbs.vue')['default']

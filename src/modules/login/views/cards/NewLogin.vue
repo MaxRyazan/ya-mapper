@@ -14,7 +14,7 @@
                     v-model:visible="isPasswordVisible"
                     placeholder="Пароль"
             />
-            <a-button @click="login" style="margin-top: 80px; " type="primary">Войти</a-button>
+            <a-button :loading="isLoading" @click="login" style="margin-top: 80px; " type="primary">Войти</a-button>
         </d-flex>
         <the-qr />
     </d-flex>
@@ -28,6 +28,7 @@ import {authorize} from "@/modules/login/api";
 import {authUser, IUser} from "@/stores/user.ts";
 import router from "@/configs/router.ts";
 
+const isLoading = ref(false)
 const isValidationFailed = ref(false)
 const isPasswordVisible = ref(false)
 const userInfo = reactive({
@@ -36,8 +37,9 @@ const userInfo = reactive({
 })
 
 async function login() {
+    isLoading.value = true
     const res: IUser|null = await authorize(userInfo)
-    console.log(res)
+    isLoading.value = false
     if(res && res.STR_LOGIN) {
         authUser.value = res
         await router.push('/routes')
