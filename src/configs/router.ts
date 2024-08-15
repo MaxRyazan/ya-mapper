@@ -107,7 +107,7 @@ const routes = [
                 name: 'AdminPage',
                 component: () => import('@/modules/admin/Index.vue'),
                 meta: {
-                    roleRequired: 7
+                    rolesRequired: [7]
                 }
             },
         ]

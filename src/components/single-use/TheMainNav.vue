@@ -49,7 +49,7 @@ const navLinks = reactive([
     {title: 'Журнал', to: '/journal', icon: FileTextOutlined},
     {title: 'Изменить пароль', to: '/change-password', icon: UserOutlined},
     {title: 'Выход', to: '/exit', icon: StopOutlined},
-    {title: 'Администраторам', to: '/admin', icon: LockOutlined},
+    {title: 'Администраторам', to: '/admin', icon: LockOutlined, rolesRequired: [7]},
 ])
 
 const isMenuExpanded = ref(true)
@@ -61,24 +61,30 @@ const isMenuExpanded = ref(true)
             type="column" gap="0"
             class="nav-wrapper"
             justify="space-between" :class="{mini: !isMenuExpanded}">
-        <d-flex type="column" justify="start" gap="0">
-            <router-link v-for="link in navLinks"
-                         :to="{path: link.to}"
-                         :class="{'current-route': route.path.includes(link.to)}"
-                         :key="link.title"
-                         class="nav__link">
-                <d-flex align="start" gap="15px">
-                    <d-flex align="start" type="column" style="position: relative; width: 100%;">
-                        <main-sub-links :is-menu-expanded="isMenuExpanded" :link="link"/>
+        <ul style="margin: 0; padding: 0; width: 100%;">
+            <d-flex type="column"
+                    justify="start"
+                    gap="0px"
+                    style="width: 100%;"
+                    v-for="link in navLinks">
+                <router-link :to="{path: link.to}"
+                             v-if="link.rolesRequired ? link.rolesRequired.includes(authUser.Role) : true"
+                             :class="{'current-route': route.path.includes(link.to)}"
+                             :key="link.title"
+                             class="nav__link">
+                    <d-flex align="start" gap="15px">
+                        <d-flex align="start" type="column" style="position: relative; width: 100%;">
+                            <main-sub-links :is-menu-expanded="isMenuExpanded" :link="link" />
+                        </d-flex>
                     </d-flex>
-                </d-flex>
-            </router-link>
-        </d-flex>
-        <d-flex class="nav__link" style="width: 84%; cursor:pointer;" gap="15px"
+                </router-link>
+            </d-flex>
+        </ul>
+        <d-flex class="nav__link" style="width: 100%;flex-grow: 0; justify-self: end; cursor:pointer;" gap="15px"
                 @click="isMenuExpanded = !isMenuExpanded">
             <right-square-filled v-if="!isMenuExpanded" class="da-icon"/>
             <left-square-filled v-else class="da-icon"/>
-            <span v-if="isMenuExpanded" style="width: 80%;">Свернуть</span>
+            <span v-if="isMenuExpanded">Свернуть</span>
         </d-flex>
     </d-flex>
 </template>
@@ -122,6 +128,7 @@ const isMenuExpanded = ref(true)
     text-align: start;
     color: rgba(255, 255, 255, .5);
     border: 2px solid transparent;
+    flex-grow: 1;
 
     &:hover {
         color: var(--primary-color) !important;
