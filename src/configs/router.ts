@@ -122,8 +122,10 @@ const router = createRouter({
 
 export default router
 
+const publicPaths = ['/login', '/registration']
+
 router.beforeEach(async (to: RouteLocationNormalized, _, next:NavigationGuardNext) => {
-    if(to.path !== '/login') {
+    if(!publicPaths.includes(to.path)) {
         if(authUser.value) {
             next()
         } else {
