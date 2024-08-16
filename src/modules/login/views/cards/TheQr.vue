@@ -71,7 +71,7 @@ onMounted(async () => {
                         authUser.value = resp
                         clearInterval(interval.value)
                         await router.push('/routes')
-                        message.success(`Авторизация прошла успешно! Добро пожаловать ${authUser!.value!.FIO}`, 8)
+                        message.success(`Авторизация прошла успешно! Добро пожаловать ${authUser!.value!.FIO}`, 5)
                     }
                 } catch (e) {
                     console.log(e)
@@ -81,7 +81,7 @@ onMounted(async () => {
         isAuthInProgress.value = false
     } catch (e) {
         isAuthInProgress.value = false
-        message.error('Вы не имеете права доступа в приложение. Авторизуйтесь через QR-код!', 8)
+        message.error('Вы не имеете права доступа в приложение. Авторизуйтесь через QR-код!', 5)
         console.error(e)
     }
 })
