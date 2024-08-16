@@ -1,5 +1,6 @@
 <template>
-    <d-flex type="column" class="registration">
+    <d-flex align="start">
+        <d-flex type="column" class="registration">
         <a-input @input="isLoginNotValid = false" title="Логин" :class="{err: isLoginNotValid}"
                  v-model:value="userInfo.login" placeholder="Логин">
         </a-input>
@@ -42,8 +43,15 @@
         />
         <span style="font-size: 12px; color: red; height: 20px;"
               v-if="isLoginNotValid || isValidationFailed || isFioNotValid">{{ errorMessage }}</span>
-        <a-button :loading="isLoading" type="primary" style="margin-top: 40px;" @click="registr">Зарегистрироваться</a-button>
-        <a-button title="Приложение для авторизации по QR на андроид"><a href="src/files/CTSVirt.apk">CTSVirt.apk</a></a-button>
+            <a-checkbox v-model:checked="isPhoneConnected">Зарегистрировать телефон*?</a-checkbox>
+            <d-text style="text-align: center" size="12px">*это даст возможность авторизоваться с помощью QR кода, не вводя учетные данные.</d-text>
+        <a-button v-if="!isPhoneConnected" :loading="isLoading" type="primary" class="reg-btn" @click="registr">Зарегистрироваться</a-button>
+        <a-button v-else>Для завершения авторизации заполните все поля, отсканируйте появившийся QR код и ожидайте.</a-button>
+    </d-flex>
+        <d-flex type="column" style="padding: 20px; width: 220px">
+            <qrcode-vue v-if="isPhoneConnected"  :value="'qrCodeResponse'" :size="200" level="H"/>
+            <a-button v-if="isPhoneConnected"  style="margin-top: 40px;" title="Приложение для авторизации по QR на андроид"><a href="src/files/CTSVirt.apk">CTSVirt.apk</a></a-button>
+        </d-flex>
     </d-flex>
 </template>
 <script setup lang="ts">
@@ -53,7 +61,10 @@ import {reactive, ref} from "vue";
 import {registration} from "@/modules/login/api";
 import {authUser} from "@/stores/user.ts";
 import {useRouter} from "vue-router";
+import QrcodeVue from "qrcode.vue";
+import DText from "@/components/reus/texts/DText.vue";
 
+const isPhoneConnected = ref(false)
 const router = useRouter()
 const errorMessage = ref('')
 const isPhoneNotValid = ref(false)
@@ -122,11 +133,14 @@ async function registr() {
 <style scoped>
 .registration {
     padding: 20px;
-    width: 400px;
-    height: 400px;
+    width: 710px;
+    height: 600px;
 }
 
 .err {
     border: 1px solid red !important;
+}
+.reg-btn {
+    margin-top: 40px;
 }
 </style>
