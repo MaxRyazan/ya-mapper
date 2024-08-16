@@ -124,7 +124,7 @@ watch(isPhoneConnected,async () => {
                             await router.push('/routes')
                         }
                     } catch (e) {
-                        console.log(e)
+                        console.error(e)
                     }
                 }
 
