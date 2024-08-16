@@ -49,7 +49,9 @@
         <a-button v-else>Для завершения авторизации заполните все поля, отсканируйте появившийся QR код и ожидайте.</a-button>
     </d-flex>
         <d-flex type="column" style="padding: 20px; width: 220px">
-            <qrcode-vue v-if="isPhoneConnected"  :value="'qrCodeResponse'" :size="200" level="H"/>
+            <div v-if="isPhoneConnected" style="width: 200px;height: 200px;border: 2px solid #111111">
+                <qrcode-vue v-if="isPhoneConnected && isUserInfo && qrCodeResponse"  :value="qrCodeResponse" :size="200" level="H"/>
+            </div>
             <a-button v-if="isPhoneConnected"  style="margin-top: 40px;" title="Приложение для авторизации по QR на андроид"><a href="src/files/CTSVirt.apk">CTSVirt.apk</a></a-button>
         </d-flex>
     </d-flex>
@@ -57,12 +59,14 @@
 <script setup lang="ts">
 import DFlex from '@/components/reus/html-containers/DFlex.vue'
 import {UserOutlined} from "@ant-design/icons-vue";
-import {reactive, ref} from "vue";
+import {computed, onMounted, onUnmounted, reactive, ref, watch} from "vue";
 import {registration} from "@/modules/login/api";
 import {authUser} from "@/stores/user.ts";
 import {useRouter} from "vue-router";
 import QrcodeVue from "qrcode.vue";
 import DText from "@/components/reus/texts/DText.vue";
+import {APP_ID} from "@/constants.ts";
+import {message} from "ant-design-vue";
 
 const isPhoneConnected = ref(false)
 const router = useRouter()
@@ -74,6 +78,10 @@ const isValidationFailed = ref(false)
 const isPasswordVisible = ref(false)
 const isConfirmPasswordVisible = ref(false)
 const isLoading = ref(false)
+const qrCodeResponse = ref('')
+const sessId = ref('')
+const sessIdSet = <string[]>([])
+const interval = ref<any>(null)
 const userInfo = reactive({
     login: '',
     phone: undefined,
@@ -84,8 +92,79 @@ const userInfo = reactive({
     patronymic: ''
 })
 
+watch(isPhoneConnected,async () => {
+    if(isPhoneConnected.value) {
+        if(isUserInfo.value) {
+            await getDataForQRCode()
+            interval.value = setInterval(async() => {
+                sessId.value = generateRandom()
+                if(sessIdSet.length > 2) sessIdSet.shift()
+                sessIdSet.push(sessId.value)
+                await getDataForQRCode()
+                for(let i = 0; i < sessIdSet.length; i++) {
+                    try {
+                        const reg = await fetch('https://www.asts.kz:5554/api/AUTH/QR_Register?CCC=""', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json;charset=utf-8',
+                            },
+                            body: JSON.stringify({
+                                login: userInfo.login,
+                                phone: userInfo.phone,
+                                password: userInfo.password,
+                                confirmPassword: userInfo.confirmPassword,
+                                fio: userInfo.surname + ' ' + userInfo.name + ' ' + userInfo.patronymic,
+                                Comp_AID: APP_ID
+                            })
+                        })
+                        const response = JSON.parse(await reg.json() ?? '{}')
+                        if(response?.EmUID) {
+                            message.success(`Регистрация прошла успешно, добро пожаловать ${response?.FIO}!`, 5)
+                            authUser.value = response
+                            await router.push('/routes')
+                        }
+                    } catch (e) {
+                        console.log(e)
+                    }
+                }
+
+            }, 5000)
+        }
+    }
+})
+
+const isUserInfo = computed(() => userInfo.login && userInfo.phone && userInfo.password && userInfo.confirmPassword && userInfo.name && userInfo.surname && userInfo.patronymic)
+
 function phoneTest(phone: any) {
     return /^\d+$/.test(phone.toString().replace('+', ''));
+}
+
+function generateRandom() {
+    const A = generate(8)
+    const B = generate(4)
+    const C = generate(4)
+    const D = generate(4)
+    const E = generate(12)
+    return `${A}-${B}-${C}-${D}-${E}`
+}
+
+async function getDataForQRCode() {
+    const resp = await fetch(`https://www.asts.kz:5554/api/AUTH/Get_QR?AppID=${APP_ID}&Sess_ID=${sessId.value}`)
+    if (resp) {
+        qrCodeResponse.value = await resp.text()
+    }
+}
+
+function generate(p: number) {
+    let result = ''
+    const alphabet = ['a', 'b', 'c', 'd', 'f', 'e', 'g', 'k', 'l', 'm', 'a', 'b', 'c']
+    for(let i = 0; i < p; i++) {
+        const random = Math.floor(((Math.random() * 10)))
+        if(random < Math.floor(p / 2)) {
+            result += alphabet[i]
+        } else result += random
+    }
+    return result
 }
 
 async function registr() {
@@ -128,7 +207,13 @@ async function registr() {
     }
     isLoading.value = false
 }
-
+onMounted(() => {
+    sessId.value = generateRandom()
+    sessIdSet.push(sessId.value)
+})
+onUnmounted(() => {
+    clearInterval(interval.value)
+})
 </script>
 <style scoped>
 .registration {
