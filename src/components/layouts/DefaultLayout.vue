@@ -9,9 +9,10 @@
 
 <style scoped>
 .def_layout-wrapper {
-    flex-grow: 1;
-    height: 100%;
-    overflow-y: auto;
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+    padding: 0;
     & > * {
         flex-grow: 1;
     }

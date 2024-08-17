@@ -47,7 +47,9 @@ function logout() {
 .user-info {
     max-width: 200px;
     position: absolute;
-    right: 50px;
+    right: 40px;
+    background-color: white;
+    z-index: 5;
 }
 .logout-icon {
     font-size: 30px;

@@ -1,7 +1,68 @@
-import {createRouter, createWebHistory, NavigationGuardNext, RouteLocationNormalized} from "vue-router";
-import {authUser} from "@/stores/user.ts";
+import {createRouter, createWebHistory} from "vue-router";
 
 
+const dispatchRouter = [
+    {
+        path: '/dispatch/monitor',
+        name: 'DispatchMonitor',
+        component: () => import('@/modules/dispatch/views/tab/TabMonitor.vue'),
+    },
+    {
+        path: '/dispatch/path',
+        name: 'DispatchPath',
+        component: () => import('@/modules/dispatch/views/tab/TabPath.vue'),
+    },
+    {
+        path: '/dispatch/vectors',
+        name: 'DispatchVectors',
+        component: () => import('@/modules/dispatch/views/tab/TabVectors.vue'),
+    },
+    {
+        path: '/dispatch/screw',
+        name: 'DispatchScrew',
+        component: () => import('@/modules/dispatch/views/tab/TabScrew.vue'),
+    },
+    {
+        path: '/dispatch/list',
+        name: 'DispatchList',
+        component: () => import('@/modules/dispatch/views/tab/TabList.vue'),
+    },
+    {
+        path: '/dispatch/weekend',
+        name: 'DispatchWeekend',
+        component: () => import('@/modules/dispatch/views/tab/TabWeekend.vue'),
+    },
+    {
+        path: '/dispatch/nodes',
+        name: 'DispatchNodes',
+        component: () => import('@/modules/dispatch/views/tab/TabNodes.vue'),
+    },
+    {
+        path: '/dispatch/graph-map',
+        name: 'DispatchGraphMap',
+        component: () => import('@/modules/dispatch/views/tab/TabGraphMap.vue'),
+    },
+    {
+        path: '/dispatch/graph-stations',
+        name: 'DispatchGraphStations',
+        component: () => import('@/modules/dispatch/views/tab/TabGraphStations.vue'),
+    },
+    {
+        path: '/dispatch/graph-reis',
+        name: 'DispatchGraphReis',
+        component: () => import('@/modules/dispatch/views/tab/TabGraphReis.vue'),
+    },
+    {
+        path: '/dispatch/future',
+        name: 'DispatchFuture',
+        component: () => import('@/modules/dispatch/views/tab/TabFuture.vue'),
+    },
+    {
+        path: '/dispatch/message',
+        name: 'DispatchMessage',
+        component: () => import('@/modules/dispatch/views/tab/TabMessage.vue'),
+    },
+]
 
 
 const routes = [
@@ -51,6 +112,7 @@ const routes = [
                 path: '/dispatch',
                 name: 'dispatch',
                 component: () => import('@/modules/dispatch/Index.vue'),
+                children: dispatchRouter
             },
             {
                 path: '/drivers',
@@ -122,15 +184,15 @@ const router = createRouter({
 
 export default router
 
-const publicPaths = ['/login', '/registration']
-
-router.beforeEach(async (to: RouteLocationNormalized, _, next:NavigationGuardNext) => {
-    if(!publicPaths.includes(to.path)) {
-        if(authUser.value) {
-            next()
-        } else {
-            if(to.meta.public) next()
-            else next('/login')
-        }
-    } else next()
-})
+// const publicPaths = ['/login', '/registration']
+//
+// router.beforeEach(async (to: RouteLocationNormalized, _, next:NavigationGuardNext) => {
+//     if(!publicPaths.includes(to.path)) {
+//         if(authUser.value) {
+//             next()
+//         } else {
+//             if(to.meta.public) next()
+//             else next('/login')
+//         }
+//     } else next()
+// })

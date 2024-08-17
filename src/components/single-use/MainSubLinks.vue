@@ -1,3 +1,18 @@
+<template>
+    <d-flex style="font-size: 22px; flex-wrap: nowrap">
+        <component :class="{'current-route': route.path.includes(link.to)}"
+                   :title="link.title"
+                   :is="link.icon"
+                   class="da-icon"/>
+        <d-flex>
+            <span @click="isSubExpanded = !isSubExpanded"
+                  class="link-title"
+                  v-if="props.isMenuExpanded">{{link.title }}</span>
+            <caret-up-outlined v-if="isSubExpanded && link.subNavs?.length" @click="isSubExpanded = false" />
+            <caret-down-outlined v-if="!isSubExpanded && link.subNavs?.length" @click="isSubExpanded = true" />
+        </d-flex>
+    </d-flex>
+</template>
 <script setup lang="ts">
 import DFlex from "@/components/reus/html-containers/DFlex.vue";
 import {useRoute} from "vue-router";
@@ -23,49 +38,12 @@ watch(() => route.query, () => {
 })
 
 </script>
-
-<template>
-    <d-flex style="font-size: 20px">
-        <component :class="{'current-route': route.path.includes(link.to)}"
-                   :title="link.title"
-                   :is="link.icon"
-                   class="da-icon"/>
-        <d-flex>
-            <span @click="isSubExpanded = !isSubExpanded"
-                  class="link-title"
-                  v-if="props.isMenuExpanded">{{link.title }}</span>
-            <caret-up-outlined v-if="isSubExpanded && link.subNavs?.length" @click="isSubExpanded = false" />
-            <caret-down-outlined v-if="!isSubExpanded && link.subNavs?.length" @click="isSubExpanded = true" />
-        </d-flex>
-    </d-flex>
-    <d-flex class="sub-links-dropdown" align="start" type="column" v-if="props.link.subNavs && isSubExpanded">
-        <router-link class="sub-link"
-                     :class="{'sub-active': route.query.tab === sub.tabQuery}"
-                     v-for="sub in props.link.subNavs"
-                     :to="{path: link.to, query: {tab: sub.tabQuery}}"
-                     :key="sub.tabQuery">-
-            {{ sub.title }}
-        </router-link>
-    </d-flex>
-</template>
-
 <style scoped>
-.sub-link {
-    width: 100%;
-    color: rgba(255, 255, 255, .5);
-    text-decoration: none;
-    &:hover{
-        color: white;
-    }
-}
-.sub-active {
-    color: white !important;
-}
 .link-title {
     white-space: nowrap;
 }
-.sub-links-dropdown {
-    margin-left: 10px;
-    transition: .4s;
+.da-icon {
+    width: 26px;
+    height: 26px;
 }
 </style>

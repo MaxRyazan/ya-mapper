@@ -21,21 +21,6 @@ import MainSubLinks from "@/components/single-use/MainSubLinks.vue";
 import {authUser} from "@/stores/user.ts";
 
 const route = useRoute()
-const dispatchSubNavs = reactive([
-    {title: 'Мониторинг', key: 1, tabQuery: 'monitor'},
-    {title: 'Путь', key: 2, tabQuery: 'path'},
-    {title: 'Отклонения', key: 3, tabQuery: 'vectors'},
-    {title: 'Обороты', key: 4, tabQuery: 'screw'},
-    {title: 'Расписание', key: 5, tabQuery: 'list'},
-    {title: 'Выходные дни', key: 6, tabQuery: 'weekend'},
-    {title: 'Прохождение узлов', key: 7, tabQuery: 'nodes'},
-    {title: 'График движения', key: 8, tabQuery: 'graph-map'},
-    {title: 'График, остановка', key: 9, tabQuery: 'graph-stations'},
-    {title: 'График, рейс', key: 10, tabQuery: 'graph-reis'},
-    {title: 'Прогноз по остановке', key: 11, tabQuery: 'future'},
-    {title: 'Сообщение на табло', key: 12, tabQuery: 'message'},
-])
-
 const navLinks = reactive([
     {title: 'Яндекс карты', to: '/map', icon: RightSquareFilled},
     {title: 'Маршруты', to: '/routes', icon: FundOutlined},
@@ -44,7 +29,7 @@ const navLinks = reactive([
     {title: 'Водители', to: '/drivers', icon: MehOutlined},
     {title: 'Транспорт/работа', to: '/auto-work', icon: BugOutlined},
     {title: 'Статистика/отчеты', to: '/statistics', icon: ProfileOutlined},
-    {title: 'Диспетчеризация', to: '/dispatch', icon: PushpinOutlined, subNavs: dispatchSubNavs},
+    {title: 'Диспетчеризация', to: '/dispatch', icon: PushpinOutlined},
     {title: 'Оценки', to: '/rating', icon: StarOutlined},
     {title: 'Журнал', to: '/journal', icon: FileTextOutlined},
     {title: 'Изменить пароль', to: '/change-password', icon: UserOutlined},
@@ -57,7 +42,8 @@ const isMenuExpanded = ref(true)
 </script>
 
 <template>
-    <d-flex v-if="authUser?.REG_ID || authUser?.FIO"
+<!--    <d-flex v-if="authUser?.REG_ID || authUser?.FIO"-->
+    <d-flex
             type="column" gap="0"
             class="nav-wrapper"
             justify="space-between" :class="{mini: !isMenuExpanded}">
@@ -68,7 +54,7 @@ const isMenuExpanded = ref(true)
                     style="width: 100%;"
                     v-for="link in navLinks">
                 <router-link :to="{path: link.to}"
-                             v-if="link.rolesRequired ? link.rolesRequired.includes(authUser.Role) : true"
+                             v-if="link.rolesRequired ? link.rolesRequired.includes(<any>authUser?.Role ?? '') : true"
                              :class="{'current-route': route.path.includes(link.to)}"
                              :key="link.title"
                              class="nav__link">
@@ -91,8 +77,6 @@ const isMenuExpanded = ref(true)
 
 <style scoped>
 .nav-wrapper {
-    scrollbar-gutter: stable;
-    scrollbar-width: thin;
     max-height: 100vh;
     padding-top: 40px;
     width: 320px;
