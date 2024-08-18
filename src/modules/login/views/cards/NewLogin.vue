@@ -42,7 +42,7 @@ async function login() {
     isLoading.value = false
     if(res && res.STR_LOGIN) {
         authUser.value = res
-        await router.push('/routes')
+        await router.push('/routes/all')
     }
 }
 </script>
