@@ -1,26 +1,32 @@
 <template>
-    <d-flex class="route__wrapper" type="column">
-        <a-spin size="large" class="route__spinner" v-if="isLoading"/>
-        <a-table size="middle"
-                 :columns="columns"
-                 :pagination="false"
-                 :data-source="allRoutes">
-            <template #emptyText></template>
-            <template #bodyCell="{column, record}">
-                <template v-if="column.key === 'operations'">
-                    <div style="display: flex; gap: 10px">
-                        <router-link :to="`/routes/${record?.routeNumber!}`">схема</router-link>
-                        <router-link :to="`/routes/stations/${record?.routeNumber!}`">остановки</router-link>
-                    </div>
-                </template>
-            </template>
-        </a-table>
-    </d-flex>
+    <page-sample :page-nav="[]">
+        <template #content>
+            <d-flex class="route__wrapper" type="column">
+                <d-spin :is-loading="isLoading"/>
+                <a-table size="middle"
+                         :columns="columns"
+                         :pagination="false"
+                         :data-source="allRoutes">
+                    <template #emptyText></template>
+                    <template #bodyCell="{column, record}">
+                        <template v-if="column.key === 'operations'">
+                            <div style="display: flex; gap: 10px">
+                                <router-link :to="`/routes/${record?.routeNumber!}`">схема</router-link>
+                                <router-link :to="`/routes/stations/${record?.routeNumber!}`">остановки</router-link>
+                            </div>
+                        </template>
+                    </template>
+                </a-table>
+            </d-flex>
+        </template>
+    </page-sample>
 </template>
 <script setup lang="ts">
 import {ref, watch} from "vue";
 import {getAllRoutes} from "@/modules/routes/api/Index.ts";
 import {allRoutes, isAllRoutesLoading} from "@/modules/routes/stores/allRoutes.ts";
+import PageSample from "@/components/samples/PageSample.vue";
+import DSpin from "@/components/reus/DSpin.vue";
 
 const isLoading = ref(false)
 
@@ -136,11 +142,5 @@ watch(allRoutes, async () => {
 <style scoped>
 .route__wrapper {
     position: relative;
-}
-.route__spinner {
-    position: absolute;
-    top: 50%;
-    right: 50%;
-    transform: translate(-50%, -50%);
 }
 </style>

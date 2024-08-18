@@ -22,6 +22,7 @@ declare module 'vue' {
     DaTable: typeof import('./src/components/reus/DaTable.vue')['default']
     DefaultLayout: typeof import('./src/components/layouts/DefaultLayout.vue')['default']
     DFlex: typeof import('./src/components/reus/html-containers/DFlex.vue')['default']
+    DSpin: typeof import('./src/components/reus/DSpin.vue')['default']
     DText: typeof import('./src/components/reus/texts/DText.vue')['default']
     MainSubLinks: typeof import('./src/components/single-use/MainSubLinks.vue')['default']
     PageSample: typeof import('./src/components/samples/PageSample.vue')['default']
