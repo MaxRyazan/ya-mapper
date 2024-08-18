@@ -3,6 +3,7 @@
         <the-header>
             <a-tabs v-model:activeKey="activeKey"
                     :tab-position="mode"
+                    type="card"
                     @tabClick="clickTab"
                     @tabScroll="tabScroll">
                 <a-tab-pane v-for="(tab, idx) in props.pageNav" :key="idx" :tab="tab.title"></a-tab-pane>
@@ -59,5 +60,8 @@ onMounted(() => {
 .page-sample {
     position: relative;
     width: 100%;
+}
+:deep(.ant-tabs-tab) {
+    padding: 8px !important;
 }
 </style>

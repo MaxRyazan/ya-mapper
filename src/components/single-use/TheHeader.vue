@@ -1,6 +1,6 @@
 <template>
     <d-flex class="header">
-        <div style="width: calc(100% - 240px); padding-left: 2%; overflow-x: auto" id="header-id">
+        <div style="width: calc(100% - 220px); padding-left: 2%; overflow-x: auto" id="header-id">
             <slot />
         </div>
         <user-info />
@@ -32,5 +32,6 @@ onMounted(() => {
     background-color: white;
     height: var(--header-height);
     max-width: 100%;
+    width: 100%;
 }
 </style>

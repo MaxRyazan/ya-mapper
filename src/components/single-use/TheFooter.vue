@@ -13,7 +13,7 @@ import DText from "@/components/reus/texts/DText.vue";
 
 <style scoped>
 .footer {
-    padding: 0 40px;
+    padding: 0 2%;
     width: 100%;
     height: 60px !important;
     background-color: white;
