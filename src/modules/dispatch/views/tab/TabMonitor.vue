@@ -1,6 +1,7 @@
 <template>
     <div ref="tab" class="tab-content">
         <a-table size="small"
+                 style="height: 100%;"
                  :pagination="{defaultPageSize: 14, showSizeChanger: true, pageSizeOptions: ['10', '14', '20', '50']}"
                  :columns="dispatchColumn"
                  :data-source="dataSource">

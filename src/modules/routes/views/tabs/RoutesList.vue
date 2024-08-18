@@ -2,8 +2,8 @@
     <d-flex class="route__wrapper" type="column">
         <d-spin :is-loading="isLoading"/>
         <a-table size="middle"
+                 :pagination="{defaultPageSize: 14, showSizeChanger: true, pageSizeOptions: ['10', '14', '20', '50']}"
                  :columns="columns"
-                 :pagination="false"
                  :data-source="allRoutes">
             <template #emptyText></template>
             <template #bodyCell="{column, record}">
