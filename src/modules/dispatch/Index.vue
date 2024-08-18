@@ -8,8 +8,10 @@
 <script setup lang="ts">
 import {reactive} from "vue";
 import PageSample from "@/components/samples/PageSample.vue";
+import {GlobalModuleInnerNav} from "@/global-types.ts";
 
-const dispatchNav = reactive([
+const dispatchNav = reactive<GlobalModuleInnerNav[]>([
+    {title: 'Общее', path: '/dispatch'},
     {title: 'Мониторинг', path: '/dispatch/monitor'},
     {title: 'Путь', path: '/dispatch/path'},
     {title: 'Отклонения', path: '/dispatch/vectors'},
@@ -21,8 +23,6 @@ const dispatchNav = reactive([
     {title: 'График, остановка', path: '/dispatch/graph-stations'},
     {title: 'График, рейс', path: '/dispatch/graph-reis'},
     {title: 'Прогноз по остановке', path: '/dispatch/future'},
-    {title: 'Сообщение на табло', path: '/dispatch/message'},
-    {title: 'Сообщение на табло', path: '/dispatch/message'},
     {title: 'Сообщение на табло', path: '/dispatch/message'},
 ])
 </script>

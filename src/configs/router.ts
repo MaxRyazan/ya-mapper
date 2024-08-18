@@ -112,7 +112,7 @@ const routes = [
                 path: '/dispatch',
                 name: 'dispatch',
                 component: () => import('@/modules/dispatch/Index.vue'),
-                children: dispatchRouter
+                children: dispatchRouter,
             },
             {
                 path: '/drivers',

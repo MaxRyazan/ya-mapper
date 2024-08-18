@@ -17,17 +17,20 @@
 <script setup lang="ts">
 import DFlex from '@/components/reus/html-containers/DFlex.vue'
 import TheHeader from "@/components/single-use/TheHeader.vue";
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 import {TabsProps} from "ant-design-vue";
-import {useRouter} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
 import TheFooter from "@/components/single-use/TheFooter.vue";
+import {GlobalModuleInnerNav} from "@/global-types.ts";
 
 const props = defineProps<{
-    pageNav: any
+    pageNav: GlobalModuleInnerNav[]
 }>()
+const route = useRoute()
 const mode = ref<TabsProps['tabPosition']>('top');
 const activeKey = ref(0);
 const router = useRouter()
+
 
 function clickTab(tabNumber: number) {
     const tab = props.pageNav[tabNumber]
@@ -36,6 +39,9 @@ function clickTab(tabNumber: number) {
 
 function tabScroll(){}
 
+onMounted(() => {
+    activeKey.value = props.pageNav.findIndex(prop => prop.path === route.path)
+})
 </script>
 
 <style scoped>
