@@ -12,8 +12,7 @@ import {
     PushpinOutlined,
     StarOutlined,
     FileTextOutlined,
-    UserOutlined,
-    StopOutlined, LockOutlined
+    LockOutlined
 } from "@ant-design/icons-vue";
 import DFlex from "@/components/reus/html-containers/DFlex.vue";
 import {useRoute} from "vue-router";
@@ -32,8 +31,6 @@ const navLinks = reactive([
     {title: 'Диспетчеризация', to: '/dispatch', icon: PushpinOutlined},
     {title: 'Оценки', to: '/rating', icon: StarOutlined},
     {title: 'Журнал', to: '/journal', icon: FileTextOutlined},
-    {title: 'Изменить пароль', to: '/change-password', icon: UserOutlined},
-    {title: 'Выход', to: '/exit', icon: StopOutlined},
     {title: 'Администраторам', to: '/admin', icon: LockOutlined, rolesRequired: [7]},
 ])
 
