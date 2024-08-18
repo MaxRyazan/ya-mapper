@@ -1,4 +1,5 @@
-import {createRouter, createWebHistory} from "vue-router";
+import {createRouter, createWebHistory, NavigationGuardNext, RouteLocationNormalized} from "vue-router";
+import {authUser} from "@/stores/user.ts";
 
 
 const routesRouter = [
@@ -188,15 +189,15 @@ const router = createRouter({
 
 export default router
 
-// const publicPaths = ['/login', '/registration']
-//
-// router.beforeEach(async (to: RouteLocationNormalized, _, next:NavigationGuardNext) => {
-//     if(!publicPaths.includes(to.path)) {
-//         if(authUser.value) {
-//             next()
-//         } else {
-//             if(to.meta.public) next()
-//             else next('/login')
-//         }
-//     } else next()
-// })
+const publicPaths = ['/login', '/registration']
+
+router.beforeEach(async (to: RouteLocationNormalized, _, next:NavigationGuardNext) => {
+    if(!publicPaths.includes(to.path)) {
+        if(authUser.value) {
+            next()
+        } else {
+            if(to.meta.public) next()
+            else next('/login')
+        }
+    } else next()
+})

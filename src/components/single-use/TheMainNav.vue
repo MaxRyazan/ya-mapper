@@ -39,8 +39,7 @@ const isMenuExpanded = ref(true)
 </script>
 
 <template>
-<!--    <d-flex v-if="authUser?.REG_ID || authUser?.FIO"-->
-    <d-flex
+    <d-flex v-if="authUser?.REG_ID || authUser?.FIO"
             type="column" gap="0"
             class="nav-wrapper"
             justify="space-between" :class="{mini: !isMenuExpanded}">

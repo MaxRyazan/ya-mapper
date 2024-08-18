@@ -1,6 +1,8 @@
 <template>
     <d-flex type="column" align="start">
-        <a-table size="small"
+        <d-spin :is-loading="isLoading" />
+        <a-table v-if="!isLoading"
+                 size="small"
                  :columns="columns"
                  :pagination="{defaultPageSize: 14, showSizeChanger: true, pageSizeOptions: ['10', '14', '20', '50']}"
                  :data-source="dataSource">
@@ -13,7 +15,9 @@ import {onMounted, ref} from "vue";
 import {GetLinesByRouteResponse} from "@/modules/map/types/api-models.ts";
 import {getLinesByRegion} from "@/modules/map/api/index.ts";
 import {StationOfRoute} from "@/modules/routes/types/Index.ts";
+import DSpin from "@/components/reus/DSpin.vue";
 
+const isLoading = ref(false)
 const props = defineProps<{
     currentRoute: number
 }>()
@@ -71,8 +75,10 @@ const columns = [
 
 
 onMounted(async () => {
+    isLoading.value = true
     const ascResponse: GetLinesByRouteResponse[] | undefined = await getLinesByRegion(props.currentRoute, 0)
     const descResponse: GetLinesByRouteResponse[] | undefined = await getLinesByRegion(props.currentRoute, 1)
+    isLoading.value = false
 
     if(ascResponse){
         ascBusStations.value = ascResponse.map((r: GetLinesByRouteResponse) => {
