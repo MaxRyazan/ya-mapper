@@ -48,6 +48,8 @@ function logout() {
     max-width: 200px;
     position: absolute;
     right: 2%;
+    top: 50%;
+    transform: translateY(-50%);
     background-color: white;
     z-index: 5;
 }

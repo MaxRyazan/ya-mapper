@@ -1,5 +1,5 @@
 <template>
-    <d-flex class="header">
+    <d-flex class="header" align="end">
         <div style="width: calc(100% - 220px); padding-left: 2%; overflow-x: auto" id="header-id">
             <slot />
         </div>
@@ -34,4 +34,5 @@ onMounted(() => {
     max-width: 100%;
     width: 100%;
 }
+
 </style>
