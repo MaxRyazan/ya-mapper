@@ -16,7 +16,9 @@
                              :station="station"/>
             </d-flex>
         </d-flex>
-        <a-spin style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%)" v-else size="large"/>
+        <a-spin style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%)" v-else size="large">
+            <template #tip>Идёт загрузка...</template>
+        </a-spin>
     </div>
 </template>
 <script setup lang="ts">

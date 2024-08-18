@@ -5,7 +5,7 @@
             >{{showBusIcon?.GRN}}</d-text>
         </div>
         <div class="station__point"></div>
-        <d-text class="station__name">{{props.station?.NAME_RU}}</d-text>
+        <d-text class="station__name" :title="props.station?.NAME_RU">{{props.station?.NAME_RU}}</d-text>
     </d-flex>
 </template>
 <script setup lang="ts">
