@@ -1,6 +1,6 @@
 <template>
     <d-flex class="header" align="end">
-        <div style="width: calc(100% - 220px); padding-left: 2%; overflow-x: auto" id="header-id">
+        <div style="width: calc(100% - 220px); padding-left: 2%; overflow-y: hidden" id="header-id">
             <slot />
         </div>
         <user-info />
