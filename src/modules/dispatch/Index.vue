@@ -25,6 +25,7 @@ const dispatchNav = reactive<GlobalModuleInnerNav[]>([
     {title: 'Прогноз по остановке', path: '/dispatch/future'},
     {title: 'Сообщение на табло', path: '/dispatch/message'},
 ])
+
 </script>
 
 <style scoped>

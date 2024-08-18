@@ -1,41 +1,46 @@
 <template>
-    <d-flex type="column" gap="200px" style="height: calc(100vh - 430px); margin-top: 40px; justify-content: space-between">
-        <d-flex justify="space-between" align="start" gap="30px" style="width: 100%; padding: 0 40px 0 20px; position: relative">
-            <div class="line__schema"></div>
-            <linear-item :show-bus-icon="showBus(station)"
-                         v-for="station in ascBusStations"
-                         :key="station.ID"
-                         :station="station"/>
+    <div style="width: 100%;height: 100%; position: relative">
+        <d-flex v-if="!isLoading" type="column" gap="200px" justify="space-between" style="overflow: hidden; height: 100%; padding-bottom: 250px;">
+            <d-flex justify="space-between" align="start" gap="30px" style="width: 100%; padding: 0 40px 0 20px; position: relative">
+                <div class="line__schema"></div>
+                <linear-item :show-bus-icon="showBus(station)"
+                             v-for="station in ascBusStations"
+                             :key="station.ID"
+                             :station="station"/>
+            </d-flex>
+            <d-flex justify="space-between" align="start" gap="30px" style="width: 100%; padding: 0 40px 0 20px; position: relative">
+                <div class="line__schema"></div>
+                <linear-item :show-bus-icon="showBus(station)"
+                             v-for="station in descBusStations"
+                             :key="station.ID"
+                             :station="station"/>
+            </d-flex>
         </d-flex>
-        <d-flex justify="space-between" align="start" gap="30px" style="width: 100%; padding: 0 40px 0 20px; position: relative">
-            <div class="line__schema"></div>
-            <linear-item :show-bus-icon="showBus(station)"
-                         v-for="station in descBusStations"
-                         :key="station.ID"
-                         :station="station"/>
-        </d-flex>
-    </d-flex>
+        <a-spin style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%)" v-else size="large"/>
+    </div>
 </template>
 <script setup lang="ts">
 import {onMounted, onUnmounted, ref} from "vue";
-import {useRoute} from "vue-router";
 import {GetLinesByRouteResponse} from "@/modules/map/types/api-models.ts";
 import {getLinesByRegion} from "@/modules/map/api";
 import LinearItem from "@/modules/dispatch/views/LinearItem.vue";
 import DFlex from "@/components/reus/html-containers/DFlex.vue";
 import {getAllBusesOfRouteInContextOfStations} from "@/modules/dispatch/api";
-const route = useRoute()
 
-const currentRoute = ref()
+const props = defineProps<{
+    currentRoute: number
+}>()
+const isLoading = ref(false)
 let ascBusStations = ref<any>([])
 let descBusStations = ref<any>([])
 const basesInContextOfStations = ref<any>([])
 const interval = ref<any>(null)
 
 onMounted(async () => {
-    currentRoute.value = route.query.route
-    const ascResponse: GetLinesByRouteResponse[] | undefined = await getLinesByRegion(+currentRoute.value, 0)
-    const descResponse: GetLinesByRouteResponse[] | undefined = await getLinesByRegion(+currentRoute.value, 1)
+    isLoading.value = true
+    const ascResponse: GetLinesByRouteResponse[] | undefined = await getLinesByRegion(props.currentRoute, 0)
+    const descResponse: GetLinesByRouteResponse[] | undefined = await getLinesByRegion(props.currentRoute, 1)
+    isLoading.value = false
 
     if(ascResponse){
         ascBusStations.value = ascResponse.map((r: GetLinesByRouteResponse) => {
@@ -74,8 +79,8 @@ onUnmounted(() => {
 })
 
 async function setBusesOnLinearView(){
-    const resp = await getAllBusesOfRouteInContextOfStations({route: currentRoute.value, direction: 0})
-    const resp2 = await getAllBusesOfRouteInContextOfStations({route: currentRoute.value, direction: 1})
+    const resp = await getAllBusesOfRouteInContextOfStations({route: props.currentRoute, direction: 0})
+    const resp2 = await getAllBusesOfRouteInContextOfStations({route: props.currentRoute, direction: 1})
     basesInContextOfStations.value = [...resp.Imei, ...resp2.Imei]
     console.log(basesInContextOfStations.value)
 }

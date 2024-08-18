@@ -1,41 +1,81 @@
 <template>
-    <div class="tab-content">
+    <div ref="tab" class="tab-content">
         <a-table size="small"
                  :pagination="{defaultPageSize: 14, showSizeChanger: true, pageSizeOptions: ['10', '14', '20', '50']}"
                  :columns="dispatchColumn"
                  :data-source="dataSource">
             <template #bodyCell="{column, record}">
                 <d-flex v-if="column.key === 'actions'" justify="center">
-                    <router-link :to="{query: {tab: 'monitor', route: record.route}, hash: '#map'}">карта</router-link>
-                    <router-link :to="{query: {tab: 'monitor', route: record.route}, hash: '#linear'}">линейный</router-link>
+                    <d-text @click="showMap(record)" cursor="pointer" class="dispatch-table__href" color="#1677FF">
+                        карта
+                    </d-text>
+                    <d-text @click="showSchema(record)" cursor="pointer" class="dispatch-table__href" color="#1677FF">
+                        линейный
+                    </d-text>
                 </d-flex>
             </template>
         </a-table>
-        <component :is="currentHashComponent" />
+        <a-drawer :get-container="false"
+                  destroyOnClose
+                  style="border-radius: 8px"
+                  width="100%"
+                  :style="{ position: 'absolute' }"
+                  v-model:open="drawer.isOpen">
+            <template #closeIcon>
+                <right-outlined/>
+            </template>
+            <template #title>
+                <d-text weight="700" color="rgba(0,0,0,.45)">Маршрут № {{ selectedItem?.route }}</d-text>
+            </template>
+            <component :currentRoute="selectedItem?.route" :is="currentComponent"/>
+        </a-drawer>
     </div>
 </template>
 <script setup lang="ts">
-import {useRoute} from "vue-router";
 import {dispatchColumn} from "@/modules/dispatch/constants";
-import {shallowRef, watch} from "vue";
-import type {Component} from "vue";
+import DText from "@/components/reus/texts/DText.vue";
+import {reactive, ref, shallowRef} from "vue";
+import {RightOutlined} from "@ant-design/icons-vue";
+import type {Component} from 'vue'
 import HashMap from "@/modules/dispatch/views/hash/dispatch/HashMap.vue";
 import HashLinear from "@/modules/dispatch/views/hash/dispatch/HashLinear.vue";
 
-const route = useRoute()
-const currentHashComponent = shallowRef<Component | null>(null)
+interface SelectedItemInterface {
+    number: number
+    points: string
+    route: number
+}
 
-watch(() => route.hash, () => {
-    currentHashComponent.value = null
-    if(route.hash) {
-        currentHashComponent.value = componentMap.get(route.hash) as any
-    }
+const selectedItem = ref<SelectedItemInterface|null>(null)
+const tab = shallowRef()
+const drawer = reactive({
+    isOpen: false
 })
+const currentComponent = shallowRef<Component | null>(null)
 
-const componentMap = new Map([
-    ['#map', HashMap],
-    ['#linear', HashLinear],
-])
+function showMap(record: any) {
+    selectedItem.value = record
+    drawer.isOpen = true
+    currentComponent.value = HashMap
+}
+
+function showSchema(record: any) {
+    selectedItem.value = record
+    drawer.isOpen = true
+    currentComponent.value = HashLinear
+}
+
+// watch(() => route.hash, () => {
+//     currentHashComponent.value = null
+//     if(route.hash) {
+//         currentHashComponent.value = componentMap.get(route.hash) as any
+//     }
+// })
+//
+// const componentMap = new Map([
+//     ['#map', HashMap],
+//     ['#linear', HashLinear],
+// ])
 
 const dataSource = [
     {
@@ -88,7 +128,23 @@ const dataSource = [
     width: 100%;
     padding: 4px
 }
+
+.dispatch-table__href {
+    &:hover {
+        color: hsl(215 100 74) !important;
+    }
+}
+
 .tab-content {
     min-width: 100%;
+    position: relative;
+}
+
+:deep(.ant-drawer-mask) {
+    border-radius: 8px !important;
+}
+
+:deep(.ant-drawer-header) {
+    border-radius: 8px 0 0 0 !important;
 }
 </style>
