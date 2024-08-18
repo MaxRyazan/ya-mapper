@@ -13,3 +13,10 @@
 .ant-table-thead {
     height: 50px;
 }
+.ant-drawer-mask {
+    border-radius: 8px !important;
+}
+
+.ant-drawer-header {
+    border-radius: 8px 0 0 0 !important;
+}
