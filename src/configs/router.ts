@@ -1,7 +1,20 @@
 import {createRouter, createWebHistory} from "vue-router";
 
 
+const routesRouter = [
+    {
+        path: '/routes/all',
+        name: 'routesAll',
+        component: () => import('@/modules/routes/views/tabs/RoutesList.vue'),
+    },
+]
+
 const dispatchRouter = [
+    {
+        path: '/dispatch/common',
+        name: 'DispatchCommon',
+        component: () => import('@/modules/dispatch/views/tab/TabCommon.vue'),
+    },
     {
         path: '/dispatch/monitor',
         name: 'DispatchMonitor',
@@ -136,18 +149,9 @@ const routes = [
             },
             {
                 path: '/routes',
-                name: 'routeIdPath',
-                component: () => import('@/modules/routes/Index.vue'),
-            },
-            {
-                path: '/routes/stations/:id',
-                name: 'stations',
-                component: () => import('@/modules/routes/views/RouteIdStations.vue'),
-            },
-            {
-                path: '/routes/:id',
                 name: 'routes',
-                component: () => import('@/modules/routes/views/RouteIdPath.vue'),
+                component: () => import('@/modules/routes/Index.vue'),
+                children: routesRouter
             },
             {
                 path: '/statistics',

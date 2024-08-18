@@ -1,8 +1,6 @@
 <template>
-    <d-flex style="margin-top: 10px; padding: 10px" type="column" align="start">
-        <da-breadcrumbs :current-link-name="route.params.id.toString()" link-to="/routes" prev-location-name="все маршруты/" />
+    <d-flex type="column" align="start">
         <a-table size="small"
-                 style="margin-top: 10px;"
                  :columns="columns"
                  :pagination="{defaultPageSize: 14, showSizeChanger: true, pageSizeOptions: ['10', '14', '20', '50']}"
                  :data-source="dataSource">
@@ -14,15 +12,16 @@
 import {onMounted, ref} from "vue";
 import {GetLinesByRouteResponse} from "@/modules/map/types/api-models.ts";
 import {getLinesByRegion} from "@/modules/map/api/index.ts";
-import {useRoute} from "vue-router";
 import {StationOfRoute} from "@/modules/routes/types/Index.ts";
-import DaBreadcrumbs from "@/components/reus/DaBreadcrumbs.vue";
 
-const route = useRoute()
+const props = defineProps<{
+    currentRoute: number
+}>()
+
 const ascBusStations = ref<StationOfRoute[]>([])
 const descBusStations = ref<StationOfRoute[]>([])
-
 const dataSource = ref<StationOfRoute[]>([])
+
 const columns = [
     {
         title: '№',
@@ -72,8 +71,8 @@ const columns = [
 
 
 onMounted(async () => {
-    const ascResponse: GetLinesByRouteResponse[] | undefined = await getLinesByRegion(+route.params.id, 0)
-    const descResponse: GetLinesByRouteResponse[] | undefined = await getLinesByRegion(+route.params.id, 1)
+    const ascResponse: GetLinesByRouteResponse[] | undefined = await getLinesByRegion(props.currentRoute, 0)
+    const descResponse: GetLinesByRouteResponse[] | undefined = await getLinesByRegion(props.currentRoute, 1)
 
     if(ascResponse){
         ascBusStations.value = ascResponse.map((r: GetLinesByRouteResponse) => {
@@ -105,8 +104,3 @@ onMounted(async () => {
 
 })
 </script>
-
-
-<style scoped>
-
-</style>

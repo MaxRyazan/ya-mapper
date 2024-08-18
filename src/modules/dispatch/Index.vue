@@ -11,7 +11,7 @@ import PageSample from "@/components/samples/PageSample.vue";
 import {GlobalModuleInnerNav} from "@/global-types.ts";
 
 const dispatchNav = reactive<GlobalModuleInnerNav[]>([
-    {title: 'Общее', path: '/dispatch'},
+    {title: 'Общее', path: '/dispatch/common'},
     {title: 'Мониторинг', path: '/dispatch/monitor'},
     {title: 'Путь', path: '/dispatch/path'},
     {title: 'Отклонения', path: '/dispatch/vectors'},
