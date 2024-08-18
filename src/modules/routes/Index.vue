@@ -11,6 +11,6 @@ import {reactive} from "vue";
 import {GlobalModuleInnerNav} from "@/global-types.ts";
 
 const subNav = reactive<GlobalModuleInnerNav[]>([
-    {title: 'Общее', path: '/routes/all'},
+    {title: 'Общее', path: '/routes/common'},
 ])
 </script>

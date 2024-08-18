@@ -1,12 +1,19 @@
-import {createRouter, createWebHistory, NavigationGuardNext, RouteLocationNormalized} from "vue-router";
-import {authUser} from "@/stores/user.ts";
+import {createRouter, createWebHistory,} from "vue-router";
 
 
 const routesRouter = [
     {
-        path: '/routes/all',
+        path: '/routes/common',
         name: 'routesAll',
         component: () => import('@/modules/routes/views/tabs/RoutesList.vue'),
+    },
+]
+
+const transportRouter = [
+    {
+        path: '/transport/common',
+        name: 'transportCommon',
+        component: () => import('@/modules/transport/views/tabs/TransportCommon.vue'),
     },
 ]
 
@@ -126,6 +133,7 @@ const routes = [
                 path: '/dispatch',
                 name: 'dispatch',
                 component: () => import('@/modules/dispatch/Index.vue'),
+                redirect: '/dispatch/common',
                 children: dispatchRouter,
             },
             {
@@ -152,6 +160,7 @@ const routes = [
                 path: '/routes',
                 name: 'routes',
                 component: () => import('@/modules/routes/Index.vue'),
+                redirect: '/routes/common',
                 children: routesRouter
             },
             {
@@ -163,6 +172,8 @@ const routes = [
                 path: '/transport',
                 name: 'transport',
                 component: () => import('@/modules/transport/Index.vue'),
+                redirect: '/transport/common',
+                children: transportRouter
             },
             {
                 path: '/auto-work',
@@ -189,15 +200,15 @@ const router = createRouter({
 
 export default router
 
-const publicPaths = ['/login', '/registration']
-
-router.beforeEach(async (to: RouteLocationNormalized, _, next:NavigationGuardNext) => {
-    if(!publicPaths.includes(to.path)) {
-        if(authUser.value) {
-            next()
-        } else {
-            if(to.meta.public) next()
-            else next('/login')
-        }
-    } else next()
-})
+// const publicPaths = ['/login', '/registration']
+//
+// router.beforeEach(async (to: RouteLocationNormalized, _, next:NavigationGuardNext) => {
+//     if(!publicPaths.includes(to.path)) {
+//         if(authUser.value) {
+//             next()
+//         } else {
+//             if(to.meta.public) next()
+//             else next('/login')
+//         }
+//     } else next()
+// })

@@ -22,13 +22,13 @@ import {authUser} from "@/stores/user.ts";
 const route = useRoute()
 const navLinks = reactive([
     {title: 'Яндекс карты', to: '/map', icon: RightSquareFilled},
-    {title: 'Маршруты', to: '/routes/all', icon: FundOutlined},
+    {title: 'Маршруты', to: '/routes', icon: FundOutlined},
     {title: 'Транспорт', to: '/transport', icon: CarOutlined},
     {title: 'Контролёры', to: '/conductors', icon: TeamOutlined},
     {title: 'Водители', to: '/drivers', icon: MehOutlined},
     {title: 'Транспорт/работа', to: '/auto-work', icon: BugOutlined},
     {title: 'Статистика/отчеты', to: '/statistics', icon: ProfileOutlined},
-    {title: 'Диспетчеризация', to: '/dispatch/common', icon: PushpinOutlined},
+    {title: 'Диспетчеризация', to: '/dispatch', icon: PushpinOutlined},
     {title: 'Оценки', to: '/rating', icon: StarOutlined},
     {title: 'Журнал', to: '/journal', icon: FileTextOutlined},
     {title: 'Администраторам', to: '/admin', icon: LockOutlined, rolesRequired: [7]},
@@ -39,7 +39,8 @@ const isMenuExpanded = ref(true)
 </script>
 
 <template>
-    <d-flex v-if="authUser?.REG_ID || authUser?.FIO"
+<!--    <d-flex v-if="authUser?.REG_ID || authUser?.FIO"-->
+            <d-flex
             type="column" gap="0"
             class="nav-wrapper"
             justify="space-between" :class="{mini: !isMenuExpanded}">
