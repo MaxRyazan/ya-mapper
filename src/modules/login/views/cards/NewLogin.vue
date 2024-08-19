@@ -27,7 +27,9 @@ import TheQr from "@/modules/login/views/cards/TheQr.vue";
 import {authorize} from "@/modules/login/api";
 import {authUser, IUser} from "@/stores/user.ts";
 import router from "@/configs/router.ts";
+import {useRoute} from "vue-router";
 
+const route = useRoute()
 const isLoading = ref(false)
 const isValidationFailed = ref(false)
 const isPasswordVisible = ref(false)
@@ -40,7 +42,7 @@ async function login() {
     isLoading.value = true
     const res: IUser|null = await authorize(userInfo)
     isLoading.value = false
-    if(res && res.STR_LOGIN) {
+    if(res && res.STR_LOGIN && route.path === '/login') {
         authUser.value = res
         await router.push('/routes/all')
     }

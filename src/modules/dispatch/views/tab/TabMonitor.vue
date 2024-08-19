@@ -22,10 +22,10 @@
 import {dispatchColumn} from "@/modules/dispatch/constants";
 import {reactive, ref, shallowRef} from "vue";
 import type {Component} from 'vue'
-import HashMap from "@/modules/dispatch/views/hash/dispatch/HashMap.vue";
 import HashLinear from "@/modules/dispatch/views/hash/dispatch/HashLinear.vue";
 import DTableDrawer from "@/components/reus/DTableDrawer.vue";
 import DTableHref from "@/components/reus/DTableHref.vue";
+import RouteIdPath from "@/modules/routes/views/RouteIdPath.vue";
 
 interface SelectedItemInterface {
     number: number
@@ -43,7 +43,7 @@ const currentComponent = shallowRef<Component | null>(null)
 function showMap(record: any) {
     selectedItem.value = record
     drawer.isOpen = true
-    currentComponent.value = HashMap
+    currentComponent.value = RouteIdPath
 }
 
 function showSchema(record: any) {

@@ -48,7 +48,7 @@ function setMapSizes() {
     const wrapper = document.querySelector('.map-wrapper')
     console.log(wrapper?.clientWidth)
     mapSizes.width = wrapper?.clientWidth! + 'px'
-    mapSizes.height = wrapper?.clientHeight + 50 + 'px'
+    mapSizes.height = wrapper?.clientHeight! + 'px'
 }
 
 window.addEventListener('resize', setMapSizes)

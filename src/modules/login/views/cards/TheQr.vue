@@ -14,7 +14,9 @@ import QrcodeVue from 'qrcode.vue'
 import {authUser} from "@/stores/user.ts";
 import router from "@/configs/router.ts";
 import {APP_ID} from "@/constants.ts";
+import {useRoute} from "vue-router";
 
+const route = useRoute()
 const interval = ref<any>()
 const isAuthInProgress = ref(false)
 const qrCodeResponse = ref<string>('')
@@ -67,7 +69,7 @@ onMounted(async () => {
                 try {
                     const auth:any = await fetch(`https://www.asts.kz:5554/api/AUTH/Get_AUTH?SessID=${sessIdSet[i]}`)
                     const resp = await auth.json()
-                    if(resp?.REG_ID) {
+                    if(resp?.REG_ID && route.path === '/login') {
                         authUser.value = resp
                         clearInterval(interval.value)
                         await router.push('/routes')

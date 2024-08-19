@@ -159,7 +159,4 @@ watch(allRoutes, async () => {
 .route__wrapper {
     position: relative;
 }
-:deep(.ant-drawer-body) {
-    padding: 0 !important;
-}
 </style>

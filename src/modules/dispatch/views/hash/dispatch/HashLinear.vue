@@ -1,6 +1,6 @@
 <template>
     <div style="width: 100%;height: 100%; position: relative">
-        <d-flex v-if="!isLoading" type="column" gap="200px" justify="space-between" style="overflow: hidden; height: 100%; padding-bottom: 250px;">
+        <d-flex v-if="!isLoading" type="column" gap="200px" justify="space-between" style="overflow: hidden; height: 100%; padding-bottom: 250px; padding-top: 100px;">
             <d-flex justify="space-between" align="start" gap="30px" style="width: 100%; padding: 0 40px 0 20px; position: relative">
                 <div class="line__schema"></div>
                 <linear-item :show-bus-icon="showBus(station)"
