@@ -20,7 +20,6 @@ declare module 'vue' {
     DaBreadcrumbs: typeof import('./src/components/reus/DaBreadcrumbs.vue')['default']
     DaSpinner: typeof import('./src/components/reus/DaSpinner.vue')['default']
     DaTable: typeof import('./src/components/reus/DaTable.vue')['default']
-    DDrawer: typeof import('./src/components/reus/DDrawer.vue')['default']
     DefaultLayout: typeof import('./src/components/layouts/DefaultLayout.vue')['default']
     DFlex: typeof import('./src/components/reus/html-containers/DFlex.vue')['default']
     DSpin: typeof import('./src/components/reus/DSpin.vue')['default']

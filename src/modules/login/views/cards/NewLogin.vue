@@ -28,6 +28,7 @@ import {authorize} from "@/modules/login/api";
 import {authUser, IUser} from "@/stores/user.ts";
 import router from "@/configs/router.ts";
 import {useRoute} from "vue-router";
+import {message} from "ant-design-vue";
 
 const route = useRoute()
 const isLoading = ref(false)
@@ -44,8 +45,8 @@ async function login() {
     isLoading.value = false
     if(res && res.STR_LOGIN && route.path === '/login') {
         authUser.value = res
-        await router.push('/routes/all')
-    }
+        await router.push('/routes/common')
+    } else message.error('Авторизация не удалась, попробуйте еще раз!')
 }
 </script>
 <style scoped>
