@@ -5,3 +5,5 @@ export const USER_ROLES_MAP = new Map([
     [7, 'Администратор'],
     [8, 'Оператор'],
 ])
+
+export const REGIONS_MAP = new Map<string, string>([])

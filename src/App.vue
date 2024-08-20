@@ -12,6 +12,10 @@ import {onMounted} from "vue";
 import DFlex from "@/components/reus/html-containers/DFlex.vue";
 import TheMainNav from "@/components/single-use/TheMainNav.vue";
 import DefaultLayout from "@/components/layouts/DefaultLayout.vue";
+import {getRegions} from "@/api-global";
+import {MapHelper} from "@/helpers/MapHelper.ts";
+import {REGIONS_MAP} from "@/constants.ts";
+import {GlobalRegions} from "@/global-types.ts";
 
 onMounted(async () => {
     isAllBusesInLoading.value = true
@@ -33,6 +37,8 @@ onMounted(async () => {
     })
     Object.assign(allBuses, res)
     isAllBusesInLoading.value = false
+    const regions = await getRegions()
+    MapHelper.createMapFromObjectArray<GlobalRegions>(REGIONS_MAP, regions, 'REG_ID', 'CITY')
 })
 </script>
 <style scoped>

@@ -37,7 +37,23 @@
                         </d-flex>
                         <d-flex justify="space-between">
                             <d-text>Регион</d-text>
-                            <a-input style="width: 50%" v-model:value="selectedUser.REG_ID"/>
+                            <d-flex style="border: 1px solid rgb(217, 217, 217); padding: 4px 11px; width: 50%;height: 32px; border-radius: 6px">
+                                <a-dropdown v-if="REGIONS_MAP.size">
+                                    <a class="ant-dropdown-link" @click.prevent>
+                                        {{REGIONS_MAP.get(selectedUser.REG_ID)}}
+                                        <DownOutlined />
+                                    </a>
+                                    <template #overlay>
+                                        <a-menu>
+                                            <span v-for="reg in REGIONS_MAP.entries()">
+                                                <a-menu-item v-if="reg[0] !== '00'">
+                                                    <a @click="setNewRegion(reg)">{{reg[1]}}</a>
+                                                </a-menu-item>
+                                            </span>
+                                        </a-menu>
+                                    </template>
+                                </a-dropdown>
+                            </d-flex>
                         </d-flex>
                         <d-flex justify="space-between">
                             <d-text>BIN</d-text>
@@ -78,6 +94,8 @@ import {IUser} from "@/stores/user.ts";
 import DTableDrawer from "@/components/reus/DTableDrawer.vue";
 import DText from "@/components/reus/texts/DText.vue";
 import {message} from "ant-design-vue";
+import {DownOutlined} from "@ant-design/icons-vue";
+import {REGIONS_MAP} from "@/constants.ts";
 
 const isLoading = ref(false)
 let adminDataSource = ref<any>([])
@@ -86,6 +104,13 @@ const drawer = reactive({
     isOpen: false,
     width: '600px'
 })
+
+function setNewRegion(reg: string[]) {
+    if(selectedUser.value) {
+        selectedUser.value.REG_ID = reg[0]
+    }
+    console.log(selectedUser.value)
+}
 
 function tableRowEvents(record:any) {
     return {
@@ -139,5 +164,11 @@ onMounted(async () => {
     width: 100%;
     height: 100%;
     padding: 10px;
+}
+:deep(.ant-dropdown-link) {
+    color: rgba(0, 0, 0, 0.88);
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
 }
 </style>
