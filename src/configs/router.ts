@@ -9,6 +9,16 @@ const routesRouter = [
         component: () => import('@/modules/routes/views/tabs/RoutesList.vue'),
     },
 ]
+const adminRouter = [
+    {
+        path: '/admin/common',
+        name: 'adminCommon',
+        component: () => import('@/modules/admin/views/tabs/AdminCommon.vue'),
+        meta: {
+            rolesRequired: [7]
+        }
+    },
+]
 
 const transportRouter = [
     {
@@ -185,9 +195,8 @@ const routes = [
                 path: '/admin',
                 name: 'AdminPage',
                 component: () => import('@/modules/admin/Index.vue'),
-                meta: {
-                    rolesRequired: [7]
-                }
+                redirect: '/admin/common',
+                children: adminRouter
             },
         ]
     }

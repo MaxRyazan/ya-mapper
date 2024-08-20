@@ -5,6 +5,7 @@ import DText from "@/components/reus/texts/DText.vue";
 const props = defineProps<{
     drawer: {
         isOpen: boolean
+        width: string
     }
 }>()
 </script>
@@ -13,7 +14,7 @@ const props = defineProps<{
     <a-drawer :get-container="false"
               destroyOnClose
               style="border-radius: 8px"
-              width="100%"
+              :width="props.drawer.width ?? '100%'"
               :style="{ position: 'absolute' }"
               v-model:open="props.drawer.isOpen">
         <template #closeIcon>
