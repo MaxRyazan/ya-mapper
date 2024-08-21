@@ -5,7 +5,7 @@ import DText from "@/components/reus/texts/DText.vue";
 const props = defineProps<{
     drawer: {
         isOpen: boolean
-        width: string
+        width?: string
     }
 }>()
 </script>
