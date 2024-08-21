@@ -3,7 +3,6 @@
         <a-spin size="large" class="route__spinner" v-if="isLoading"/>
         <a-table :custom-row="tableRowEvents"
                  size="middle"
-                 :rowClassName="rowClassName"
                  style="width: 100%;"
                  :columns="adminTableColumns"
                  :data-source="adminDataSource">
@@ -136,11 +135,6 @@ function tableRowEvents(record:any) {
     };
 }
 
-function rowClassName(record: IUser) {
-    if(!record.Valid)
-    return 'blocked'
-}
-
 async function block(blockUser: boolean) {
     if(selectedUser.value) {
         selectedUser.value.Valid = blockUser
@@ -189,8 +183,5 @@ onMounted(async () => {
     width: 100%;
     display: flex;
     justify-content: space-between;
-}
-:deep(.blocked) {
-    background-color: rgba(255,0,0, .075) !important;
 }
 </style>

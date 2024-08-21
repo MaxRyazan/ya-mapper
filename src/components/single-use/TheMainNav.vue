@@ -18,6 +18,7 @@ import DFlex from "@/components/reus/html-containers/DFlex.vue";
 import {useRoute} from "vue-router";
 import MainSubLinks from "@/components/single-use/MainSubLinks.vue";
 import {authUser} from "@/stores/user.ts";
+import {IRoles} from "@/enums.ts";
 
 const route = useRoute()
 const navLinks = reactive([
@@ -31,7 +32,7 @@ const navLinks = reactive([
     {title: 'Диспетчеризация', to: '/dispatch', icon: PushpinOutlined},
     {title: 'Оценки', to: '/rating', icon: StarOutlined},
     {title: 'Журнал', to: '/journal', icon: FileTextOutlined},
-    {title: 'Администраторам', to: '/admin', icon: LockOutlined, rolesRequired: [7]},
+    {title: 'Администраторам', to: '/admin', icon: LockOutlined, rolesRequired: [IRoles.admin]},
 ])
 
 const isMenuExpanded = ref(true)
