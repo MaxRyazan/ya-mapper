@@ -1,4 +1,5 @@
 import {IUser} from "@/stores/user.ts";
+import {message} from "ant-design-vue";
 
 export async function getAllUsers() {
     try {
@@ -20,10 +21,20 @@ export async function editUser(userData: IUser){
                 ...userData,
             })
         });
-        console.log(result)
         const res = await result.json()
         return JSON.parse(res)
     } catch (e) {
         console.log(e)
+        message.error('Произошла ошибка при выполнении скрипта, попробуйте позже!', 5)
+    }
+}
+
+export async function getUidByPhone(phone: string) {
+    try {
+        const response = await fetch(`https://www.asts.kz:5554/api/AUTH/Get_EmUID?PHONE=${phone}`)
+        return await response.json()
+    } catch (e) {
+        console.log(e)
+        message.error('Произошла ошибка при выполнении скрипта, попробуйте позже!', 5)
     }
 }

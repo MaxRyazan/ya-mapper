@@ -3,6 +3,7 @@
         <a-spin size="large" class="route__spinner" v-if="isLoading"/>
         <a-table :custom-row="tableRowEvents"
                  size="middle"
+                 :rowClassName="rowClassName"
                  style="width: 100%;"
                  :columns="adminTableColumns"
                  :data-source="adminDataSource">
@@ -17,31 +18,35 @@
                     <d-flex type="column" style="width: 100%;" align="stretch">
                         <d-flex justify="space-between">
                             <d-text>UID телефона</d-text>
-                            <a-input style="width: 50%; cursor: default" class="constant-data" readonly v-model:value="selectedUser.EmUID"/>
+                            <a-input v-if="selectedUser.EmUID" style="width: 50%; cursor: default" class="constant-data" readonly v-model:value="selectedUser.EmUID"/>
+                            <d-flex justify="space-between" style="width: 50%;" v-else>
+                                <d-text>UID отсутствует</d-text>
+                                <a-button :disabled="!selectedUser.Valid" @click="getUID">Получить</a-button>
+                            </d-flex>
                         </d-flex>
                         <d-flex justify="space-between">
                             <d-text>ИИН</d-text>
-                            <a-input style="width: 50%" v-model:value="selectedUser.IIN"/>
+                            <a-input :disabled="!selectedUser.Valid" style="width: 50%" v-model:value="selectedUser.IIN"/>
                         </d-flex>
                         <d-flex justify="space-between">
                             <d-text>ФИО</d-text>
-                            <a-input style="width: 50%" v-model:value="selectedUser.FIO"/>
+                            <a-input :disabled="!selectedUser.Valid" style="width: 50%" v-model:value="selectedUser.FIO"/>
                         </d-flex>
                         <d-flex justify="space-between">
                             <d-text>Телефон</d-text>
-                            <a-input class="constant-data" readonly style="width: 50%; cursor:default;" :value="selectedUser.LOGIN"/>
+                            <a-input :disabled="!selectedUser.Valid" class="constant-data" readonly style="width: 50%; cursor:default;" :value="selectedUser.LOGIN"/>
                         </d-flex>
                         <d-flex justify="space-between">
                             <d-text>Роль</d-text>
-                            <a-input style="width: 50%" v-model:value="selectedUser.Role"/>
+                            <a-input :disabled="!selectedUser.Valid" style="width: 50%" v-model:value="selectedUser.Role"/>
                         </d-flex>
                         <d-flex justify="space-between">
                             <d-text>Регион</d-text>
                             <d-flex style="border: 1px solid rgb(217, 217, 217); padding: 4px 11px; width: 50%;height: 32px; border-radius: 6px">
-                                <a-dropdown v-if="REGIONS_MAP.size">
-                                    <a class="ant-dropdown-link" @click.prevent>
+                                <a-dropdown :disabled="!selectedUser.Valid" v-if="REGIONS_MAP.size">
+                                    <a style="width: 100%; height: 100%;" class="ant-dropdown-link" @click.prevent>
                                         {{REGIONS_MAP.get(selectedUser.REG_ID)}}
-                                        <DownOutlined />
+                                        <DownOutlined v-if="selectedUser.REG_ID !== '0'"/>
                                     </a>
                                     <template #overlay>
                                         <a-menu>
@@ -57,15 +62,15 @@
                         </d-flex>
                         <d-flex justify="space-between">
                             <d-text>BIN</d-text>
-                            <a-input style="width: 50%" v-model:value="selectedUser.BIN"/>
+                            <a-input :disabled="!selectedUser.Valid" style="width: 50%" v-model:value="selectedUser.BIN"/>
                         </d-flex>
                         <d-flex justify="space-between">
                             <d-text>Логин</d-text>
-                            <a-input style="width: 50%" v-model:value="selectedUser.STR_LOGIN"/>
+                            <a-input :disabled="!selectedUser.Valid" style="width: 50%" v-model:value="selectedUser.STR_LOGIN"/>
                         </d-flex>
                         <d-flex justify="space-between">
                             <d-text>Пароль</d-text>
-                            <a-input style="width: 50%" v-model:value="selectedUser.STR_PASS"/>
+                            <a-input :disabled="!selectedUser.Valid" style="width: 50%" v-model:value="selectedUser.STR_PASS"/>
                         </d-flex>
                     </d-flex>
                     <d-flex>
@@ -89,7 +94,7 @@
 import DFlex from "@/components/reus/html-containers/DFlex.vue";
 import {adminTableColumns} from "@/modules/admin/constants";
 import {onMounted, reactive, ref} from "vue";
-import {editUser, getAllUsers} from "@/modules/admin/api";
+import {editUser, getAllUsers, getUidByPhone} from "@/modules/admin/api";
 import {IUser} from "@/stores/user.ts";
 import DTableDrawer from "@/components/reus/DTableDrawer.vue";
 import DText from "@/components/reus/texts/DText.vue";
@@ -105,11 +110,18 @@ const drawer = reactive({
     width: '600px'
 })
 
-function setNewRegion(reg: string[]) {
+async function setNewRegion(reg: string[]) {
     if(selectedUser.value) {
         selectedUser.value.REG_ID = reg[0]
+        await edit()
     }
-    console.log(selectedUser.value)
+}
+
+async function getUID() {
+    if(selectedUser.value) {
+        const response = await getUidByPhone(selectedUser.value.LOGIN)
+        console.log(response)
+    }
 }
 
 function tableRowEvents(record:any) {
@@ -124,15 +136,22 @@ function tableRowEvents(record:any) {
     };
 }
 
-function block(blockUser: boolean) {
-    console.log(blockUser)
+function rowClassName(record: IUser) {
+    if(!record.Valid)
+    return 'blocked'
+}
+
+async function block(blockUser: boolean) {
+    if(selectedUser.value) {
+        selectedUser.value.Valid = blockUser
+        await edit()
+    }
 }
 
 async function edit() {
     if(selectedUser.value) {
         try {
-            const resp = await editUser(selectedUser.value)
-            console.log(resp)
+            await editUser(selectedUser.value)
             message.success('Данные успешно изменены!')
         } catch (e) {
             console.log(e)
@@ -170,5 +189,8 @@ onMounted(async () => {
     width: 100%;
     display: flex;
     justify-content: space-between;
+}
+:deep(.blocked) {
+    background-color: rgba(255,0,0, .075) !important;
 }
 </style>
