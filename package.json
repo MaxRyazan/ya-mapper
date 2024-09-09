@@ -14,6 +14,7 @@
     "axios": "^1.7.3",
     "dayjs": "^1.11.11",
     "qrcode.vue": "^3.4.1",
+    "quick-registration": "^1.0.12",
     "vue": "^3.4.21",
     "vue-router": "^4.3.3",
     "vue-yandex-maps": "^2.1.2"

@@ -20,7 +20,6 @@ declare module 'vue' {
     ATable: typeof import('ant-design-vue/es')['Table']
     ATabPane: typeof import('ant-design-vue/es')['TabPane']
     ATabs: typeof import('ant-design-vue/es')['Tabs']
-    ATypographyParagraph: typeof import('ant-design-vue/es')['TypographyParagraph']
     DaBreadcrumbs: typeof import('./src/components/reus/DaBreadcrumbs.vue')['default']
     DaSpinner: typeof import('./src/components/reus/DaSpinner.vue')['default']
     DaTable: typeof import('./src/components/reus/DaTable.vue')['default']

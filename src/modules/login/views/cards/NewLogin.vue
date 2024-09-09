@@ -16,19 +16,19 @@
             />
             <a-button :loading="isLoading" @click="login" style="margin-top: 80px; " type="primary">Войти</a-button>
         </d-flex>
-        <the-qr />
+        <quick-auth :applicationIdentifier="APP_ID"/>
     </d-flex>
 </template>
 <script setup lang="ts">
 import {UserOutlined} from "@ant-design/icons-vue";
 import DFlex from "@/components/reus/html-containers/DFlex.vue";
 import {reactive, ref} from "vue";
-import TheQr from "@/modules/login/views/cards/TheQr.vue";
 import {authorize} from "@/modules/login/api";
 import {authUser, IUser} from "@/stores/user.ts";
 import router from "@/configs/router.ts";
 import {useRoute} from "vue-router";
 import {message} from "ant-design-vue";
+import {APP_ID} from "@/constants.ts";
 
 const route = useRoute()
 const isLoading = ref(false)
