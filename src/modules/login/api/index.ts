@@ -1,4 +1,5 @@
 import {APP_ID} from "@/constants.ts";
+import {IUser} from "@/stores/user.ts";
 
 
 export async function registration(userInfo: {
@@ -44,4 +45,13 @@ export async function authorize(userInfo: {login: string, password: string}) {
         console.log(e)
         return null
     }
+}
+
+export async function loginByQr(emUid: string): Promise<IUser|undefined> {
+    try {
+        const response = await fetch(`https://www.asts.kz:5554/api/AUTH/Get_USER_PARAMS?EmUID=${emUid}`)
+        if(response) {
+            return await response.json()
+        }
+    } catch (e) {}
 }

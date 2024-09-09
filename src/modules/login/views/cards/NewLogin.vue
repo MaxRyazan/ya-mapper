@@ -16,14 +16,14 @@
             />
             <a-button :loading="isLoading" @click="login" style="margin-top: 80px; " type="primary">Войти</a-button>
         </d-flex>
-        <quick-auth :applicationIdentifier="APP_ID"/>
+        <quick-auth @on-complete="getEmUid" :applicationIdentifier="APP_ID"/>
     </d-flex>
 </template>
 <script setup lang="ts">
 import {UserOutlined} from "@ant-design/icons-vue";
 import DFlex from "@/components/reus/html-containers/DFlex.vue";
 import {reactive, ref} from "vue";
-import {authorize} from "@/modules/login/api";
+import {authorize, loginByQr} from "@/modules/login/api";
 import {authUser, IUser} from "@/stores/user.ts";
 import router from "@/configs/router.ts";
 import {useRoute} from "vue-router";
@@ -38,6 +38,16 @@ const userInfo = reactive({
     login: '',
     password: ''
 })
+
+async function getEmUid(data: any){
+    if(data) {
+        const response = await loginByQr(data.uid)
+        if(response && response.STR_LOGIN) {
+            authUser.value = response
+            await router.push('/routes/common')
+        }
+    }
+}
 
 async function login() {
     isLoading.value = true
