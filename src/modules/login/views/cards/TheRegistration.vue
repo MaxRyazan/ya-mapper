@@ -1,69 +1,79 @@
 <template>
     <d-flex align="start">
         <d-flex type="column" class="registration">
-        <a-input @input="isLoginNotValid = false" title="Логин" :class="{err: isLoginNotValid}"
-                 v-model:value="userInfo.login" placeholder="Логин">
-        </a-input>
-        <a-input @input="isPhoneNotValid = false" type="phone" title="Телефон" :class="{err: isPhoneNotValid}"
-                 v-model:value="userInfo.phone" placeholder="Телефон в формате +79507505050">
-        </a-input>
-        <a-input @input="isFioNotValid = false" title="Фамилия" :class="{err: isFioNotValid}"
-                 v-model:value="userInfo.name" placeholder="Фамилия">
-            <template #prefix>
-                <user-outlined/>
-            </template>
-        </a-input>
-        <a-input @input="isFioNotValid = false" title="Имя" :class="{err: isFioNotValid}"
-                 v-model:value="userInfo.surname" placeholder="Имя">
-            <template #prefix>
-                <user-outlined/>
-            </template>
-        </a-input>
-        <a-input @input="isFioNotValid = false" title="Отчество" :class="{err: isFioNotValid}"
-                 v-model:value="userInfo.patronymic" placeholder="Отчество">
-            <template #prefix>
-                <user-outlined/>
-            </template>
-        </a-input>
-        <a-input-password
-                title="Пароль"
-                @input="isValidationFailed = false"
-                :class="{err: isValidationFailed}"
-                v-model:value="userInfo.password"
-                v-model:visible="isPasswordVisible"
-                placeholder="Пароль"
-        />
-        <a-input-password
-                title="Повторите пароль"
-                @input="isValidationFailed = false"
-                :class="{err: isValidationFailed}"
-                v-model:value="userInfo.confirmPassword"
-                v-model:visible="isConfirmPasswordVisible"
-                placeholder="Повторите пароль"
-        />
-        <span style="font-size: 12px; color: red; height: 20px;"
-              v-if="isLoginNotValid || isValidationFailed || isFioNotValid">{{ errorMessage }}</span>
+            <a-input @input="isLoginNotValid = false" title="Логин" :class="{err: isLoginNotValid}"
+                     v-model:value="userInfo.login" placeholder="Логин">
+            </a-input>
+            <a-input @input="isPhoneNotValid = false" type="phone" title="Телефон" :class="{err: isPhoneNotValid}"
+                     v-model:value="userInfo.phone" placeholder="Телефон в формате +79507505050">
+            </a-input>
+            <a-input @input="isFioNotValid = false" title="Имя" :class="{err: isFioNotValid}"
+                     v-model:value="userInfo.surname" placeholder="Фамилия">
+                <template #prefix>
+                    <user-outlined/>
+                </template>
+            </a-input>
+            <a-input @input="isFioNotValid = false" title="Фамилия" :class="{err: isFioNotValid}"
+                     v-model:value="userInfo.name" placeholder="Имя">
+                <template #prefix>
+                    <user-outlined/>
+                </template>
+            </a-input>
+            <a-input @input="isFioNotValid = false" title="Отчество" :class="{err: isFioNotValid}"
+                     v-model:value="userInfo.patronymic" placeholder="Отчество">
+                <template #prefix>
+                    <user-outlined/>
+                </template>
+            </a-input>
+            <a-input-password
+                    title="Пароль"
+                    @input="isValidationFailed = false"
+                    :class="{err: isValidationFailed}"
+                    v-model:value="userInfo.password"
+                    v-model:visible="isPasswordVisible"
+                    placeholder="Пароль"
+            />
+            <a-input-password
+                    title="Повторите пароль"
+                    @input="isValidationFailed = false"
+                    :class="{err: isValidationFailed}"
+                    v-model:value="userInfo.confirmPassword"
+                    v-model:visible="isConfirmPasswordVisible"
+                    placeholder="Повторите пароль"
+            />
+            <span style="font-size: 12px; color: red; height: 20px;"
+                  v-if="isLoginNotValid || isValidationFailed || isFioNotValid">{{ errorMessage }}</span>
             <a-checkbox v-model:checked="isPhoneConnected">Зарегистрировать телефон*?</a-checkbox>
-            <d-text style="text-align: center" size="12px">*это даст возможность авторизоваться с помощью QR кода, не вводя учетные данные.</d-text>
-        <a-button v-if="!isPhoneConnected" :loading="isLoading" type="primary" class="reg-btn" @click="registr">Зарегистрироваться</a-button>
-        <a-button v-else>Для завершения авторизации заполните все поля, отсканируйте появившийся QR код и ожидайте.</a-button>
-    </d-flex>
+            <d-text style="text-align: center" size="12px">*это даст возможность авторизоваться с помощью QR кода, не
+                вводя учетные данные.
+            </d-text>
+            <a-button v-if="!isPhoneConnected" :loading="isLoading" type="primary" class="reg-btn" @click="registr">
+                Зарегистрироваться
+            </a-button>
+            <a-button v-else>Для завершения авторизации заполните все поля, отсканируйте появившийся QR код и
+                ожидайте.
+            </a-button>
+        </d-flex>
         <d-flex type="column" style="padding: 20px; width: 220px">
             <div v-if="isPhoneConnected" style="width: 200px;height: 200px;border: 2px solid #111111">
-                <qrcode-vue v-if="isPhoneConnected && isUserInfo && qrCodeResponse"  :value="qrCodeResponse" :size="200" level="H"/>
+                <quick-reg @on-complete="qrRegistration" v-if="isPhoneConnected && isUserInfo" :phone="userInfo.phone"
+                           :applicationIdentifier="APP_ID"/>
             </div>
-            <a-button v-if="isPhoneConnected"  style="margin-top: 40px;" title="Приложение для авторизации по QR на андроид"><a href="src/files/CTSVirt.apk">CTSVirt.apk</a></a-button>
+            <a-button v-if="isPhoneConnected"
+                      style="margin-top: 40px;"
+                      title="Приложение для авторизации по QR на андроид">
+                <a href="src/files/CTSVirt.apk">CTSVirt.apk</a>
+            </a-button>
         </d-flex>
     </d-flex>
 </template>
 <script setup lang="ts">
 import DFlex from '@/components/reus/html-containers/DFlex.vue'
 import {UserOutlined} from "@ant-design/icons-vue";
-import {computed, onMounted, onUnmounted, reactive, ref, watch} from "vue";
+import {computed, reactive, ref} from "vue";
 import {registration} from "@/modules/login/api";
 import {authUser} from "@/stores/user.ts";
 import {useRouter} from "vue-router";
-import QrcodeVue from "qrcode.vue";
 import DText from "@/components/reus/texts/DText.vue";
 import {APP_ID} from "@/constants.ts";
 import {message} from "ant-design-vue";
@@ -78,10 +88,9 @@ const isValidationFailed = ref(false)
 const isPasswordVisible = ref(false)
 const isConfirmPasswordVisible = ref(false)
 const isLoading = ref(false)
-const qrCodeResponse = ref('')
-const sessId = ref('')
-const sessIdSet = <string[]>([])
-const interval = ref<any>(null)
+
+
+//todo перед генерацией qr проверить что телефон зарегистрирован
 const userInfo = reactive({
     login: '',
     phone: undefined,
@@ -92,79 +101,43 @@ const userInfo = reactive({
     patronymic: ''
 })
 
-watch(isPhoneConnected,async () => {
-    if(isPhoneConnected.value) {
-        if(isUserInfo.value) {
-            await getDataForQRCode()
-            interval.value = setInterval(async() => {
-                sessId.value = generateRandom()
-                if(sessIdSet.length > 2) sessIdSet.shift()
-                sessIdSet.push(sessId.value)
-                await getDataForQRCode()
-                for(let i = 0; i < sessIdSet.length; i++) {
-                    try {
-                        const reg = await fetch('https://www.asts.kz:5554/api/AUTH/QR_Register?CCC=""', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json;charset=utf-8',
-                            },
-                            body: JSON.stringify({
-                                login: userInfo.login,
-                                phone: userInfo.phone,
-                                password: userInfo.password,
-                                confirmPassword: userInfo.confirmPassword,
-                                fio: userInfo.surname + ' ' + userInfo.name + ' ' + userInfo.patronymic,
-                                Comp_AID: APP_ID
-                            })
-                        })
-                        const response = JSON.parse(await reg.json() ?? '{}')
-                        if(response?.EmUID) {
-                            message.success(`Регистрация прошла успешно, добро пожаловать ${response?.FIO}!`, 5)
-                            authUser.value = response
-                            await router.push('/routes')
-                        }
-                    } catch (e) {
-                        console.error(e)
-                    }
-                }
 
-            }, 5000)
+async function qrRegistration() {
+    try {
+        const reg = await fetch('https://www.asts.kz:5554/api/AUTH/QR_Register?CCC=""', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            body: JSON.stringify({
+                login: userInfo.login,
+                phone: userInfo.phone,
+                password: userInfo.password,
+                confirmPassword: userInfo.confirmPassword,
+                fio: userInfo.surname + ' ' + userInfo.name + ' ' + userInfo.patronymic,
+                Comp_AID: APP_ID
+            })
+        })
+        const response = JSON.parse(await reg.json() ?? '{}')
+        if(response?.EmUID) {
+            message.success(`Регистрация прошла успешно, добро пожаловать ${response?.FIO}!`, 5)
+            authUser.value = response
+            await router.push('/routes/common')
         }
+    } catch (e) {
+        console.error(e)
     }
-})
+}
 
-const isUserInfo = computed(() => userInfo.login && userInfo.phone && userInfo.password && userInfo.confirmPassword && userInfo.name && userInfo.surname && userInfo.patronymic)
+const isUserInfo = computed(() => userInfo.login
+    && userInfo.phone
+    && userInfo.password && userInfo.confirmPassword
+    && userInfo.name && userInfo.surname
+    && userInfo.patronymic
+)
 
 function phoneTest(phone: any) {
     return /^\d+$/.test(phone.toString().replace('+', ''));
-}
-
-function generateRandom() {
-    const A = generate(8)
-    const B = generate(4)
-    const C = generate(4)
-    const D = generate(4)
-    const E = generate(12)
-    return `${A}-${B}-${C}-${D}-${E}`
-}
-
-async function getDataForQRCode() {
-    const resp = await fetch(`https://www.asts.kz:5554/api/AUTH/Get_QR?AppID=${APP_ID}&Sess_ID=${sessId.value}`)
-    if (resp) {
-        qrCodeResponse.value = await resp.text()
-    }
-}
-
-function generate(p: number) {
-    let result = ''
-    const alphabet = ['a', 'b', 'c', 'd', 'f', 'e', 'g', 'k', 'l', 'm', 'a', 'b', 'c']
-    for(let i = 0; i < p; i++) {
-        const random = Math.floor(((Math.random() * 10)))
-        if(random < Math.floor(p / 2)) {
-            result += alphabet[i]
-        } else result += random
-    }
-    return result
 }
 
 async function registr() {
@@ -173,12 +146,12 @@ async function registr() {
         errorMessage.value = 'Логин не может быть пустым!'
         return;
     }
-    if(!userInfo.phone || !phoneTest(userInfo.phone)) {
+    if (!userInfo.phone || !phoneTest(userInfo.phone)) {
         isPhoneNotValid.value = true
         errorMessage.value = 'Номер телефона отсутствует, или введен некорректно.'
         return
     }
-    if(userInfo.name.length < 2 || userInfo.surname.length < 2 || userInfo.patronymic.length < 2) {
+    if (userInfo.name.length < 2 || userInfo.surname.length < 2 || userInfo.patronymic.length < 2) {
         isFioNotValid.value = true
         errorMessage.value = 'Фамилия, имя, отчество должны быть заполнены! Не менее 2 букв!'
         return
@@ -201,19 +174,13 @@ async function registr() {
         phone: userInfo.phone,
         fio: userInfo.name + ' ' + userInfo.surname + ' ' + userInfo.patronymic
     })
-    if(newUser && newUser.Comp_AID) {
+    if (newUser && newUser.Comp_AID) {
         authUser.value = newUser
         await router.push('/routes')
     }
     isLoading.value = false
 }
-onMounted(() => {
-    sessId.value = generateRandom()
-    sessIdSet.push(sessId.value)
-})
-onUnmounted(() => {
-    clearInterval(interval.value)
-})
+
 </script>
 <style scoped>
 .registration {
@@ -225,6 +192,7 @@ onUnmounted(() => {
 .err {
     border: 1px solid red !important;
 }
+
 .reg-btn {
     margin-top: 40px;
 }
