@@ -2,6 +2,18 @@
     <div style="display: flex; justify-content: space-between">
         <div>
             <d-flex type="column" align="start">
+                <d-flex style="width: 100%;">
+                    <button :class="{current: center === regions.reg18}"
+                            @click="center = regions.reg18"
+                            style="font-size: 24px; padding: 4px">
+                        REG_18
+                    </button>
+                    <button :class="{current: center === regions.reg15}"
+                            @click="center = regions.reg15"
+                            style="font-size: 24px; padding: 4px">
+                        REG_15
+                    </button>
+                </d-flex>
                 <d-flex style="width: 100%;" justify="space-between">
                     <label style="font-size: 24px;" for="emei">emei</label>
                     <input style="height: 40px; font-size: 24px;" id="emei" placeholder="emei автобуса" v-model="watchData.emei"/>
@@ -65,7 +77,12 @@ import DText from "@/components/reus/texts/DText.vue";
 const lastCoordinate = ref<[number, number]>([0,0])
 const lineColor = ref('red')
 
-const center = ref([63.615375, 53.181536])
+const regions = reactive({
+    reg18: [63.615375, 53.181536],
+    reg15: [69.15, 54.8667],
+})
+
+const center = ref(regions.reg15)
 const addedCoordinates = ref<[number, number][]>([])
 
 function getCoordinatesFromString(stringCoords: string): [number, number] {
@@ -223,5 +240,9 @@ onMounted(async () => {
 }
 .active {
     color: blue !important;
+}
+.current {
+    background-color: dodgerblue;
+    color: white;
 }
 </style>
