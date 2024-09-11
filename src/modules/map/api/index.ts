@@ -1,5 +1,6 @@
 import {Bus} from "@/models/Bus.ts";
 import {GetLinesByRouteResponse, GetSingleBusCoordinates} from "@/modules/map/types/api-models.ts";
+import {REG} from "@/constants.ts";
 
 const PORT = 5553
 export const URL = 'https://www.asts.kz:5554/api/test/'
@@ -84,7 +85,7 @@ export async function getBusesByRoute(options?: {
  * Метод получает маршрут с отстановками с параметрами очередности остановок для отрисовки линий на карте
  */
 export async function getLinesByRegion(num: number, direction: 0 | 1 | 2): Promise<GetLinesByRouteResponse[] | undefined> {
-    const res: Response = await fetch(`${URL}?op=Get_ROUTE&REGION=REG_18&NUM=${num}&DIRECTION=${direction}`)
+    const res: Response = await fetch(`${URL}?op=Get_ROUTE&REGION=REG_${REG.value}&NUM=${num}&DIRECTION=${direction}`)
 
     const raw: string = await res.text()
     const openArray: number = raw.indexOf('[{')

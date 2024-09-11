@@ -28,6 +28,7 @@ import {getAllRoutes} from "@/modules/routes/api/Index.ts";
 import RouteIdStations from "@/modules/routes/views/RouteIdStations.vue";
 import RouteIdPath from "@/modules/routes/views/RouteIdPath.vue";
 import DTableDrawer from "@/components/reus/DTableDrawer.vue";
+import {REG} from "@/constants.ts";
 
 const isLoading = ref(false)
 const selectedItem = ref<any>(null)
@@ -133,7 +134,7 @@ watch(allRoutes, async () => {
     if(!allRoutes.value) {
         if(!isAllRoutesLoading.value) {
             isLoading.value = true
-            const response = await getAllRoutes({bin: '10540003043', region: 'REG_18'})
+            const response = await getAllRoutes({bin: '10540003043', region: `REG_${REG.value}`})
             allRoutes.value = response.map((a, idx) => {
                 return {
                     key: idx + 1,

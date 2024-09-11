@@ -28,7 +28,7 @@ import {authUser, IUser} from "@/stores/user.ts";
 import router from "@/configs/router.ts";
 import {useRoute} from "vue-router";
 import {message} from "ant-design-vue";
-import {APP_ID} from "@/constants.ts";
+import {APP_ID, REG} from "@/constants.ts";
 
 const route = useRoute()
 const isLoading = ref(false)
@@ -44,6 +44,7 @@ async function getEmUid(data: any){
         const response = await loginByQr(data.uid)
         if(response && response.STR_LOGIN) {
             authUser.value = response
+            REG.value = authUser.value.REG_ID
             await router.push('/routes/common')
         }
     }

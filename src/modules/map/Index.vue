@@ -73,6 +73,7 @@ import {DateHelper} from "@/helpers/DateHelper.ts";
 import DFlex from "@/components/reus/html-containers/DFlex.vue";
 import {GetSingleBusCoordinates} from "@/modules/map/types/api-models.ts";
 import DText from "@/components/reus/texts/DText.vue";
+import {REG} from "@/constants.ts";
 
 const lastCoordinate = ref<[number, number]>([0,0])
 const lineColor = ref('red')
@@ -108,7 +109,7 @@ async function getDataFromBackend() {
     apiData.value = []
     isDataLoading.value = false
     const response = await getSingleBusGPSData({
-        region: 'REG_18',
+        region: `REG_${REG.value}`,
         emei: watchData.emei,
         date: watchData.date,
         TIME_Start: watchData.TIME_Start,
