@@ -1,8 +1,8 @@
 <template>
     <d-flex gap="15px" class="user-info">
-        <d-flex gap="2px" type="column">
+        <d-flex align="center" gap="2px" type="column">
             <d-text weight="600" cursor="pointer" class="user-info__fio">{{userFIO}}</d-text>
-            <d-text>{{userRole}}</d-text>
+            <d-text style="text-align: center">{{userRole}}</d-text>
         </d-flex>
         <a-popconfirm
                 placement="rightBottom"

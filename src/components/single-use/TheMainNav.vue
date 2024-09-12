@@ -12,7 +12,8 @@ import {
     PushpinOutlined,
     StarOutlined,
     FileTextOutlined,
-    LockOutlined
+    LockOutlined,
+    SettingOutlined
 } from "@ant-design/icons-vue";
 import DFlex from "@/components/reus/html-containers/DFlex.vue";
 import {useRoute} from "vue-router";
@@ -33,6 +34,7 @@ const navLinks = reactive([
     {title: 'Оценки', to: '/rating', icon: StarOutlined},
     {title: 'Журнал', to: '/journal', icon: FileTextOutlined},
     {title: 'Администраторам', to: '/admin', icon: LockOutlined, rolesRequired: [IRoles.admin]},
+    {title: 'Настройки', to: '/settings', icon: SettingOutlined},
 ])
 
 const isMenuExpanded = ref(true)

@@ -192,6 +192,11 @@ const routes = [
                 component: () => import('@/modules/transport-work/Index.vue'),
             },
             {
+                path: '/settings',
+                name: 'settings',
+                component: () => import('@/modules/settings/Index.vue'),
+            },
+            {
                 path: '/admin',
                 name: 'AdminPage',
                 component: () => import('@/modules/admin/Index.vue'),
