@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {reactive, ref} from "vue";
+import {ref, watch} from "vue";
 import {
     RightSquareFilled,
     LeftSquareFilled,
@@ -20,22 +20,43 @@ import {useRoute} from "vue-router";
 import MainSubLinks from "@/components/single-use/MainSubLinks.vue";
 import {authUser} from "@/stores/user.ts";
 import {IRoles} from "@/enums.ts";
+import {useI18n} from "vue-i18n";
+import i18n from "@/i18n.ts";
 
+const {t} = useI18n()
 const route = useRoute()
-const navLinks = reactive([
+const navLinks = ref([
     {title: 'Яндекс карты', to: '/map', icon: RightSquareFilled},
-    {title: 'Маршруты', to: '/routes', icon: FundOutlined},
-    {title: 'Транспорт', to: '/transport', icon: CarOutlined},
-    {title: 'Контролёры', to: '/conductors', icon: TeamOutlined},
-    {title: 'Водители', to: '/drivers', icon: MehOutlined},
-    {title: 'Транспорт/работа', to: '/auto-work', icon: BugOutlined},
-    {title: 'Статистика/отчеты', to: '/statistics', icon: ProfileOutlined},
-    {title: 'Диспетчеризация', to: '/dispatch', icon: PushpinOutlined},
-    {title: 'Оценки', to: '/rating', icon: StarOutlined},
-    {title: 'Журнал', to: '/journal', icon: FileTextOutlined},
-    {title: 'Администраторам', to: '/admin', icon: LockOutlined, rolesRequired: [IRoles.admin]},
-    {title: 'Настройки', to: '/settings', icon: SettingOutlined},
+    {title: t('mainNav.routes'), to: '/routes', icon: FundOutlined},
+    {title: t('mainNav.transport'), to: '/transport', icon: CarOutlined},
+    {title: t('mainNav.conductors'), to: '/conductors', icon: TeamOutlined},
+    {title: t('mainNav.drivers'), to: '/drivers', icon: MehOutlined},
+    {title: t('mainNav.auto-work'), to: '/auto-work', icon: BugOutlined},
+    {title: t('mainNav.statistics'), to: '/statistics', icon: ProfileOutlined},
+    {title: t('mainNav.dispatch'), to: '/dispatch', icon: PushpinOutlined},
+    {title: t('mainNav.rating'), to: '/rating', icon: StarOutlined},
+    {title: t('mainNav.journal'), to: '/journal', icon: FileTextOutlined},
+    {title: t('mainNav.admin'), to: '/admin', icon: LockOutlined, rolesRequired: [IRoles.admin]},
+    {title: t('mainNav.settings'), to: '/settings', icon: SettingOutlined},
 ])
+
+watch(i18n.global.locale, () => {
+    console.log('222')
+    navLinks.value = [
+        {title: 'Яндекс карты', to: '/map', icon: RightSquareFilled},
+        {title: t('mainNav.routes'), to: '/routes', icon: FundOutlined},
+        {title: t('mainNav.transport'), to: '/transport', icon: CarOutlined},
+        {title: t('mainNav.conductors'), to: '/conductors', icon: TeamOutlined},
+        {title: t('mainNav.drivers'), to: '/drivers', icon: MehOutlined},
+        {title: t('mainNav.auto-work'), to: '/auto-work', icon: BugOutlined},
+        {title: t('mainNav.statistics'), to: '/statistics', icon: ProfileOutlined},
+        {title: t('mainNav.dispatch'), to: '/dispatch', icon: PushpinOutlined},
+        {title: t('mainNav.rating'), to: '/rating', icon: StarOutlined},
+        {title: t('mainNav.journal'), to: '/journal', icon: FileTextOutlined},
+        {title: t('mainNav.admin'), to: '/admin', icon: LockOutlined, rolesRequired: [IRoles.admin]},
+        {title: t('mainNav.settings'), to: '/settings', icon: SettingOutlined},
+    ]
+}, {deep: true})
 
 const isMenuExpanded = ref(true)
 

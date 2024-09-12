@@ -23,7 +23,7 @@ export async function getLocales() {
     }
     for (let file in KAZ) {
         const fileName = file.replace("./", "").replace(".json", "");
-        let obj = await import(`@/locales/en/${fileName}.json`);
+        let obj = await import(`@/locales/kz/${fileName}.json`);
 
         kz = { ...kz, ...obj.default };
     }

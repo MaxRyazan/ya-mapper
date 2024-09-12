@@ -1,0 +1,15 @@
+{
+  "mainNav": {
+    "routes": "Routes",
+    "transport": "Transport",
+    "conductors": "Controllers",
+    "drivers": "Drivers",
+    "auto-work": "Transport/work",
+    "statistics": "Statistics/reports",
+    "dispatch": "Dispatching",
+    "rating": "Ratings",
+    "journal": "Journal",
+    "admin": "Administrators",
+    "settings": "Settings"
+  }
+}
