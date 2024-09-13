@@ -4,12 +4,12 @@
             <d-flex type="column" align="start">
                 <d-flex style="width: 100%;">
                     <button :class="{current: center === regions.reg18}"
-                            @click="center = regions.reg18"
+                            @click="setReg(regions.reg18)"
                             style="font-size: 24px; padding: 4px">
                         REG_18
                     </button>
                     <button :class="{current: center === regions.reg15}"
-                            @click="center = regions.reg15"
+                            @click="setReg(regions.reg15)"
                             style="font-size: 24px; padding: 4px">
                         REG_15
                     </button>
@@ -73,10 +73,11 @@ import {DateHelper} from "@/helpers/DateHelper.ts";
 import DFlex from "@/components/reus/html-containers/DFlex.vue";
 import {GetSingleBusCoordinates} from "@/modules/map/types/api-models.ts";
 import DText from "@/components/reus/texts/DText.vue";
-import {REG} from "@/constants.ts";
 
 const lastCoordinate = ref<[number, number]>([0,0])
 const lineColor = ref('red')
+const regId = ref(15)
+
 
 const regions = reactive({
     reg18: [63.615375, 53.181536],
@@ -89,6 +90,16 @@ const addedCoordinates = ref<[number, number][]>([])
 function getCoordinatesFromString(stringCoords: string): [number, number] {
     const coords = stringCoords.split(',')
     return [+coords[1], +coords[0]]
+}
+
+function setReg(regCoords: number[]){
+    if(regCoords[0] === 63.615375) {
+        center.value = regions.reg18
+        regId.value = 18
+    } else if (regCoords[0] === 69.15) {
+        center.value = regions.reg15
+        regId.value = 15
+    }
 }
 
 function addCoordinate() {
@@ -109,7 +120,7 @@ async function getDataFromBackend() {
     apiData.value = []
     isDataLoading.value = false
     const response = await getSingleBusGPSData({
-        region: `REG_${REG.value}`,
+        region: `REG_${regId.value}`,
         emei: watchData.emei,
         date: watchData.date,
         TIME_Start: watchData.TIME_Start,
