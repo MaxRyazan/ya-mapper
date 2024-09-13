@@ -3,10 +3,16 @@
         <d-spin :is-loading="isLoading"/>
         <a-table size="middle"
                  :pagination="{defaultPageSize: 14, showSizeChanger: true, pageSizeOptions: ['10', '14', '20', '50']}"
-                 :columns="columns"
+                 :columns="returnedColumns"
                  :data-source="allRoutes">
             <template #emptyText></template>
             <template #bodyCell="{column, record}">
+                <template v-if="column.key==='descRu'">
+
+                </template>
+                <template v-if="column.key==='descKZ'">
+
+                </template>
                 <d-flex v-if="column.key === 'operations'" justify="center">
                     <d-table-href @push="showMap(record)">карта</d-table-href>
                     <d-table-href @push="showStations(record)">остановки</d-table-href>
@@ -29,6 +35,7 @@ import RouteIdStations from "@/modules/routes/views/RouteIdStations.vue";
 import RouteIdPath from "@/modules/routes/views/RouteIdPath.vue";
 import DTableDrawer from "@/components/reus/DTableDrawer.vue";
 import {REG} from "@/constants.ts";
+import {CURRENT_LOCALE, Languages} from "@/locales";
 
 const isLoading = ref(false)
 const selectedItem = ref<any>(null)
@@ -36,6 +43,8 @@ const currentComponent = shallowRef<Component|null>(null)
 const drawer = reactive({
     isOpen: false
 })
+
+
 const columns = [
     {
         title: '№',
@@ -117,8 +126,17 @@ const columns = [
     },
 ]
 
+const returnedColumns = columns.filter(a => {
+    if(CURRENT_LOCALE.value === Languages.kz) {
+        return a.key !== 'descRu'
+    }
+    if(CURRENT_LOCALE.value === Languages.ru) {
+        return a.key !== 'descKZ'
+    }
+    else return a
+})
+
 function showMap(record: any) {
-    console.log(record)
     selectedItem.value = record
     drawer.isOpen = true
     currentComponent.value = RouteIdPath
