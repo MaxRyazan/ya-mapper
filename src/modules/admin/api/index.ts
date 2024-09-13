@@ -1,9 +1,10 @@
 import {IUser} from "@/stores/user.ts";
 import {message} from "ant-design-vue";
+import {REG} from "@/constants.ts";
 
 export async function getAllUsers() {
     try {
-        const response = await fetch('https://www.asts.kz:5554/api/AUTH/Get_USERS_PARAMS?REGION=18')
+        const response = await fetch(`https://www.asts.kz:5554/api/AUTH/?op=Get_USERS_PARAMS&REGION=${REG.value}`)
         return await response.json()
     } catch (e) {
         return []
