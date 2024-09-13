@@ -23,8 +23,13 @@
 <script setup lang="ts">
 import {CURRENT_LOCALE, Languages} from "@/locales";
 import {useI18n} from "vue-i18n";
+import {watch} from "vue";
 
 const {t} = useI18n()
+
+watch(CURRENT_LOCALE, () => {
+    localStorage.setItem('alempay-lang', CURRENT_LOCALE.value)
+})
 </script>
 
 <style scoped>

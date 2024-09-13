@@ -41,7 +41,6 @@ const navLinks = ref([
 ])
 
 watch(i18n.global.locale, () => {
-    console.log('222')
     navLinks.value = [
         {title: 'Яндекс карты', to: '/map', icon: RightSquareFilled},
         {title: t('mainNav.routes'), to: '/routes', icon: FundOutlined},
