@@ -74,6 +74,9 @@ const userInfo = reactive({
 
 async function selectRegion (e: {key: string}) {
     REG.value = e.key
+    if(REG.value === '15') {
+        authUser.value!.BIN = '210140006411'
+    }
     authUser.value!.REG_ID = REG.value
     superAdminModalOpen.value = false
     await router.push('/routes/common')

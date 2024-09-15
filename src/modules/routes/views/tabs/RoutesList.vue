@@ -23,14 +23,13 @@
             <template #title>{{`Маршрут № ${+selectedItem?.routeNumber}`}}</template>
             <component :currentRoute="+selectedItem?.routeNumber" :is="currentComponent" />
         </d-table-drawer>
-        {{authUser}}
     </d-flex>
 </template>
 <script setup lang="ts">
-import {allRoutes, isAllRoutesLoading} from "@/modules/routes/stores/allRoutes.ts";
+import {allRoutes} from "@/modules/routes/stores/allRoutes.ts";
 import DTableHref from "@/components/reus/DTableHref.vue";
 import DSpin from "@/components/reus/DSpin.vue";
-import {type Component, reactive, ref, shallowRef, watch} from "vue";
+import {type Component, onMounted, reactive, ref, shallowRef} from "vue";
 import {getAllRoutes} from "@/modules/routes/api/Index.ts";
 import RouteIdStations from "@/modules/routes/views/RouteIdStations.vue";
 import RouteIdPath from "@/modules/routes/views/RouteIdPath.vue";
@@ -150,29 +149,48 @@ function showStations(record: any) {
     currentComponent.value = RouteIdStations
 }
 
-watch(allRoutes, async () => {
-    if(!allRoutes.value) {
-        if(!isAllRoutesLoading.value) {
-            isLoading.value = true
-            const response = await getAllRoutes({bin: authUser.value!.BIN, region: `REG_${REG.value}`})
-            allRoutes.value = response.map((a, idx) => {
-                return {
-                    key: idx + 1,
-                    type: 'Автобус',
-                    routeNumber: a.ROUTE,
-                    descRu: a.NAME_RU,
-                    descKZ: a.NAME_KZ,
-                    tarifCity: a.TAR_CITY,
-                    zones: a.ZONES,
-                    tarifBeznal: a.TAR_BEZ,
-                    tarifCahs: a.TAR_CASH,
-                    operations: ''
-                }
-            })
-            isLoading.value = false
+// watch(allRoutes, async () => {
+//     if(!allRoutes.value) {
+//         if(!isAllRoutesLoading.value) {
+//             isLoading.value = true
+//             const response = await getAllRoutes({bin: authUser.value!.BIN, region: `REG_${REG.value}`})
+//             allRoutes.value = response.map((a, idx) => {
+//                 return {
+//                     key: idx + 1,
+//                     type: 'Автобус',
+//                     routeNumber: a.ROUTE,
+//                     descRu: a.NAME_RU,
+//                     descKZ: a.NAME_KZ,
+//                     tarifCity: a.TAR_CITY,
+//                     zones: a.ZONES,
+//                     tarifBeznal: a.TAR_BEZ,
+//                     tarifCahs: a.TAR_CASH,
+//                     operations: ''
+//                 }
+//             })
+//             isLoading.value = false
+//         }
+//     }
+// }, {immediate: true})
+onMounted(async () => {
+    isLoading.value = true
+    const response = await getAllRoutes({bin: authUser.value!.BIN, region: `REG_${REG.value}`})
+    allRoutes.value = response.map((a, idx) => {
+        return {
+            key: idx + 1,
+            type: 'Автобус',
+            routeNumber: a.ROUTE,
+            descRu: a.NAME_RU,
+            descKZ: a.NAME_KZ,
+            tarifCity: a.TAR_CITY,
+            zones: a.ZONES,
+            tarifBeznal: a.TAR_BEZ,
+            tarifCahs: a.TAR_CASH,
+            operations: ''
         }
-    }
-}, {immediate: true})
+    })
+    isLoading.value = false
+})
 </script>
 
 
