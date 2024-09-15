@@ -91,7 +91,7 @@ async function getEmUid(data: any){
         const response = await loginByQr(data.uid)
         if(response && response.STR_LOGIN) {
             authUser.value = response
-            setUserRoleSuperAdmin()
+            // setUserRoleSuperAdmin()
             if(authUser.value.Role === IRoles.superAdmin) {
                 superAdminModalOpen.value = true
             } else {
@@ -112,9 +112,9 @@ async function login() {
     } else message.error('Авторизация не удалась, попробуйте еще раз!')
 }
 
-function  setUserRoleSuperAdmin() {
-    authUser.value!.Role = IRoles.superAdmin
-}
+// function  setUserRoleSuperAdmin() {
+//     authUser.value!.Role = IRoles.superAdmin
+// }
 
 
 </script>
