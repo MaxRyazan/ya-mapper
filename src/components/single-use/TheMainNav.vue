@@ -22,6 +22,7 @@ import {authUser} from "@/stores/user.ts";
 import {IRoles} from "@/enums.ts";
 import {useI18n} from "vue-i18n";
 import i18n from "@/i18n.ts";
+import {superAdminModalOpen} from "@/constants.ts";
 
 const {t} = useI18n()
 const route = useRoute()
@@ -36,7 +37,7 @@ const navLinks = ref([
     {title: t('mainNav.dispatch'), to: '/dispatch', icon: PushpinOutlined},
     {title: t('mainNav.rating'), to: '/rating', icon: StarOutlined},
     {title: t('mainNav.journal'), to: '/journal', icon: FileTextOutlined},
-    {title: t('mainNav.admin'), to: '/admin', icon: LockOutlined, rolesRequired: [IRoles.admin]},
+    {title: t('mainNav.admin'), to: '/admin', icon: LockOutlined, rolesRequired: [IRoles.admin, IRoles.superAdmin]},
     {title: t('mainNav.settings'), to: '/settings', icon: SettingOutlined},
 ])
 
@@ -52,7 +53,7 @@ watch(i18n.global.locale, () => {
         {title: t('mainNav.dispatch'), to: '/dispatch', icon: PushpinOutlined},
         {title: t('mainNav.rating'), to: '/rating', icon: StarOutlined},
         {title: t('mainNav.journal'), to: '/journal', icon: FileTextOutlined},
-        {title: t('mainNav.admin'), to: '/admin', icon: LockOutlined, rolesRequired: [IRoles.admin]},
+        {title: t('mainNav.admin'), to: '/admin', icon: LockOutlined, rolesRequired: [IRoles.admin, IRoles.superAdmin]},
         {title: t('mainNav.settings'), to: '/settings', icon: SettingOutlined},
     ]
 }, {deep: true})
@@ -62,7 +63,7 @@ const isMenuExpanded = ref(true)
 </script>
 
 <template>
-    <d-flex v-if="authUser?.REG_ID || authUser?.FIO"
+    <d-flex v-if="(authUser?.REG_ID || authUser?.FIO) && !superAdminModalOpen"
             type="column" gap="0"
             class="nav-wrapper"
             justify="space-between" :class="{mini: !isMenuExpanded}">

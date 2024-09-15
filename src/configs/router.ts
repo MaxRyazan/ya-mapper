@@ -1,5 +1,6 @@
 import {createRouter, createWebHistory, NavigationGuardNext, RouteLocationNormalized,} from "vue-router";
 import {authUser} from "@/stores/user.ts";
+import {IRoles} from "@/enums.ts";
 
 
 const routesRouter = [
@@ -15,7 +16,7 @@ const adminRouter = [
         name: 'adminCommon',
         component: () => import('@/modules/admin/views/tabs/AdminCommon.vue'),
         meta: {
-            rolesRequired: [7]
+            rolesRequired: [IRoles.admin, IRoles.superAdmin]
         }
     },
 ]

@@ -3,6 +3,7 @@
         <d-flex align="center" gap="2px" type="column">
             <d-text weight="600" cursor="pointer" class="user-info__fio">{{userFIO}}</d-text>
             <d-text style="text-align: center">{{userRole}}</d-text>
+            <d-text style="text-align: center">{{REG}}</d-text>
         </d-flex>
         <a-popconfirm
                 placement="rightBottom"
@@ -21,7 +22,7 @@ import {authUser} from "@/stores/user.ts";
 import DText from "@/components/reus/texts/DText.vue";
 import {computed} from "vue";
 import router from "@/configs/router.ts";
-import {USER_ROLES_MAP} from "@/constants.ts";
+import {REG, USER_ROLES_MAP} from "@/constants.ts";
 
 const userFIO = computed(() => {
     if(authUser?.value?.FIO) {

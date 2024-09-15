@@ -23,6 +23,7 @@
             <template #title>{{`Маршрут № ${+selectedItem?.routeNumber}`}}</template>
             <component :currentRoute="+selectedItem?.routeNumber" :is="currentComponent" />
         </d-table-drawer>
+        {{authUser}}
     </d-flex>
 </template>
 <script setup lang="ts">
@@ -36,6 +37,7 @@ import RouteIdPath from "@/modules/routes/views/RouteIdPath.vue";
 import DTableDrawer from "@/components/reus/DTableDrawer.vue";
 import {REG} from "@/constants.ts";
 import {CURRENT_LOCALE, Languages} from "@/locales";
+import {authUser} from "@/stores/user.ts";
 
 const isLoading = ref(false)
 const selectedItem = ref<any>(null)
@@ -152,7 +154,7 @@ watch(allRoutes, async () => {
     if(!allRoutes.value) {
         if(!isAllRoutesLoading.value) {
             isLoading.value = true
-            const response = await getAllRoutes({bin: '10540003043', region: `REG_${REG.value}`})
+            const response = await getAllRoutes({bin: authUser.value!.BIN, region: `REG_${REG.value}`})
             allRoutes.value = response.map((a, idx) => {
                 return {
                     key: idx + 1,

@@ -2,7 +2,7 @@ import {Bus} from "@/models/Bus.ts";
 import {GetLinesByRouteResponse, GetSingleBusCoordinates} from "@/modules/map/types/api-models.ts";
 import {REG} from "@/constants.ts";
 
-const PORT = 5553
+// const PORT = 5553
 export const URL = 'https://www.asts.kz:5554/api/test/'
 export const URL2 = 'https://www.asts.kz:5554/api/Routes/'
 
@@ -35,50 +35,50 @@ export async function getSingleBusGPSData(options: { region: string, emei: strin
  * Получаем координаты автобуса в промежуток времени
  * @param options
  */
-export async function getBusGpsDataJson(options?: {
-    emei?: string,
-    region?: string,
-    date: string,
-    time_start: string,
-    time_stop: string
-}) {
-    const res: Response = await fetch(`http://localhost:${PORT}/get-bus-gps-data-json?emei=${options!.emei}&region=${options!.region}&time_start=${options?.time_start}&time_stop=${options?.time_stop}&date=${options?.date}`)
-
-    const raw: string = await res.text()
-    const openArray: number = raw.indexOf('[')
-    const closeArray: number = raw.indexOf(']')
-
-    const text: string = raw.slice(openArray, closeArray + 1)
-    if (text) return await JSON.parse(text)
-}
-
-export async function getRouteXml(options?: {
-    route?: string,
-    region?: string,
-    direction: string,
-}) {
-    const res: Response = await fetch(`http://localhost:${PORT}/get-route-xml?route=${options!.route}&region=${options!.region}&direction=${options?.direction}`)
-    const raw: string = await res.text()
-    console.log(raw)
-    const openArray: number = raw.indexOf('[')
-    const closeArray: number = raw.indexOf(']')
-
-    const text: string = raw.slice(openArray, closeArray + 1)
-    if (text) return await JSON.parse(text)
-}
-
-export async function getBusesByRoute(options?: {
-    route?: string,
-    region?: string,
-}) {
-    const res: Response = await fetch(`http://localhost:${PORT}/get-buses-by-route?route=${options!.route}&region=${options!.region}`)
-    const raw: string = await res.text()
-    const openArray: number = raw.indexOf('[')
-    const closeArray: number = raw.indexOf(']')
-
-    const text: string = raw.slice(openArray, closeArray + 1)
-    if (text) return await JSON.parse(text)
-}
+// export async function getBusGpsDataJson(options?: {
+//     emei?: string,
+//     region?: string,
+//     date: string,
+//     time_start: string,
+//     time_stop: string
+// }) {
+//     const res: Response = await fetch(`http://localhost:${PORT}/get-bus-gps-data-json?emei=${options!.emei}&region=${options!.region}&time_start=${options?.time_start}&time_stop=${options?.time_stop}&date=${options?.date}`)
+//
+//     const raw: string = await res.text()
+//     const openArray: number = raw.indexOf('[')
+//     const closeArray: number = raw.indexOf(']')
+//
+//     const text: string = raw.slice(openArray, closeArray + 1)
+//     if (text) return await JSON.parse(text)
+// }
+//
+// export async function getRouteXml(options?: {
+//     route?: string,
+//     region?: string,
+//     direction: string,
+// }) {
+//     const res: Response = await fetch(`http://localhost:${PORT}/get-route-xml?route=${options!.route}&region=${options!.region}&direction=${options?.direction}`)
+//     const raw: string = await res.text()
+//     console.log(raw)
+//     const openArray: number = raw.indexOf('[')
+//     const closeArray: number = raw.indexOf(']')
+//
+//     const text: string = raw.slice(openArray, closeArray + 1)
+//     if (text) return await JSON.parse(text)
+// }
+//
+// export async function getBusesByRoute(options?: {
+//     route?: string,
+//     region?: string,
+// }) {
+//     const res: Response = await fetch(`http://localhost:${PORT}/get-buses-by-route?route=${options!.route}&region=${options!.region}`)
+//     const raw: string = await res.text()
+//     const openArray: number = raw.indexOf('[')
+//     const closeArray: number = raw.indexOf(']')
+//
+//     const text: string = raw.slice(openArray, closeArray + 1)
+//     if (text) return await JSON.parse(text)
+// }
 
 
 /**
@@ -95,17 +95,17 @@ export async function getLinesByRegion(num: number, direction: 0 | 1 | 2): Promi
     if (text) return await JSON.parse(text)
 }
 
-
-export async function getGroupBusGPSDataJson(options?: {
-    route?: string,
-    region?: string,
-}) {
-    const res: Response = await fetch(`http://localhost:${PORT}/get-group-bus-gps-data-json?route=${options!.route}&region=${options!.region}`)
-
-    const raw: string = await res.text()
-    const openArray: number = raw.indexOf('[')
-    const closeArray: number = raw.indexOf(']')
-
-    const text: string = raw.slice(openArray, closeArray + 1)
-    if (text) return await JSON.parse(text)
-}
+//
+// export async function getGroupBusGPSDataJson(options?: {
+//     route?: string,
+//     region?: string,
+// }) {
+//     const res: Response = await fetch(`http://localhost:${PORT}/get-group-bus-gps-data-json?route=${options!.route}&region=${options!.region}`)
+//
+//     const raw: string = await res.text()
+//     const openArray: number = raw.indexOf('[')
+//     const closeArray: number = raw.indexOf(']')
+//
+//     const text: string = raw.slice(openArray, closeArray + 1)
+//     if (text) return await JSON.parse(text)
+// }
