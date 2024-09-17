@@ -25,9 +25,11 @@ import {DateHelper} from "@/helpers/DateHelper.ts";
 import {ParseHelper} from "@/helpers/ParseHelper.ts";
 import {getBusGRN} from "@/stores/buses.ts";
 import DSpin from "@/components/reus/DSpin.vue";
+import {authUser} from "@/stores/user.ts";
+import {centerOfRegions} from "@/constants.ts";
 
 const isLoading = ref(false)
-const center = ref([63.615375, 53.181536])
+const center = ref(centerOfRegions[authUser.value?.REG_ID!] )
 const zoom = ref(13)
 const direction = ref<0 | 1 | 2>(2)
 const busStations = ref<string[]>([])
