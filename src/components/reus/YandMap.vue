@@ -48,33 +48,31 @@
                 <yandex-map-marker v-for="(bus, idx) in props.currentBusesCoordinates" :key="idx"
                                    :settings="{ coordinates: bus.coords as any}"
                                    position="top-center left-center">
-                    <div v-if="bus.GRN">
-                        <d-text class="bus__number-container">{{ bus?.GRN }}</d-text>
-                        <svg v-if="bus.direction === 0" fill="white" stroke="red"
-                             class="bus" viewBox="0 0 500 500"
-                             @click="produceAnAlert(bus.coords)"
-                             xmlns="http://www.w3.org/2000/svg">
-                            <defs/>
-                            <path style="stroke-width: 10px"
-                                  d="M 457.974 55.958 L 130.546 55.958 L 35.046 374.291 L 139.641 178.744 L 453.427 169.649 L 457.974 55.958 Z"/>
-                        </svg>
-                        <svg v-if="bus.direction === 1" fill="white" stroke="blue"
-                             class="bus" viewBox="0 0 500 500"
-                             @click="produceAnAlert(bus.coords)"
-                             xmlns="http://www.w3.org/2000/svg">
-                            <defs/>
-                            <path style="stroke-width: 10px"
-                                  d="M 457.974 55.958 L 130.546 55.958 L 35.046 374.291 L 139.641 178.744 L 453.427 169.649 L 457.974 55.958 Z"/>
-                        </svg>
-                        <svg v-if="bus.direction === 7" fill="white" stroke="black"
-                             class="bus" viewBox="0 0 500 500"
-                             @click="produceAnAlert(bus.coords)"
-                             xmlns="http://www.w3.org/2000/svg">
-                            <defs/>
-                            <path style="stroke-width: 10px"
-                                  d="M 457.974 55.958 L 130.546 55.958 L 35.046 374.291 L 139.641 178.744 L 453.427 169.649 L 457.974 55.958 Z"/>
-                        </svg>
-                    </div>
+                    <d-text class="bus__number-container">{{ bus?.GRN }}</d-text>
+                    <svg v-if="bus.direction === 0" fill="white" stroke="red"
+                         class="bus" viewBox="0 0 500 500"
+                         @click="produceAnAlert(bus.coords)"
+                         xmlns="http://www.w3.org/2000/svg">
+                        <defs/>
+                        <path style="stroke-width: 10px"
+                              d="M 457.974 55.958 L 130.546 55.958 L 35.046 374.291 L 139.641 178.744 L 453.427 169.649 L 457.974 55.958 Z"/>
+                    </svg>
+                    <svg v-if="bus.direction === 1" fill="white" stroke="blue"
+                         class="bus" viewBox="0 0 500 500"
+                         @click="produceAnAlert(bus.coords)"
+                         xmlns="http://www.w3.org/2000/svg">
+                        <defs/>
+                        <path style="stroke-width: 10px"
+                              d="M 457.974 55.958 L 130.546 55.958 L 35.046 374.291 L 139.641 178.744 L 453.427 169.649 L 457.974 55.958 Z"/>
+                    </svg>
+                    <svg v-if="bus.direction === 7" fill="white" stroke="black"
+                         class="bus" viewBox="0 0 500 500"
+                         @click="produceAnAlert(bus.coords)"
+                         xmlns="http://www.w3.org/2000/svg">
+                        <defs/>
+                        <path style="stroke-width: 10px"
+                              d="M 457.974 55.958 L 130.546 55.958 L 35.046 374.291 L 139.641 178.744 L 453.427 169.649 L 457.974 55.958 Z"/>
+                    </svg>
                 </yandex-map-marker>
 
                 <yandex-map-marker v-if="props.busLastCoordinate"
@@ -138,6 +136,7 @@ watch(() => props.busStationsMarkers, () => {
 }, {deep: true})
 
 watch(() => props.currentBusesCoordinates, () => {
+    console.log(props.currentBusesCoordinates)
 })
 
 onMounted(() => {

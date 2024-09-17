@@ -46,7 +46,6 @@ const props = defineProps<{
 
 function setMapSizes() {
     const wrapper = document.querySelector('.map-wrapper')
-    console.log(wrapper?.clientWidth)
     mapSizes.width = wrapper?.clientWidth! + 'px'
     mapSizes.height = wrapper?.clientHeight! + 'px'
 }

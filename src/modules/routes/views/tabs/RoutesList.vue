@@ -37,6 +37,7 @@ import DTableDrawer from "@/components/reus/DTableDrawer.vue";
 import {REG} from "@/constants.ts";
 import {CURRENT_LOCALE, Languages} from "@/locales";
 import {authUser} from "@/stores/user.ts";
+import {useGetBuses} from "@/hooks/useGetAllBuses.ts";
 
 const isLoading = ref(false)
 const selectedItem = ref<any>(null)
@@ -149,29 +150,7 @@ function showStations(record: any) {
     currentComponent.value = RouteIdStations
 }
 
-// watch(allRoutes, async () => {
-//     if(!allRoutes.value) {
-//         if(!isAllRoutesLoading.value) {
-//             isLoading.value = true
-//             const response = await getAllRoutes({bin: authUser.value!.BIN, region: `REG_${REG.value}`})
-//             allRoutes.value = response.map((a, idx) => {
-//                 return {
-//                     key: idx + 1,
-//                     type: 'Автобус',
-//                     routeNumber: a.ROUTE,
-//                     descRu: a.NAME_RU,
-//                     descKZ: a.NAME_KZ,
-//                     tarifCity: a.TAR_CITY,
-//                     zones: a.ZONES,
-//                     tarifBeznal: a.TAR_BEZ,
-//                     tarifCahs: a.TAR_CASH,
-//                     operations: ''
-//                 }
-//             })
-//             isLoading.value = false
-//         }
-//     }
-// }, {immediate: true})
+
 onMounted(async () => {
     isLoading.value = true
     const response = await getAllRoutes({bin: authUser.value!.BIN, region: `REG_${REG.value}`})
@@ -189,6 +168,7 @@ onMounted(async () => {
             operations: ''
         }
     })
+    await useGetBuses()
     isLoading.value = false
 })
 </script>
