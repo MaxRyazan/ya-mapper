@@ -17,8 +17,9 @@
             <a-button :loading="isLoading" @click="login" style="margin-top: 80px; " type="primary">Войти</a-button>
         </d-flex>
         <quick-auth @on-complete="getEmUid" :applicationIdentifier="APP_ID"/>
-        <a-modal v-model:open="superAdminModalOpen"
+        <a-modal :maskClosable="false" v-model:open="superAdminModalOpen"
                  title="Выберите регион, с которым вы хотите работать"
+                 @cancel="clear"
                  @ok="confirmModal">
             <d-flex>
                 <d-flex>
@@ -109,6 +110,11 @@ async function confirmModal() {
         superAdminModalOpen.value = false
         await router.push('/routes/common')
     } else message.warn('Выберите BIN и регион!')
+}
+
+async function clear() {
+    authUser.value = null
+    REG.value = ''
 }
 
 
