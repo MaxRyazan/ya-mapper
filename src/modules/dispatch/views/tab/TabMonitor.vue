@@ -64,6 +64,7 @@ function showSchema(record: any) {
 }
 
 onMounted(async () => {
+    if(!REG.value || !authUser.value?.BIN) return
     isLoading.value = true
     const response = await getAllRoutes({bin: authUser.value!.BIN, region: `REG_${REG.value}`})
     allRoutes.value = response.map((a, idx) => {
