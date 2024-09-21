@@ -1,24 +1,32 @@
 export const dispatchColumn = [
     {
         title: '№',
-        dataIndex: 'number',
-        key: 'number',
+        dataIndex: 'key',
+        key: 'key',
         align: 'center',
         ellipsis: true,
         width: 100
     },
     {
         title: 'Маршрут',
-        dataIndex: 'route',
-        key: 'route',
+        dataIndex: 'routeNumber',
+        key: 'routeNumber',
         align: 'center',
         ellipsis: true,
         width: 150
     },
     {
-        title: 'Конечные точки',
-        dataIndex: 'points',
-        key: 'points',
+        title: 'Описание(рус)',
+        dataIndex: 'descRu',
+        key: 'descRu',
+        align: 'center',
+        ellipsis: true,
+    },
+    {
+        title: 'Описание(каз)',
+        dataIndex: 'descKZ',
+        key: 'descKZ',
+        align: 'center',
         ellipsis: true,
     },
     {
