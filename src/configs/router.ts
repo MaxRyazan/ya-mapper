@@ -107,7 +107,6 @@ const routes = [
         children: [
             {
                 path: '/login',
-                alias: ['/login'],
                 name: 'login',
                 component: () => import('@/modules/login/views/cards/NewLogin.vue'),
             },
@@ -220,7 +219,7 @@ const publicPaths = ['/login', '/registration']
 
 router.beforeEach(async (to: RouteLocationNormalized, _, next:NavigationGuardNext) => {
     if(!publicPaths.includes(to.path)) {
-        if(authUser.value) {
+        if(authUser.value && authUser.value.REG_ID) {
             next()
         } else {
             if(to.meta.public) next()

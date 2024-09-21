@@ -18,3 +18,8 @@ export const USER_ROLES_MAP = new Map([
 ])
 
 export const REGIONS_MAP = new Map<string, string>([])
+
+export const REGIONS_BINS = new Map<string, string[]>([
+    ['15', ['210140006411']],
+    ['18', ['10540003043']],
+])
