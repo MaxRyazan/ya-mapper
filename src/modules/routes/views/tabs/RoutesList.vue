@@ -154,7 +154,7 @@ function showStations(record: any) {
 onMounted(async () => {
     isLoading.value = true
     const response = await getAllRoutes({bin: authUser.value!.BIN, region: `REG_${REG.value}`})
-    allRoutes.value = response.map((a, idx) => {
+    allRoutes.value = response?.map((a, idx) => {
         return {
             key: idx + 1,
             type: 'Автобус',

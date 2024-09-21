@@ -75,7 +75,7 @@ import {registration} from "@/modules/login/api";
 import {authUser} from "@/stores/user.ts";
 import {useRouter} from "vue-router";
 import DText from "@/components/reus/texts/DText.vue";
-import {APP_ID} from "@/constants.ts";
+import {APP_ID, REG} from "@/constants.ts";
 import {message} from "ant-design-vue";
 
 const isPhoneConnected = ref(false)
@@ -175,8 +175,10 @@ async function registr() {
         fio: userInfo.name + ' ' + userInfo.surname + ' ' + userInfo.patronymic
     })
     if (newUser && newUser.Comp_AID) {
+        console.log(newUser)
         authUser.value = newUser
-        await router.push('/routes')
+        REG.value = authUser.value!.REG_ID
+        await router.push('/routes/common')
     }
     isLoading.value = false
 }
