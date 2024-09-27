@@ -16,6 +16,7 @@
             />
             <a-button :loading="isLoading" @click="login" style="margin-top: 80px; " type="primary">Войти</a-button>
         </d-flex>
+<!--        <quick-auth registeredUrl="https://www.asts.kz/" @on-complete="getEmUid" :applicationIdentifier="APP_ID"/>-->
         <quick-auth @on-complete="getEmUid" :applicationIdentifier="APP_ID"/>
         <a-modal :maskClosable="false" v-model:open="superAdminModalOpen"
                  title="Выберите регион, с которым вы хотите работать"
