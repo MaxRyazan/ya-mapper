@@ -56,7 +56,7 @@
         </d-flex>
         <d-flex type="column" style="padding: 20px; width: 220px">
             <div v-if="isPhoneConnected" style="width: 200px;height: 200px;border: 2px solid #111111">
-                <quick-reg @on-complete="qrRegistration" v-if="isPhoneConnected && isUserInfo" :phone="userInfo.phone"
+                <quick-reg registeredUrl="https://www.asts.kz/" @on-complete="qrRegistration" v-if="isPhoneConnected && isUserInfo" :phone="userInfo.phone"
                            :applicationIdentifier="APP_ID"/>
             </div>
             <a-button v-if="isPhoneConnected"
