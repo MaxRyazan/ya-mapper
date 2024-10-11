@@ -84,7 +84,7 @@ export async function getSingleBusGPSData(options: { region: string, emei: strin
 /**
  * Метод получает маршрут с отстановками с параметрами очередности остановок для отрисовки линий на карте
  */
-export async function getLinesByRegion(num: number, direction: 0 | 1 | 2): Promise<GetLinesByRouteResponse[] | undefined> {
+export async function getLinesByRegion(num: number|string, direction: 0 | 1 | 2): Promise<GetLinesByRouteResponse[] | undefined> {
     const res: Response = await fetch(`${URL}?op=Get_ROUTE&REGION=REG_${REG.value}&NUM=${num}&DIRECTION=${direction}`)
 
     const raw: string = await res.text()

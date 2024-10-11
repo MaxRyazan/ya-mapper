@@ -43,7 +43,7 @@ const mapSizes = reactive({
 })
 
 const props = defineProps<{
-    currentRoute: number
+    currentRoute: number|string
 }>()
 
 function setMapSizes() {

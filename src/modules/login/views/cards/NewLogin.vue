@@ -16,8 +16,8 @@
             />
             <a-button :loading="isLoading" @click="login" style="margin-top: 80px; " type="primary">Войти</a-button>
         </d-flex>
-<!--        <quick-auth registeredUrl="https://www.asts.kz/" @on-complete="getEmUid" :applicationIdentifier="APP_ID"/>-->
-        <quick-auth @on-complete="getEmUid" :applicationIdentifier="APP_ID"/>
+        <quick-auth registeredUrl="https://www.asts.kz/" @on-complete="getEmUid" :applicationIdentifier="APP_ID"/>
+<!--        <quick-auth @on-complete="getEmUid" :applicationIdentifier="APP_ID"/>-->
         <a-modal :maskClosable="false" v-model:open="superAdminModalOpen"
                  title="Выберите регион, с которым вы хотите работать"
                  @cancel="clear"
@@ -32,15 +32,15 @@
                         </a-button>
                         <template #overlay>
                             <a-menu @click="selectRegion">
-                                <a-menu-item key="05">
-                                    05
-                                </a-menu-item>
-                                <a-menu-item key="11">
-                                    11
-                                </a-menu-item>
-                                <a-menu-item key="13">
-                                    13
-                                </a-menu-item>
+<!--                                <a-menu-item key="05">-->
+<!--                                    05-->
+<!--                                </a-menu-item>-->
+<!--                                <a-menu-item key="11">-->
+<!--                                    11-->
+<!--                                </a-menu-item>-->
+<!--                                <a-menu-item key="13">-->
+<!--                                    13-->
+<!--                                </a-menu-item>-->
                                 <a-menu-item key="15">
                                     15 Петропавловск
                                 </a-menu-item>

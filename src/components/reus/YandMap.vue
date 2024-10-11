@@ -136,7 +136,7 @@ watch(() => props.busStationsMarkers, () => {
 }, {deep: true})
 
 watch(() => props.currentBusesCoordinates, () => {
-    console.log(props.currentBusesCoordinates)
+    // console.log(props.currentBusesCoordinates)
 })
 
 onMounted(() => {

@@ -21,7 +21,7 @@
         </a-table>
         <d-table-drawer :drawer="drawer">
             <template #title>{{`Маршрут № ${+selectedItem?.routeNumber}`}}</template>
-            <component :currentRoute="+selectedItem?.routeNumber" :is="currentComponent" />
+            <component :currentRoute="selectedItem?.routeNumber" :is="currentComponent" />
         </d-table-drawer>
     </d-flex>
 </template>
